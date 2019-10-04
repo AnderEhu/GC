@@ -10,11 +10,28 @@ extern GLdouble _ortho_x_min,_ortho_x_max;
 extern GLdouble _ortho_y_min,_ortho_y_max;
 extern GLdouble _ortho_z_min,_ortho_z_max;
 
+void liberar_memoria_obj(object3d *objptr) {
+    int i;
+
+    // LIBERAR tabla de vertices
+    free(objptr->vertex_table);
+
+    // LIBERAR cada una de las entradas de las caras, recorriendo una a una
+    for (i = 0; i < objptr->num_faces; i++) {
+        free(objptr->face_table[i].vertex_table);
+    }
+
+    // LIBERAR tabla de caras
+    free(objptr->face_table);
+
+    // LIBERAR objeto
+    free(objptr);
+}
 /**
  * @brief This function just prints information about the use
  * of the keys
  */
-void print_help(){
+void print_help() {
     printf("KbG Irakasgaiaren Praktika. Programa honek 3D objektuak \n");
     printf("aldatzen eta bistaratzen ditu.  \n\n");
     printf("\n\n");
@@ -41,6 +58,7 @@ void keyboard(unsigned char key, int x, int y) {
     int read = 0;
     object3d *auxiliar_object = 0;
     GLdouble wd,he,midx,midy;
+    int i;
 
     switch (key) {
     case 'f':
@@ -86,7 +104,9 @@ void keyboard(unsigned char key, int x, int y) {
             /*To remove the first object we just set the first as the current's next*/
             _first_object = _first_object->next;
             /*Once updated the pointer to the first object it is save to free the memory*/
-            free(_selected_object);
+
+            liberar_memoria_obj(_selected_object);
+            
             /*Finally, set the selected to the new first one*/
             _selected_object = _first_object;
         } else {
@@ -97,7 +117,7 @@ void keyboard(unsigned char key, int x, int y) {
             /*Now we bypass the element to erase*/
             auxiliar_object->next = _selected_object->next;
             /*free the memory*/
-            free(_selected_object);
+            liberar_memoria_obj(_selected_object);
             /*and update the selection*/
             _selected_object = auxiliar_object;
         }
@@ -120,7 +140,19 @@ void keyboard(unsigned char key, int x, int y) {
         break;
 
     case '+':
-        //INPLEMENTA EZAZU CTRL + + KONBINAZIOAREN FUNTZIOANLITATEA
+        if (glutGetModifiers() == GLUT_ACTIVE_CTRL){
+            /*Decrease the projection plane; compute the new dimensions*/
+            wd=(_ortho_x_max-_ortho_x_min)*KG_STEP_ZOOM;
+            he=(_ortho_y_max-_ortho_y_min)*KG_STEP_ZOOM;
+            /*In order to avoid moving the center of the plane, we get its coordinates*/
+            midx = (_ortho_x_max+_ortho_x_min)/2;
+            midy = (_ortho_y_max+_ortho_y_min)/2;
+            /*The the new limits are set, keeping the center of the plane*/
+            _ortho_x_max = midx + wd/2;
+            _ortho_x_min = midx - wd/2;
+            _ortho_y_max = midy + he/2;
+            _ortho_y_min = midy - he/2;
+        }
         break;
 
     case '?':
