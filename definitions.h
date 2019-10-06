@@ -1,7 +1,11 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 
 /** DEFINITIONS **/
 

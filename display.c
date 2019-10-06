@@ -1,6 +1,22 @@
-#include "definitions.h"
-#include <GL/glut.h>
+// PARA COMPILAR LINUX: gcc dibujar-puntos.c -lGL -lGLU -lglut -o program
+// PARA COMPILAR EN MAC: gcc *.c -framework OpenGL -framework GLUT -lm -o program
+#ifndef GL_SILENCE_DEPRECATION
+#define GL_SILENCE_DEPRECATION true
+#endif
+
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
+
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
+#include "definitions.h"
 #include <GL/glu.h>
 
 /** EXTERNAL VARIABLES **/
