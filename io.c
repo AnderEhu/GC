@@ -12,6 +12,7 @@
 #include "definitions.h"
 #include "load_obj.h"
 #include <stdio.h>
+#include <stdbool.h> 
 
 extern object3d * _first_object;
 extern object3d * _selected_object;
@@ -19,6 +20,9 @@ extern object3d * _selected_object;
 extern GLdouble _ortho_x_min,_ortho_x_max;
 extern GLdouble _ortho_y_min,_ortho_y_max;
 extern GLdouble _ortho_z_min,_ortho_z_max;
+
+bool translacion_activada, rotacion_activada, escalado_activada;
+bool transformacion_mundo, transformacion_local;
 
 void liberar_memoria_obj(object3d *objptr) {
     int i;
@@ -67,9 +71,10 @@ void keyboard(unsigned char key, int x, int y) {
     char* fname = malloc(sizeof (char)*128); /* Note that scanf adds a null character at the end of the vector*/
     int read = 0;
     object3d *auxiliar_object = 0;
+    list_matrix *aux_list;
     GLdouble wd,he,midx,midy;
     int i;
-
+    
     switch (key) {
     case 'f':
     case 'F':
@@ -92,6 +97,16 @@ void keyboard(unsigned char key, int x, int y) {
             break;
         /*Read OK*/
         case 0:
+            /* Reservar memoria para list_matrix */
+            aux_list = malloc(sizeof(list_matrix));
+            
+            /* Obtenemos la matrix de indentidad del mopdel-view */
+            glMatrixMode(GL_MODELVIEW);
+            glLoadIdentity();
+            glGetFloatv(GL_MODELVIEW_MATRIX, aux_list->m); 
+            aux_list->nextptr = 0;
+            auxiliar_object->list_matrix = aux_list;
+            
             /*Insert the new object in the list*/
             auxiliar_object->next = _first_object;
             _first_object = auxiliar_object;
@@ -169,6 +184,51 @@ void keyboard(unsigned char key, int x, int y) {
         print_help();
         break;
 
+    /* Tipo de transformacion */
+    case 'm':
+    case 'M':
+        translacion_activada = !translacion_activada;
+        break;
+
+    case 'b':
+    case 'B':
+        rotacion_activada = !rotacion_activada;
+        break;
+
+    case 't':
+    case 'T':
+        escalado_activada = !escalado_activada;
+        break;
+
+    /* Sistema de referencia (modos excluyentes entre si) */
+    case 'g':
+    case 'G':
+
+        break;
+
+    case 'l':
+    case 'L':
+
+        break;
+
+    /* Elemento a transformar (en todo momento se debe en algun modo. Excluyentes entre si) */
+    case 'o':
+    case 'O':
+
+        break;
+
+    case 'k':
+    case 'K':
+
+        break;
+
+    case 'a':
+    case 'A':
+
+        break;
+
+    /* Flechas */
+
     case 27: /* <ESC> */
         exit(0);
         break;
@@ -176,8 +236,30 @@ void keyboard(unsigned char key, int x, int y) {
     default:
         /*In the default case we just print the code of the key. This is usefull to define new cases*/
         printf("%d %c\n", key, key);
+        break;
     }
     /*In case we have do any modification affecting the displaying of the object, we redraw them*/
     glutPostRedisplay();
+}
+
+void specialKeyboard(int key, int x, int y) {
+
+
+    switch(key) {
+        case GLUT_KEY_UP:
+            break;
+        case GLUT_KEY_RIGHT:
+            break;
+        case GLUT_KEY_LEFT:
+            break;
+        case GLUT_KEY_DOWN:
+            break;
+        default:
+            printf("%d %c\n", key, key);
+            break;
+
+    }
+    glutPostRedisplay();
+
 }
 

@@ -1,0 +1,2 @@
+- glTranslate: calcula una matriz de transalacion y la multiplica a la matriz del model-view (lo hace por la derecha). El resultado lo deja en la matriz del model-view. Hay que guardar la matriz en el objeto asociado.
+- https://www.khronos.org/opengl/wiki/Viewing_and_Transformations
