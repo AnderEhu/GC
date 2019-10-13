@@ -12,27 +12,29 @@
 #include "definitions.h"
 #include "load_obj.h"
 #include <stdio.h>
-#include <stdbool.h> 
+#include <stdbool.h>
 #include <stdlib.h>
 
-extern object3d * _first_object;
-extern object3d * _selected_object;
+extern object3d *_first_object;
+extern object3d *_selected_object;
 
-extern GLdouble _ortho_x_min,_ortho_x_max;
-extern GLdouble _ortho_y_min,_ortho_y_max;
-extern GLdouble _ortho_z_min,_ortho_z_max;
+extern GLdouble _ortho_x_min, _ortho_x_max;
+extern GLdouble _ortho_y_min, _ortho_y_max;
+extern GLdouble _ortho_z_min, _ortho_z_max;
 
 bool translacion_activada, rotacion_activada, escalado_activada;
 bool transformacion_mundo, transformacion_local;
 
-void liberar_memoria_obj(object3d *objptr) {
+void liberar_memoria_obj(object3d *objptr)
+{
     int i;
 
     // LIBERAR tabla de vertices
     free(objptr->vertex_table);
 
     // LIBERAR cada una de las entradas de las caras, recorriendo una a una
-    for (i = 0; i < objptr->num_faces; i++) {
+    for (i = 0; i < objptr->num_faces; i++)
+    {
         free(objptr->face_table[i].vertex_table);
     }
 
@@ -46,7 +48,8 @@ void liberar_memoria_obj(object3d *objptr) {
  * @brief This function just prints information about the use
  * of the keys
  */
-void print_help() {
+void print_help()
+{
     printf("KbG Irakasgaiaren Praktika. Programa honek 3D objektuak \n");
     printf("aldatzen eta bistaratzen ditu.  \n\n");
     printf("\n\n");
@@ -67,25 +70,28 @@ void print_help() {
  * @param x X coordinate of the mouse pointer when the key was pressed
  * @param y Y coordinate of the mouse pointer when the key was pressed
  */
-void keyboard(unsigned char key, int x, int y) {
+void keyboard(unsigned char key, int x, int y)
+{
 
-    char* fname = malloc(sizeof (char)*128); /* Note that scanf adds a null character at the end of the vector*/
+    char *fname = malloc(sizeof(char) * 128); /* Note that scanf adds a null character at the end of the vector*/
     int read = 0;
     object3d *auxiliar_object = 0;
     list_matrix *aux_list;
-    GLdouble wd,he,midx,midy;
+    GLdouble wd, he, midx, midy;
     int i;
-    
-    switch (key) {
+
+    switch (key)
+    {
     case 'f':
     case 'F':
         /*Ask for file*/
         printf("%s", KG_MSSG_SELECT_FILE);
         scanf("%s", fname);
         /*Allocate memory for the structure and read the file*/
-        auxiliar_object = (object3d *) malloc(sizeof (object3d));
+        auxiliar_object = (object3d *)malloc(sizeof(object3d));
         read = read_wavefront(fname, auxiliar_object);
-        switch (read) {
+        switch (read)
+        {
         /*Errors in the reading*/
         case 1:
             printf("%s: %s\n", fname, KG_MSSG_FILENOTFOUND);
@@ -100,19 +106,19 @@ void keyboard(unsigned char key, int x, int y) {
         case 0:
             /* Reservar memoria para list_matrix */
             aux_list = malloc(sizeof(list_matrix));
-            
+
             /* Obtenemos la matrix de indentidad del mopdel-view */
             glMatrixMode(GL_MODELVIEW);
             glLoadIdentity();
-            glGetFloatv(GL_MODELVIEW_MATRIX, aux_list->m); 
+            glGetFloatv(GL_MODELVIEW_MATRIX, aux_list->m);
             aux_list->nextptr = 0;
             auxiliar_object->list_matrix = aux_list;
-            
+
             /*Insert the new object in the list*/
             auxiliar_object->next = _first_object;
             _first_object = auxiliar_object;
             _selected_object = _first_object;
-            printf("%s\n",KG_MSSG_FILEREAD);
+            printf("%s\n", KG_MSSG_FILEREAD);
             break;
         }
         break;
@@ -120,7 +126,8 @@ void keyboard(unsigned char key, int x, int y) {
     case 9: /* <TAB> */
         _selected_object = _selected_object->next;
         /*The selection is circular, thus if we move out of the list we go back to the first element*/
-        if (_selected_object == 0) _selected_object = _first_object;
+        if (_selected_object == 0)
+            _selected_object = _first_object;
         break;
 
     case 127: /* <SUPR> */
@@ -132,10 +139,12 @@ void keyboard(unsigned char key, int x, int y) {
             /*Once updated the pointer to the first object it is save to free the memory*/
 
             liberar_memoria_obj(_selected_object);
-            
+
             /*Finally, set the selected to the new first one*/
             _selected_object = _first_object;
-        } else {
+        }
+        else
+        {
             /*In this case we need to get the previous element to the one we want to erase*/
             auxiliar_object = _first_object;
             while (auxiliar_object->next != _selected_object)
@@ -150,34 +159,36 @@ void keyboard(unsigned char key, int x, int y) {
         break;
 
     case '-':
-        if (glutGetModifiers() == GLUT_ACTIVE_CTRL){
+        if (glutGetModifiers() == GLUT_ACTIVE_CTRL)
+        {
             /*Increase the projection plane; compute the new dimensions*/
-            wd=(_ortho_x_max-_ortho_x_min)/KG_STEP_ZOOM;
-            he=(_ortho_y_max-_ortho_y_min)/KG_STEP_ZOOM;
+            wd = (_ortho_x_max - _ortho_x_min) / KG_STEP_ZOOM;
+            he = (_ortho_y_max - _ortho_y_min) / KG_STEP_ZOOM;
             /*In order to avoid moving the center of the plane, we get its coordinates*/
-            midx = (_ortho_x_max+_ortho_x_min)/2;
-            midy = (_ortho_y_max+_ortho_y_min)/2;
+            midx = (_ortho_x_max + _ortho_x_min) / 2;
+            midy = (_ortho_y_max + _ortho_y_min) / 2;
             /*The the new limits are set, keeping the center of the plane*/
-            _ortho_x_max = midx + wd/2;
-            _ortho_x_min = midx - wd/2;
-            _ortho_y_max = midy + he/2;
-            _ortho_y_min = midy - he/2;
+            _ortho_x_max = midx + wd / 2;
+            _ortho_x_min = midx - wd / 2;
+            _ortho_y_max = midy + he / 2;
+            _ortho_y_min = midy - he / 2;
         }
         break;
 
     case '+':
-        if (glutGetModifiers() == GLUT_ACTIVE_CTRL){
+        if (glutGetModifiers() == GLUT_ACTIVE_CTRL)
+        {
             /*Decrease the projection plane; compute the new dimensions*/
-            wd=(_ortho_x_max-_ortho_x_min)*KG_STEP_ZOOM;
-            he=(_ortho_y_max-_ortho_y_min)*KG_STEP_ZOOM;
+            wd = (_ortho_x_max - _ortho_x_min) * KG_STEP_ZOOM;
+            he = (_ortho_y_max - _ortho_y_min) * KG_STEP_ZOOM;
             /*In order to avoid moving the center of the plane, we get its coordinates*/
-            midx = (_ortho_x_max+_ortho_x_min)/2;
-            midy = (_ortho_y_max+_ortho_y_min)/2;
+            midx = (_ortho_x_max + _ortho_x_min) / 2;
+            midy = (_ortho_y_max + _ortho_y_min) / 2;
             /*The the new limits are set, keeping the center of the plane*/
-            _ortho_x_max = midx + wd/2;
-            _ortho_x_min = midx - wd/2;
-            _ortho_y_max = midy + he/2;
-            _ortho_y_min = midy - he/2;
+            _ortho_x_max = midx + wd / 2;
+            _ortho_x_min = midx - wd / 2;
+            _ortho_y_max = midy + he / 2;
+            _ortho_y_min = midy - he / 2;
         }
         break;
 
@@ -228,7 +239,7 @@ void keyboard(unsigned char key, int x, int y) {
 
         break;
 
-    /* Flechas */
+        /* Flechas */
 
     case 27: /* <ESC> */
         exit(0);
@@ -243,24 +254,22 @@ void keyboard(unsigned char key, int x, int y) {
     glutPostRedisplay();
 }
 
-void specialKeyboard(int key, int x, int y) {
+void specialKeyboard(int key, int x, int y)
+{
 
-
-    switch(key) {
-        case GLUT_KEY_UP:
-            break;
-        case GLUT_KEY_RIGHT:
-            break;
-        case GLUT_KEY_LEFT:
-            break;
-        case GLUT_KEY_DOWN:
-            break;
-        default:
-            printf("%d %c\n", key, key);
-            break;
-
+    switch (key)
+    {
+    case GLUT_KEY_UP:
+        break;
+    case GLUT_KEY_RIGHT:
+        break;
+    case GLUT_KEY_LEFT:
+        break;
+    case GLUT_KEY_DOWN:
+        break;
+    default:
+        printf("%d %c\n", key, key);
+        break;
     }
     glutPostRedisplay();
-
 }
-
