@@ -250,8 +250,10 @@ void keyboard(unsigned char key, int x, int y)
     case 'A':
 
         break;
-
-        /* Flechas */
+    
+    case 26: 
+        printf("CTRL-Z\n");
+        break;
 
     case 27: /* <ESC> */
         exit(0);
