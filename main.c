@@ -11,13 +11,19 @@
 #endif
 
 #ifdef __APPLE__
+#include <OpenGL/glu.h>
+#else
+#include <GL/glu.h>
+#endif
+
+#ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
 #include <GL/glut.h>
 #endif
 
 #include <stdio.h>
-#include <GL/glu.h>
+
 #include "display.h"
 #include "io.h"
 #include "definitions.h"

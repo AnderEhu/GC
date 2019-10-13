@@ -13,6 +13,7 @@
 #include "load_obj.h"
 #include <stdio.h>
 #include <stdbool.h> 
+#include <stdlib.h>
 
 extern object3d * _first_object;
 extern object3d * _selected_object;
