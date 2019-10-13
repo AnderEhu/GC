@@ -15,6 +15,18 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#ifdef __APPLE__
+#define CTRL_PLUS 29
+#else
+#define CTRL_PLUS '+'
+#endif
+
+#ifdef __APPLE__
+#define CTRL_MINUS 47
+#else
+#define CTRL_PLUS '-'
+#endif
+
 extern object3d *_first_object;
 extern object3d *_selected_object;
 
@@ -158,7 +170,7 @@ void keyboard(unsigned char key, int x, int y)
         }
         break;
 
-    case '-':
+    case CTRL_MINUS:
         if (glutGetModifiers() == GLUT_ACTIVE_CTRL)
         {
             /*Increase the projection plane; compute the new dimensions*/
@@ -175,7 +187,7 @@ void keyboard(unsigned char key, int x, int y)
         }
         break;
 
-    case '+':
+    case CTRL_PLUS:
         if (glutGetModifiers() == GLUT_ACTIVE_CTRL)
         {
             /*Decrease the projection plane; compute the new dimensions*/
