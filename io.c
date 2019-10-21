@@ -24,7 +24,7 @@
 #ifdef __APPLE__
 #define CTRL_MINUS 47
 #else
-#define CTRL_PLUS '-'
+#define CTRL_MINUS '-'
 #endif
 
 extern object3d *_first_object;
