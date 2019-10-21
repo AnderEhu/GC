@@ -110,7 +110,7 @@ typedef struct
     GLint *vertex_table; /* table with the index of each vertex */
 } face;
 
-typedef struct
+typedef struct list_matrix
 {
     GLfloat m[16];
     struct list_matrix *nextptr;

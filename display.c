@@ -117,7 +117,6 @@ void display(void)
     /*Now each of the objects in the list*/
     while (aux_obj != 0)
     {
-
         /* Select the color, depending on whether the current object is the selected one or not */
         if (aux_obj == _selected_object)
         {

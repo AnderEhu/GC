@@ -38,6 +38,8 @@ bool translacion_activada, rotacion_activada, escalado_activada;
 bool transformacion_mundo = true;
 bool transformacion_local = false;
 
+list_matrix *n_elem_ptr;
+
 void liberar_memoria_obj(object3d *objptr)
 {
     int i;
@@ -287,6 +289,15 @@ void specialKeyboard(int key, int x, int y)
     switch (key)
     {
     case GLUT_KEY_UP:
+        printf("UP\n");
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glTranslatef(0.0f, 1.0f, 0.0f);
+        glMultMatrixf(_selected_object->list_matrix->m);
+        n_elem_ptr = malloc(sizeof(list_matrix));
+        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
+        n_elem_ptr->nextptr = _selected_object->list_matrix;
+        _selected_object->list_matrix = n_elem_ptr;
         break;
     case GLUT_KEY_RIGHT:
         break;
