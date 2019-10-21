@@ -35,7 +35,8 @@ extern GLdouble _ortho_y_min, _ortho_y_max;
 extern GLdouble _ortho_z_min, _ortho_z_max;
 
 bool translacion_activada, rotacion_activada, escalado_activada;
-bool transformacion_mundo, transformacion_local;
+bool transformacion_mundo = true;
+bool transformacion_local = false;
 
 void liberar_memoria_obj(object3d *objptr)
 {
@@ -227,12 +228,24 @@ void keyboard(unsigned char key, int x, int y)
     /* Sistema de referencia (modos excluyentes entre si) */
     case 'g':
     case 'G':
-
+        if (transformacion_mundo) {
+            transformacion_mundo = false;
+            transformacion_local = true;
+        } else {
+            transformacion_local = false;
+            transformacion_mundo = true;
+        }
         break;
 
     case 'l':
     case 'L':
-
+        if (transformacion_local) {
+            transformacion_mundo = true;
+            transformacion_local = false;
+        } else {
+            transformacion_local = true;
+            transformacion_mundo = false;
+        }
         break;
 
     /* Elemento a transformar (en todo momento se debe en algun modo. Excluyentes entre si) */
