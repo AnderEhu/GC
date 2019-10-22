@@ -79,8 +79,6 @@ int main(int argc, char **argv)
     glutKeyboardFunc(keyboard);
     glutSpecialFunc(specialKeyboard);
 
-    // AÑADIR LO DE ESPECIAL KEYBOARD EN OPENGL
-
     /* this initialization has to be AFTER the creation of the window */
     initialization();
 

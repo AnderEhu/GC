@@ -34,11 +34,18 @@ extern GLdouble _ortho_x_min, _ortho_x_max;
 extern GLdouble _ortho_y_min, _ortho_y_max;
 extern GLdouble _ortho_z_min, _ortho_z_max;
 
-bool translacion_activada, rotacion_activada, escalado_activada;
+bool translacion_activada = false;
+bool rotacion_activada = false;
+bool escalado_activada = false;
+
 bool transformacion_mundo = true;
 bool transformacion_local = false;
 
-list_matrix *n_elem_ptr;
+// Handler para special keyboard
+void key_up_handler();
+void key_down_handler();
+void key_right_handler();
+void key_left_handler();
 
 void liberar_memoria_obj(object3d *objptr)
 {
@@ -87,7 +94,6 @@ void print_help()
  */
 void keyboard(unsigned char key, int x, int y)
 {
-
     char *fname = malloc(sizeof(char) * 128); /* Note that scanf adds a null character at the end of the vector*/
     int read = 0;
     object3d *auxiliar_object = 0;
@@ -283,27 +289,134 @@ void keyboard(unsigned char key, int x, int y)
     glutPostRedisplay();
 }
 
+void key_up_handler()
+{
+    /*
+    Trasladar +Y; Escalar + Y; Rotar +X
+    */
+    list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    if (translacion_activada) {
+        glTranslatef(0.0f, 1.0f, 0.0f);
+    }
+
+    if (escalado_activada) {
+        glScalef(0.0f, 1.0f, 0.0f);
+    }
+
+    if (rotacion_activada) {
+        glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+    }
+    
+    glMultMatrixf(_selected_object->list_matrix->m);
+    glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
+    n_elem_ptr->nextptr = _selected_object->list_matrix;
+    _selected_object->list_matrix = n_elem_ptr;
+}
+
+void key_down_handler() 
+{
+    /*
+    Trasladar -Y; Escalar - Y; Rotar -X
+    */
+    list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    if (translacion_activada) {
+        glTranslatef(0.0f, -1.0f, 0.0f);
+    }
+
+    if (escalado_activada) {
+        glScalef(0.0f, -1.0f, 0.0f);
+    }
+
+    if (rotacion_activada) {
+        glRotatef(90.0f, -1.0f, 0.0f, 0.0f);
+    }
+
+    glMultMatrixf(_selected_object->list_matrix->m);
+    glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
+    n_elem_ptr->nextptr = _selected_object->list_matrix;
+    _selected_object->list_matrix = n_elem_ptr;
+}
+
+void key_right_handler() 
+{
+    /*
+    Trasladar +X; Escalar + X; Rotar +Y
+    */
+    list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    if (translacion_activada) {
+        glTranslatef(1.0f, 0.0f, 0.0f);
+    }
+
+    if (escalado_activada) {
+        glScalef(1.0f, 0.0f, 0.0f);
+    }
+
+    if (rotacion_activada) {
+        glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+    }
+
+    glMultMatrixf(_selected_object->list_matrix->m);
+    glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
+    n_elem_ptr->nextptr = _selected_object->list_matrix;
+    _selected_object->list_matrix = n_elem_ptr;
+}
+
+void key_left_handler() 
+{
+    /*
+    Trasladar -X; Escalar - X; Rotar -Y
+    */
+    list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    if (translacion_activada) {
+        glTranslatef(-1.0f, 0.0f, 0.0f);
+    }
+
+    if (escalado_activada) {
+        glScalef(-1.0f, 0.0f, 0.0f);
+    }
+
+    if (rotacion_activada) {
+        glRotatef(90.0f, 0.0f, -1.0f, 0.0f);
+    }
+
+    glMultMatrixf(_selected_object->list_matrix->m);
+    glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
+    n_elem_ptr->nextptr = _selected_object->list_matrix;
+    _selected_object->list_matrix = n_elem_ptr;
+}
+
+/* (TODO): Arreglar que cuando no hay objeto, al pulsar tecla no de un segmentation fault */
 void specialKeyboard(int key, int x, int y)
 {
-
     switch (key)
     {
     case GLUT_KEY_UP:
-        printf("UP\n");
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        glTranslatef(0.0f, 1.0f, 0.0f);
-        glMultMatrixf(_selected_object->list_matrix->m);
-        n_elem_ptr = malloc(sizeof(list_matrix));
-        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
-        n_elem_ptr->nextptr = _selected_object->list_matrix;
-        _selected_object->list_matrix = n_elem_ptr;
+        key_up_handler();
         break;
     case GLUT_KEY_RIGHT:
+        key_right_handler();
         break;
     case GLUT_KEY_LEFT:
+        key_left_handler();
         break;
     case GLUT_KEY_DOWN:
+        key_down_handler();
         break;
     default:
         printf("%d %c\n", key, key);
