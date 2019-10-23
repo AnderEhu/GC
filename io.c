@@ -383,12 +383,6 @@ void key_up_handler()
         glLoadIdentity();
     }
 
-    if (translacion_activada)
-    {
-        printf("Translando\n");
-        glTranslatef(0.0f, 1.0f, 0.0f);
-    }
-
     if (escalado_activada)
     {
         printf("Escalando\n");
@@ -399,6 +393,12 @@ void key_up_handler()
     {
         printf("Rotando\n");
         glRotatef(45.0f, 1.0f, 0.0f, 0.0f);
+    }
+
+    if (translacion_activada)
+    {
+        printf("Translando\n");
+        glTranslatef(0.0f, 1.0f, 0.0f);
     }
 
     if (transformacion_local)
@@ -432,12 +432,6 @@ void key_down_handler()
         glLoadIdentity();
     }
 
-    if (translacion_activada)
-    {
-        glTranslatef(0.0f, -1.0f, 0.0f);
-        printf("Translando\n");
-    }
-
     if (escalado_activada)
     {
         glScalef(1.0f, 0.5f, 1.0f);
@@ -448,6 +442,12 @@ void key_down_handler()
     {
         glRotatef(45.0f, -1.0f, 0.0f, 0.0f);
         printf("Rotando\n");
+    }
+
+    if (translacion_activada)
+    {
+        glTranslatef(0.0f, -1.0f, 0.0f);
+        printf("Translando\n");
     }
 
     if (transformacion_local)
@@ -481,12 +481,6 @@ void key_right_handler()
         glLoadIdentity();
     }
 
-    if (translacion_activada)
-    {
-        glTranslatef(1.0f, 0.0f, 0.0f);
-        printf("Translando\n");
-    }
-
     if (escalado_activada)
     {
         glScalef(1.5f, 1.0f, 1.0f);
@@ -497,6 +491,12 @@ void key_right_handler()
     {
         glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
         printf("Rotando\n");
+    }
+
+    if (translacion_activada)
+    {
+        glTranslatef(1.0f, 0.0f, 0.0f);
+        printf("Translando\n");
     }
 
     if (transformacion_local)
@@ -539,12 +539,6 @@ void key_left_handler()
         glLoadIdentity();
     }
 
-    if (translacion_activada)
-    {
-        glTranslatef(-1.0f, 0.0f, 0.0f);
-        printf("Translando\n");
-    }
-
     if (escalado_activada)
     {
         glScalef(0.5f, 1.0f, 1.0f);
@@ -555,6 +549,12 @@ void key_left_handler()
     {
         glRotatef(45.0f, 0.0f, -1.0f, 0.0f);
         printf("Rotando\n");
+    }
+
+    if (translacion_activada)
+    {
+        glTranslatef(-1.0f, 0.0f, 0.0f);
+        printf("Translando\n");
     }
 
     if (transformacion_local)
@@ -597,12 +597,6 @@ void key_avpag_handler()
         glLoadIdentity();
     }
 
-    if (translacion_activada)
-    {
-        glTranslatef(0.0f, 0.0f, 1.0f);
-        printf("Translando\n");
-    }
-
     if (escalado_activada)
     {
         glScalef(1.0f, 1.0f, 1.5f);
@@ -613,6 +607,12 @@ void key_avpag_handler()
     {
         glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
         printf("Rotando\n");
+    }
+
+    if (translacion_activada)
+    {
+        glTranslatef(0.0f, 0.0f, 1.0f);
+        printf("Translando\n");
     }
 
     if (transformacion_local)
@@ -655,12 +655,6 @@ void key_repag_handler()
         glLoadIdentity();
     }
 
-    if (translacion_activada)
-    {
-        glTranslatef(0.0f, 0.0f, -1.0f);
-        printf("Translando\n");
-    }
-
     if (escalado_activada)
     {
         glScalef(1.0f, 1.0f, 0.5f);
@@ -671,6 +665,12 @@ void key_repag_handler()
     {
         glRotatef(45.0f, 0.0f, 0.0f, -1.0f);
         printf("Rotando\n");
+    }
+
+    if (translacion_activada)
+    {
+        glTranslatef(0.0f, 0.0f, -1.0f);
+        printf("Translando\n");
     }
 
     if (transformacion_local)
