@@ -126,7 +126,7 @@ void keyboard(unsigned char key, int x, int y)
         /*Read OK*/
         case 0:
             /* Reservar memoria para list_matrix */
-            aux_list = malloc(sizeof(list_matrix));
+            aux_list = (list_matrix*) malloc(sizeof(list_matrix));
 
             /* Obtenemos la matrix de indentidad del mopdel-view */
             glMatrixMode(GL_MODELVIEW);
@@ -309,17 +309,10 @@ void key_up_handler()
     /*
     Trasladar +Y; Escalar + Y; Rotar +X
     */
-    for(int i = 0; i < 12; i+=4) {
-        printf("%f %f %f %f\n", 
-        _selected_object->list_matrix->m[i], 
-        _selected_object->list_matrix->m[i+1], 
-        _selected_object->list_matrix->m[i+2],
-        _selected_object->list_matrix->m[i+3]);
-    }
-    printf("-------------------\n");
-    list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
+    list_matrix *n_elem_ptr = (list_matrix*) malloc(sizeof(list_matrix));
 
     glMatrixMode(GL_MODELVIEW);
+    //glLoadMatrixf(_selected_object->list_matrix->m);
     glLoadIdentity();
 
     if (translacion_activada) {
@@ -336,21 +329,11 @@ void key_up_handler()
         printf("Rotando\n");
         glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
     }
-    
+
     glMultMatrixf(_selected_object->list_matrix->m);
     glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
     n_elem_ptr->nextptr = _selected_object->list_matrix;
     _selected_object->list_matrix = n_elem_ptr;
-
-    for(int i = 0; i < 12; i+=4) {
-        printf("%f %f %f %f\n", 
-        _selected_object->list_matrix->m[i], 
-        _selected_object->list_matrix->m[i+1], 
-        _selected_object->list_matrix->m[i+2],
-        _selected_object->list_matrix->m[i+3]);
-    }
-
-    printf("-------------------\n");
 }
 
 void key_down_handler() 

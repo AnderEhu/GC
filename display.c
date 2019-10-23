@@ -128,7 +128,7 @@ void display(void)
         }
 
         /* Draw the object; for each face create a new polygon with the corresponding vertices */
-        glLoadIdentity();
+        glLoadMatrixf(aux_obj->list_matrix->m);
         for (f = 0; f < aux_obj->num_faces; f++)
         {
             glBegin(GL_POLYGON);
