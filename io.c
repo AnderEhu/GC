@@ -221,16 +221,31 @@ void keyboard(unsigned char key, int x, int y)
     case 'm':
     case 'M':
         translacion_activada = !translacion_activada;
+        if (translacion_activada) {
+            printf("Translacion activada!\n");
+        } else {
+            printf("Translacion desactivada!\n");
+        }
         break;
 
     case 'b':
     case 'B':
         rotacion_activada = !rotacion_activada;
+        if (rotacion_activada) {
+            printf("Rotacion activada!\n");
+        } else {
+            printf("Rotacion desactivada!\n");
+        }
         break;
 
     case 't':
     case 'T':
         escalado_activada = !escalado_activada;
+        if (escalado_activada) {
+            printf("Escalado activada!\n");
+        } else {
+            printf("Escalado desactivada!\n");
+        }
         break;
 
     /* Sistema de referencia (modos excluyentes entre si) */
@@ -300,14 +315,17 @@ void key_up_handler()
     glLoadIdentity();
 
     if (translacion_activada) {
+        printf("Translando\n");
         glTranslatef(0.0f, 1.0f, 0.0f);
     }
 
     if (escalado_activada) {
+        printf("Escalando\n");
         glScalef(0.0f, 1.0f, 0.0f);
     }
 
     if (rotacion_activada) {
+        printf("Rotando\n");
         glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
     }
     
@@ -329,14 +347,17 @@ void key_down_handler()
 
     if (translacion_activada) {
         glTranslatef(0.0f, -1.0f, 0.0f);
+        printf("Translando\n");
     }
 
     if (escalado_activada) {
         glScalef(0.0f, -1.0f, 0.0f);
+        printf("Escalando\n");
     }
 
     if (rotacion_activada) {
         glRotatef(90.0f, -1.0f, 0.0f, 0.0f);
+        printf("Rotando\n");
     }
 
     glMultMatrixf(_selected_object->list_matrix->m);
@@ -357,14 +378,17 @@ void key_right_handler()
 
     if (translacion_activada) {
         glTranslatef(1.0f, 0.0f, 0.0f);
+        printf("Translando\n");
     }
 
     if (escalado_activada) {
         glScalef(1.0f, 0.0f, 0.0f);
+        printf("Escalando\n");
     }
 
     if (rotacion_activada) {
         glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+        printf("Rotando\n");
     }
 
     glMultMatrixf(_selected_object->list_matrix->m);
@@ -385,14 +409,17 @@ void key_left_handler()
 
     if (translacion_activada) {
         glTranslatef(-1.0f, 0.0f, 0.0f);
+        printf("Translando\n");
     }
 
     if (escalado_activada) {
         glScalef(-1.0f, 0.0f, 0.0f);
+        printf("Escalando\n");
     }
 
     if (rotacion_activada) {
         glRotatef(90.0f, 0.0f, -1.0f, 0.0f);
+        printf("Rotando\n");
     }
 
     glMultMatrixf(_selected_object->list_matrix->m);
