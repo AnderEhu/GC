@@ -480,23 +480,25 @@ void key_left_handler()
 /* (TODO): Arreglar que cuando no hay objeto, al pulsar tecla no de un segmentation fault */
 void specialKeyboard(int key, int x, int y)
 {
-    switch (key)
-    {
-    case GLUT_KEY_UP:
-        key_up_handler();
-        break;
-    case GLUT_KEY_RIGHT:
-        key_right_handler();
-        break;
-    case GLUT_KEY_LEFT:
-        key_left_handler();
-        break;
-    case GLUT_KEY_DOWN:
-        key_down_handler();
-        break;
-    default:
-        printf("%d %c\n", key, key);
-        break;
+    if (_selected_object != 0) {
+        switch (key)
+        {
+        case GLUT_KEY_UP:
+            key_up_handler();
+            break;
+        case GLUT_KEY_RIGHT:
+            key_right_handler();
+            break;
+        case GLUT_KEY_LEFT:
+            key_left_handler();
+            break;
+        case GLUT_KEY_DOWN:
+            key_down_handler();
+            break;
+        default:
+            printf("%d %c\n", key, key);
+            break;
+        }
+        glutPostRedisplay();
     }
-    glutPostRedisplay();
 }
