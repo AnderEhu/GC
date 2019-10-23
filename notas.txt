@@ -2,3 +2,4 @@
     - Comparar en el switch cada tecla y efectuar los cambios en las matrices.
     - Realizar los cambios en el objeto dependendiendo de las coordenadas.
 - Terminar las teclas nuevas (AVPAG, REPAG, +, -)
+- Arreglar el if del cambio de coordenadas
