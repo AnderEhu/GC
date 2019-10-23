@@ -292,7 +292,10 @@ void keyboard(unsigned char key, int x, int y)
         break;
     
     case 26: 
-        printf("CTRL-Z\n");
+        if (_selected_object->list_matrix->nextptr != 0) {
+            printf("CTRL-Z aplicado.\n");
+            _selected_object->list_matrix = _selected_object->list_matrix->nextptr;
+        }
         break;
 
     case 27: /* <ESC> */
