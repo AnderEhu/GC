@@ -329,12 +329,12 @@ void key_up_handler()
 
     if (escalado_activada) {
         printf("Escalando\n");
-        glScalef(0.0f, 1.0f, 0.0f);
+        glScalef(1.0f, 1.5f, 1.0f);
     }
 
     if (rotacion_activada) {
         printf("Rotando\n");
-        glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+        glRotatef(45.0f, 1.0f, 0.0f, 0.0f);
     }
 
     if (transformacion_local) {
@@ -368,12 +368,12 @@ void key_down_handler()
     }
 
     if (escalado_activada) {
-        glScalef(0.0f, -1.0f, 0.0f);
+        glScalef(1.0f, 0.5f, 1.0f);
         printf("Escalando\n");
     }
 
     if (rotacion_activada) {
-        glRotatef(90.0f, -1.0f, 0.0f, 0.0f);
+        glRotatef(45.0f, -1.0f, 0.0f, 0.0f);
         printf("Rotando\n");
     }
 
@@ -408,12 +408,12 @@ void key_right_handler()
     }
 
     if (escalado_activada) {
-        glScalef(1.0f, 0.0f, 0.0f);
+        glScalef(1.5f, 1.0f, 1.0f);
         printf("Escalando\n");
     }
 
     if (rotacion_activada) {
-        glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+        glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
         printf("Rotando\n");
     }
 
@@ -454,12 +454,12 @@ void key_left_handler()
     }
 
     if (escalado_activada) {
-        glScalef(-1.0f, 0.0f, 0.0f);
+        glScalef(0.5f, 1.0f, 1.0f);
         printf("Escalando\n");
     }
 
     if (rotacion_activada) {
-        glRotatef(90.0f, 0.0f, -1.0f, 0.0f);
+        glRotatef(45.0f, 0.0f, -1.0f, 0.0f);
         printf("Rotando\n");
     }
 
