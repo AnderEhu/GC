@@ -1,3 +1,4 @@
 - Cambiar la forma de transformar pasando a una funcion la tecla y separando eso en un switch.
     - Comparar en el switch cada tecla y efectuar los cambios en las matrices.
     - Realizar los cambios en el objeto dependendiendo de las coordenadas.
+- Terminar las teclas nuevas (AVPAG, REPAG, +, -)
