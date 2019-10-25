@@ -86,7 +86,19 @@ void print_help()
     printf("<TAB>\t\t Kargaturiko objektuen artean bat hautatu\n");
     printf("<DEL>\t\t Hautatutako objektua ezabatu\n");
     printf("<CTRL + ->\t Bistaratze-eremua handitu\n");
-    printf("<CTRL + +>\t Bistaratze-eremua txikitu\n");
+    printf("<CTRL + +>\t Bistaratze-eremua txikitu\n\n");
+    printf("TRANSFORMACIONES\n");
+    printf("- Tipo de transformacion\n");
+    printf("<M, m> \t Activar Translacion\n");
+    printf("<B, b> \t Activar Rotacion\n");
+    printf("<T, t> \t Activar Escalado\n");
+    printf("- Sistema de referencia\n");
+    printf("<G, g> \t Activar transformaciones globales\n");
+    printf("<T, t> \t Activar transformaciones locales\n");
+
+
+
+
     printf("\n\n");
 }
 
