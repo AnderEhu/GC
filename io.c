@@ -325,25 +325,9 @@ void keyboard(unsigned char key, int x, int y)
         break;
         /* 
     TODO: -- CAMBIAR --
-    113 q -> AVPAG
-    119 w -> REPAG
     101 e -> +
     114 r -> -
     */
-    case 'q':
-    case 'Q':
-        if (_selected_object != 0)
-        {
-            key_avpag_handler();
-        }
-        break;
-    case 'w':
-    case 'W':
-        if (_selected_object != 0)
-        {
-        key_repag_handler();
-        }
-        break;
     case 'e':
     case 'E':
         if (_selected_object != 0)
@@ -790,6 +774,8 @@ void key_minus_handler()
     n_elem_ptr->nextptr = _selected_object->list_matrix;
     _selected_object->list_matrix = n_elem_ptr;
 }
+
+
 /* (TODO): Arreglar que cuando no hay objeto, al pulsar tecla no de un segmentation fault */
 void specialKeyboard(int key, int x, int y)
 {
@@ -808,6 +794,12 @@ void specialKeyboard(int key, int x, int y)
             break;
         case GLUT_KEY_DOWN:
             key_down_handler();
+            break;
+        case GLUT_KEY_PAGE_UP: //Repag
+            key_repag_handler();
+            break;
+        case GLUT_KEY_PAGE_DOWN: //AVPAG
+            key_avpag_handler();
             break;
         default:
             printf("%d %c\n", key, key);
