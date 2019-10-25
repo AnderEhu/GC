@@ -87,7 +87,7 @@ void print_help()
     printf("<DEL>\t\t Hautatutako objektua ezabatu\n");
     printf("<CTRL + ->\t Bistaratze-eremua handitu\n");
     printf("<CTRL + +>\t Bistaratze-eremua txikitu\n\n");
-    printf("TRANSFORMACIONES\n");
+    printf("<CTRL + z>\t Deshacer\n\n");
     printf("- Tipo de transformacion\n");
     printf("<M, m> \t Activar Translacion\n");
     printf("<B, b> \t Activar Rotacion\n");
