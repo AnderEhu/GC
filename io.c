@@ -27,6 +27,26 @@
 #define CTRL_MINUS '-'
 #endif
 
+#ifdef __APPLE__
+#define TRANSLACION 0
+#else
+#define TRANSLACION 0
+#endif
+
+#ifdef __APPLE__
+#define ROTACION 1
+#else
+#define ROTACION 1
+#endif
+
+#ifdef __APPLE__
+#define ESCALADO 2
+#else
+#define ESCALADO 2
+#endif
+
+
+
 extern object3d *_first_object;
 extern object3d *_selected_object;
 
@@ -40,6 +60,8 @@ bool escalado_activada = false;
 
 bool transformacion_mundo = true;
 bool transformacion_local = false;
+
+int transformacion_activa = TRANSLACION;
 
 // Handler para special keyboard
 void key_up_handler();
@@ -239,41 +261,32 @@ void keyboard(unsigned char key, int x, int y)
     /* Tipo de transformacion */
     case 'm':
     case 'M':
-        translacion_activada = !translacion_activada;
-        if (translacion_activada)
+        
+        if (transformacion_activa != TRANSLACION)
         {
+            transformacion_activa = TRANSLACION;
             printf("Translacion activada!\n");
         }
-        else
-        {
-            printf("Translacion desactivada!\n");
-        }
+    
         break;
 
     case 'b':
     case 'B':
-        rotacion_activada = !rotacion_activada;
-        if (rotacion_activada)
+        if (transformacion_activa != ROTACION)
         {
+            transformacion_activa = ROTACION;
             printf("Rotacion activada!\n");
-        }
-        else
-        {
-            printf("Rotacion desactivada!\n");
         }
         break;
 
     case 't':
     case 'T':
-        escalado_activada = !escalado_activada;
-        if (escalado_activada)
+        if (transformacion_activa != ESCALADO)
         {
-            printf("Escalado activada!\n");
+            transformacion_activa = ESCALADO;
+            printf("ESCALADO activada!\n");
         }
-        else
-        {
-            printf("Escalado desactivada!\n");
-        }
+    
         break;
 
     /* Sistema de referencia (modos excluyentes entre si) */
@@ -378,25 +391,20 @@ void key_up_handler()
     {
         glLoadIdentity();
     }
-
-    if (escalado_activada)
-    {
-        printf("Escalando\n");
-        glScalef(1.0f, 1.5f, 1.0f);
+    switch(transformacion_activa){
+        case ESCALADO:
+            printf("Escalando\n");
+            glScalef(1.0f, 1.5f, 1.0f);
+            break;
+        case ROTACION:
+            printf("Rotando\n");
+            glRotatef(45.0f, 1.0f, 0.0f, 0.0f);
+            break;
+        case TRANSLACION:
+            printf("Translando\n");
+            glTranslatef(0.0f, 1.0f, 0.0f);
+            break;
     }
-
-    if (rotacion_activada)
-    {
-        printf("Rotando\n");
-        glRotatef(45.0f, 1.0f, 0.0f, 0.0f);
-    }
-
-    if (translacion_activada)
-    {
-        printf("Translando\n");
-        glTranslatef(0.0f, 1.0f, 0.0f);
-    }
-
     if (transformacion_local)
     {
         glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
@@ -428,22 +436,19 @@ void key_down_handler()
         glLoadIdentity();
     }
 
-    if (escalado_activada)
-    {
-        glScalef(1.0f, 0.5f, 1.0f);
-        printf("Escalando\n");
-    }
-
-    if (rotacion_activada)
-    {
-        glRotatef(45.0f, -1.0f, 0.0f, 0.0f);
-        printf("Rotando\n");
-    }
-
-    if (translacion_activada)
-    {
-        glTranslatef(0.0f, -1.0f, 0.0f);
-        printf("Translando\n");
+    switch(transformacion_activa){
+        case ESCALADO:
+            printf("Escalando\n");
+            glScalef(1.0f, 0.5f, 1.0f);
+            break;
+        case ROTACION:
+            printf("Rotando\n");
+            glRotatef(45.0f, -1.0f, 0.0f, 0.0f);
+            break;
+        case TRANSLACION:
+            printf("Translando\n");
+            glTranslatef(0.0f, -1.0f, 0.0f);
+            break;
     }
 
     if (transformacion_local)
@@ -477,22 +482,19 @@ void key_right_handler()
         glLoadIdentity();
     }
 
-    if (escalado_activada)
-    {
-        glScalef(1.5f, 1.0f, 1.0f);
-        printf("Escalando\n");
-    }
-
-    if (rotacion_activada)
-    {
-        glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
-        printf("Rotando\n");
-    }
-
-    if (translacion_activada)
-    {
-        glTranslatef(1.0f, 0.0f, 0.0f);
-        printf("Translando\n");
+    switch(transformacion_activa){
+        case ESCALADO:
+            printf("Escalando\n");
+            glScalef(1.5f, 1.0f, 1.0f);
+            break;
+        case ROTACION:
+            printf("Rotando\n");
+            glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
+            break;
+        case TRANSLACION:
+            printf("Translando\n");
+            glTranslatef(1.0f, 0.0f, 0.0f);
+            break;
     }
 
     if (transformacion_local)
@@ -534,24 +536,22 @@ void key_left_handler()
     {
         glLoadIdentity();
     }
-
-    if (escalado_activada)
-    {
-        glScalef(0.5f, 1.0f, 1.0f);
-        printf("Escalando\n");
+    
+    switch(transformacion_activa){
+        case ESCALADO:
+            printf("Escalando\n");
+            glScalef(0.5f, 1.0f, 1.0f);
+            break;
+        case ROTACION:
+            printf("Rotando\n");
+            glRotatef(45.0f, 0.0f, -1.0f, 0.0f);
+            break;
+        case TRANSLACION:
+            printf("Translando\n");
+            glTranslatef(-1.0f, 0.0f, 0.0f);
+            break;
     }
 
-    if (rotacion_activada)
-    {
-        glRotatef(45.0f, 0.0f, -1.0f, 0.0f);
-        printf("Rotando\n");
-    }
-
-    if (translacion_activada)
-    {
-        glTranslatef(-1.0f, 0.0f, 0.0f);
-        printf("Translando\n");
-    }
 
     if (transformacion_local)
     {
@@ -593,22 +593,19 @@ void key_avpag_handler()
         glLoadIdentity();
     }
 
-    if (escalado_activada)
-    {
-        glScalef(1.0f, 1.0f, 1.5f);
-        printf("Escalando\n");
-    }
-
-    if (rotacion_activada)
-    {
-        glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
-        printf("Rotando\n");
-    }
-
-    if (translacion_activada)
-    {
-        glTranslatef(0.0f, 0.0f, 1.0f);
-        printf("Translando\n");
+    switch(transformacion_activa){
+        case ESCALADO:
+            printf("Escalando\n");
+            glScalef(1.0f, 1.0f, 1.5f);
+            break;
+        case ROTACION:
+            printf("Rotando\n");
+            glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
+            break;
+        case TRANSLACION:
+            printf("Translando\n");
+            glTranslatef(0.0f, 0.0f, 1.0f);
+            break;
     }
 
     if (transformacion_local)
@@ -627,6 +624,7 @@ void key_avpag_handler()
 /* TODO: terminar */
 void key_repag_handler()
 {
+
     /*
     Trasladar -Z; Escalar - Z; Rotar -Z
     */
@@ -650,23 +648,20 @@ void key_repag_handler()
     {
         glLoadIdentity();
     }
-
-    if (escalado_activada)
-    {
-        glScalef(1.0f, 1.0f, 0.5f);
-        printf("Escalando\n");
-    }
-
-    if (rotacion_activada)
-    {
-        glRotatef(45.0f, 0.0f, 0.0f, -1.0f);
-        printf("Rotando\n");
-    }
-
-    if (translacion_activada)
-    {
-        glTranslatef(0.0f, 0.0f, -1.0f);
-        printf("Translando\n");
+    printf("%d\n", translacion_activada);
+    switch(transformacion_activa){
+        case ESCALADO:
+            printf("Escalando\n");
+            glScalef(1.0f, 1.0f, 0.5f);
+            break;
+        case ROTACION:
+            printf("Rotando\n");
+            glRotatef(45.0f, 0.0f, 0.0f, -1.0f);
+            break;
+        case TRANSLACION:
+            printf("Translando\n");
+            glTranslatef(0.0f, 0.0f, -1.0f);
+            break;
     }
 
     if (transformacion_local)
@@ -709,7 +704,7 @@ void key_plus_handler()
         glLoadIdentity();
     }
 
-    if (escalado_activada)
+    if (transformacion_activa == ESCALADO)
     {
         glScalef(1.5f, 1.5f, 1.5f);
         printf("Escalando\n");
@@ -755,7 +750,7 @@ void key_minus_handler()
         glLoadIdentity();
     }
 
-    if (escalado_activada)
+    if (transformacion_activa == ESCALADO)
     {
         glScalef(0.5f, 0.5f, 0.5f);
         printf("Escalando\n");
@@ -796,9 +791,11 @@ void specialKeyboard(int key, int x, int y)
             key_down_handler();
             break;
         case GLUT_KEY_PAGE_UP: //Repag
+            printf("HOLsA\n");
             key_repag_handler();
             break;
         case GLUT_KEY_PAGE_DOWN: //AVPAG
+            printf("HOLA\n");
             key_avpag_handler();
             break;
         default:
