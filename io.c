@@ -27,25 +27,12 @@
 #define CTRL_MINUS '-'
 #endif
 
-#ifdef __APPLE__
 #define TRANSLACION 0
-#else
-#define TRANSLACION 0
-#endif
-
-#ifdef __APPLE__
 #define ROTACION 1
-#else
-#define ROTACION 1
-#endif
-
-#ifdef __APPLE__
 #define ESCALADO 2
-#else
-#define ESCALADO 2
-#endif
 
-
+#define COORD_GLOBAL 0
+#define COORD_LOCAL 1
 
 extern object3d *_first_object;
 extern object3d *_selected_object;
@@ -62,8 +49,8 @@ bool transformacion_mundo = true;
 bool transformacion_local = false;
 
 int transformacion_activa = TRANSLACION;
+int coordenada_activa = COORD_GLOBAL;
 
-// Handler para special keyboard
 void key_up_handler();
 void key_down_handler();
 void key_right_handler();
@@ -292,33 +279,18 @@ void keyboard(unsigned char key, int x, int y)
     /* Sistema de referencia (modos excluyentes entre si) */
     case 'g':
     case 'G':
-        if (transformacion_mundo)
-        {
-            printf("Transformacion local activada!\n");
-            transformacion_mundo = false;
-            transformacion_local = true;
-        }
-        else
-        {
-            printf("Transformacion mundo activada!\n");
-            transformacion_local = false;
-            transformacion_mundo = true;
+        if (coordenada_activa != COORD_GLOBAL) {
+            coordenada_activa = COORD_GLOBAL;
+            printf("Transformacion mundo activada!\n");            
         }
         break;
 
     case 'l':
     case 'L':
-        if (transformacion_local)
+        if (coordenada_activa != COORD_LOCAL)
         {
-            printf("Transformacion mundo activada!\n");
-            transformacion_mundo = true;
-            transformacion_local = false;
-        }
-        else
-        {
+            coordenada_activa = COORD_LOCAL;
             printf("Transformacion local activada!\n");
-            transformacion_local = true;
-            transformacion_mundo = false;
         }
         break;
 
@@ -451,7 +423,7 @@ void key_down_handler()
             break;
     }
 
-    if (transformacion_local)
+    if (coordenada_activa == COORD_LOCAL)
     {
         glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
     }
@@ -473,7 +445,7 @@ void key_right_handler()
     list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
 
     glMatrixMode(GL_MODELVIEW);
-    if (transformacion_local)
+    if (coordenada_activa == COORD_LOCAL)
     {
         glLoadMatrixf(_selected_object->list_matrix->m);
     }
@@ -497,7 +469,7 @@ void key_right_handler()
             break;
     }
 
-    if (transformacion_local)
+    if (coordenada_activa == COORD_LOCAL)
     {
         glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
     }
@@ -519,7 +491,7 @@ void key_left_handler()
     list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
 
     glMatrixMode(GL_MODELVIEW);
-    if (transformacion_local)
+    if (coordenada_activa == COORD_LOCAL)
     {
         glLoadMatrixf(_selected_object->list_matrix->m);
     }
@@ -528,7 +500,7 @@ void key_left_handler()
         glLoadIdentity();
     }
 
-    if (transformacion_local)
+    if (coordenada_activa == COORD_LOCAL)
     {
         glLoadMatrixf(_selected_object->list_matrix->m);
     }
@@ -553,7 +525,7 @@ void key_left_handler()
     }
 
 
-    if (transformacion_local)
+    if (coordenada_activa == COORD_LOCAL)
     {
         glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
     }
@@ -575,7 +547,7 @@ void key_avpag_handler()
     list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
 
     glMatrixMode(GL_MODELVIEW);
-    if (transformacion_local)
+    if (coordenada_activa == COORD_LOCAL)
     {
         glLoadMatrixf(_selected_object->list_matrix->m);
     }
@@ -584,7 +556,7 @@ void key_avpag_handler()
         glLoadIdentity();
     }
 
-    if (transformacion_local)
+    if (coordenada_activa == COORD_LOCAL)
     {
         glLoadMatrixf(_selected_object->list_matrix->m);
     }
@@ -608,7 +580,7 @@ void key_avpag_handler()
             break;
     }
 
-    if (transformacion_local)
+    if (coordenada_activa == COORD_LOCAL)
     {
         glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
     }
@@ -631,7 +603,7 @@ void key_repag_handler()
     list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
 
     glMatrixMode(GL_MODELVIEW);
-    if (transformacion_local)
+    if (coordenada_activa == COORD_LOCAL)
     {
         glLoadMatrixf(_selected_object->list_matrix->m);
     }
@@ -640,7 +612,7 @@ void key_repag_handler()
         glLoadIdentity();
     }
 
-    if (transformacion_local)
+    if (coordenada_activa == COORD_LOCAL)
     {
         glLoadMatrixf(_selected_object->list_matrix->m);
     }
@@ -664,7 +636,7 @@ void key_repag_handler()
             break;
     }
 
-    if (transformacion_local)
+    if (coordenada_activa == COORD_LOCAL)
     {
         glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
     }
@@ -686,7 +658,7 @@ void key_plus_handler()
     list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
 
     glMatrixMode(GL_MODELVIEW);
-    if (transformacion_local)
+    if (coordenada_activa == COORD_LOCAL)
     {
         glLoadMatrixf(_selected_object->list_matrix->m);
     }
@@ -695,7 +667,7 @@ void key_plus_handler()
         glLoadIdentity();
     }
 
-    if (transformacion_local)
+    if (coordenada_activa == COORD_LOCAL)
     {
         glLoadMatrixf(_selected_object->list_matrix->m);
     }
@@ -710,7 +682,7 @@ void key_plus_handler()
         printf("Escalando\n");
     }
 
-    if (transformacion_local)
+    if (coordenada_activa == COORD_LOCAL)
     {
         glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
     }
@@ -732,7 +704,7 @@ void key_minus_handler()
     list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
 
     glMatrixMode(GL_MODELVIEW);
-    if (transformacion_local)
+    if (coordenada_activa == COORD_LOCAL)
     {
         glLoadMatrixf(_selected_object->list_matrix->m);
     }
@@ -741,7 +713,7 @@ void key_minus_handler()
         glLoadIdentity();
     }
 
-    if (transformacion_local)
+    if (coordenada_activa == COORD_LOCAL)
     {
         glLoadMatrixf(_selected_object->list_matrix->m);
     }
@@ -756,7 +728,7 @@ void key_minus_handler()
         printf("Escalando\n");
     }
 
-    if (transformacion_local)
+    if (coordenada_activa == COORD_LOCAL)
     {
         glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
     }
@@ -791,11 +763,9 @@ void specialKeyboard(int key, int x, int y)
             key_down_handler();
             break;
         case GLUT_KEY_PAGE_UP: //Repag
-            printf("HOLsA\n");
             key_repag_handler();
             break;
         case GLUT_KEY_PAGE_DOWN: //AVPAG
-            printf("HOLA\n");
             key_avpag_handler();
             break;
         default:
