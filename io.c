@@ -41,13 +41,6 @@ extern GLdouble _ortho_x_min, _ortho_x_max;
 extern GLdouble _ortho_y_min, _ortho_y_max;
 extern GLdouble _ortho_z_min, _ortho_z_max;
 
-bool translacion_activada = false;
-bool rotacion_activada = false;
-bool escalado_activada = false;
-
-bool transformacion_mundo = true;
-bool transformacion_local = false;
-
 int transformacion_activa = TRANSLACION;
 int coordenada_activa = COORD_GLOBAL;
 
@@ -59,6 +52,35 @@ void key_avpag_handler();
 void key_repag_handler();
 void key_plus_handler();
 void key_minus_handler();
+
+void transf_matrix_init()
+{
+    glMatrixMode(GL_MODELVIEW);
+    if (coordenada_activa == COORD_LOCAL)
+    {
+        glLoadMatrixf(_selected_object->list_matrix->m);
+    }
+    else
+    {
+        glLoadIdentity();
+    }
+}
+
+void transf_matrix_set(list_matrix *n_elem_ptr)
+{
+    if (coordenada_activa == COORD_LOCAL)
+    {
+        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
+    }
+    else
+    {
+        glMultMatrixf(_selected_object->list_matrix->m);
+        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
+    }
+
+    n_elem_ptr->nextptr = _selected_object->list_matrix;
+    _selected_object->list_matrix = n_elem_ptr;
+}
 
 void liberar_memoria_obj(object3d *objptr)
 {
@@ -104,9 +126,6 @@ void print_help()
     printf("- Sistema de referencia\n");
     printf("<G, g> \t Activar transformaciones globales\n");
     printf("<T, t> \t Activar transformaciones locales\n");
-
-
-
 
     printf("\n\n");
 }
@@ -172,7 +191,7 @@ void keyboard(unsigned char key, int x, int y)
     case 9: /* <TAB> */
         if (_selected_object != 0)
         {
-        _selected_object = _selected_object->next;
+            _selected_object = _selected_object->next;
         }
         /*The selection is circular, thus if we move out of the list we go back to the first element*/
         if (_selected_object == 0)
@@ -248,13 +267,13 @@ void keyboard(unsigned char key, int x, int y)
     /* Tipo de transformacion */
     case 'm':
     case 'M':
-        
+
         if (transformacion_activa != TRANSLACION)
         {
             transformacion_activa = TRANSLACION;
             printf("Translacion activada!\n");
         }
-    
+
         break;
 
     case 'b':
@@ -273,15 +292,16 @@ void keyboard(unsigned char key, int x, int y)
             transformacion_activa = ESCALADO;
             printf("ESCALADO activada!\n");
         }
-    
+
         break;
 
     /* Sistema de referencia (modos excluyentes entre si) */
     case 'g':
     case 'G':
-        if (coordenada_activa != COORD_GLOBAL) {
+        if (coordenada_activa != COORD_GLOBAL)
+        {
             coordenada_activa = COORD_GLOBAL;
-            printf("Transformacion mundo activada!\n");            
+            printf("Transformacion mundo activada!\n");
         }
         break;
 
@@ -317,14 +337,14 @@ void keyboard(unsigned char key, int x, int y)
     case 'E':
         if (_selected_object != 0)
         {
-        key_plus_handler();
+            key_plus_handler();
         }
         break;
     case 'r':
     case 'R':
         if (_selected_object != 0)
         {
-        key_minus_handler();
+            key_minus_handler();
         }
         break;
     case 26:
@@ -354,41 +374,25 @@ void key_up_handler()
     */
     list_matrix *n_elem_ptr = (list_matrix *)malloc(sizeof(list_matrix));
 
-    glMatrixMode(GL_MODELVIEW);
-    if (transformacion_local)
+    transf_matrix_init();
+
+    switch (transformacion_activa)
     {
-        glLoadMatrixf(_selected_object->list_matrix->m);
-    }
-    else
-    {
-        glLoadIdentity();
-    }
-    switch(transformacion_activa){
-        case ESCALADO:
-            printf("Escalando\n");
-            glScalef(1.0f, 1.5f, 1.0f);
-            break;
-        case ROTACION:
-            printf("Rotando\n");
-            glRotatef(45.0f, 1.0f, 0.0f, 0.0f);
-            break;
-        case TRANSLACION:
-            printf("Translando\n");
-            glTranslatef(0.0f, 1.0f, 0.0f);
-            break;
-    }
-    if (transformacion_local)
-    {
-        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
-    }
-    else
-    {
-        glMultMatrixf(_selected_object->list_matrix->m);
-        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
+    case ESCALADO:
+        printf("Escalando\n");
+        glScalef(1.0f, 1.5f, 1.0f);
+        break;
+    case ROTACION:
+        printf("Rotando\n");
+        glRotatef(45.0f, 1.0f, 0.0f, 0.0f);
+        break;
+    case TRANSLACION:
+        printf("Translando\n");
+        glTranslatef(0.0f, 1.0f, 0.0f);
+        break;
     }
 
-    n_elem_ptr->nextptr = _selected_object->list_matrix;
-    _selected_object->list_matrix = n_elem_ptr;
+    transf_matrix_set(n_elem_ptr);
 }
 
 void key_down_handler()
@@ -398,43 +402,25 @@ void key_down_handler()
     */
     list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
 
-    glMatrixMode(GL_MODELVIEW);
-    if (transformacion_local)
+    transf_matrix_init();
+
+    switch (transformacion_activa)
     {
-        glLoadMatrixf(_selected_object->list_matrix->m);
-    }
-    else
-    {
-        glLoadIdentity();
+    case ESCALADO:
+        printf("Escalando\n");
+        glScalef(1.0f, 0.5f, 1.0f);
+        break;
+    case ROTACION:
+        printf("Rotando\n");
+        glRotatef(45.0f, -1.0f, 0.0f, 0.0f);
+        break;
+    case TRANSLACION:
+        printf("Translando\n");
+        glTranslatef(0.0f, -1.0f, 0.0f);
+        break;
     }
 
-    switch(transformacion_activa){
-        case ESCALADO:
-            printf("Escalando\n");
-            glScalef(1.0f, 0.5f, 1.0f);
-            break;
-        case ROTACION:
-            printf("Rotando\n");
-            glRotatef(45.0f, -1.0f, 0.0f, 0.0f);
-            break;
-        case TRANSLACION:
-            printf("Translando\n");
-            glTranslatef(0.0f, -1.0f, 0.0f);
-            break;
-    }
-
-    if (coordenada_activa == COORD_LOCAL)
-    {
-        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
-    }
-    else
-    {
-        glMultMatrixf(_selected_object->list_matrix->m);
-        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
-    }
-
-    n_elem_ptr->nextptr = _selected_object->list_matrix;
-    _selected_object->list_matrix = n_elem_ptr;
+    transf_matrix_set(n_elem_ptr);
 }
 
 void key_right_handler()
@@ -444,43 +430,25 @@ void key_right_handler()
     */
     list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
 
-    glMatrixMode(GL_MODELVIEW);
-    if (coordenada_activa == COORD_LOCAL)
+    transf_matrix_init();
+
+    switch (transformacion_activa)
     {
-        glLoadMatrixf(_selected_object->list_matrix->m);
-    }
-    else
-    {
-        glLoadIdentity();
+    case ESCALADO:
+        printf("Escalando\n");
+        glScalef(1.5f, 1.0f, 1.0f);
+        break;
+    case ROTACION:
+        printf("Rotando\n");
+        glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
+        break;
+    case TRANSLACION:
+        printf("Translando\n");
+        glTranslatef(1.0f, 0.0f, 0.0f);
+        break;
     }
 
-    switch(transformacion_activa){
-        case ESCALADO:
-            printf("Escalando\n");
-            glScalef(1.5f, 1.0f, 1.0f);
-            break;
-        case ROTACION:
-            printf("Rotando\n");
-            glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
-            break;
-        case TRANSLACION:
-            printf("Translando\n");
-            glTranslatef(1.0f, 0.0f, 0.0f);
-            break;
-    }
-
-    if (coordenada_activa == COORD_LOCAL)
-    {
-        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
-    }
-    else
-    {
-        glMultMatrixf(_selected_object->list_matrix->m);
-        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
-    }
-
-    n_elem_ptr->nextptr = _selected_object->list_matrix;
-    _selected_object->list_matrix = n_elem_ptr;
+    transf_matrix_set(n_elem_ptr);
 }
 
 void key_left_handler()
@@ -490,53 +458,25 @@ void key_left_handler()
     */
     list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
 
-    glMatrixMode(GL_MODELVIEW);
-    if (coordenada_activa == COORD_LOCAL)
+    transf_matrix_init();
+
+    switch (transformacion_activa)
     {
-        glLoadMatrixf(_selected_object->list_matrix->m);
-    }
-    else
-    {
-        glLoadIdentity();
+    case ESCALADO:
+        printf("Escalando\n");
+        glScalef(0.5f, 1.0f, 1.0f);
+        break;
+    case ROTACION:
+        printf("Rotando\n");
+        glRotatef(45.0f, 0.0f, -1.0f, 0.0f);
+        break;
+    case TRANSLACION:
+        printf("Translando\n");
+        glTranslatef(-1.0f, 0.0f, 0.0f);
+        break;
     }
 
-    if (coordenada_activa == COORD_LOCAL)
-    {
-        glLoadMatrixf(_selected_object->list_matrix->m);
-    }
-    else
-    {
-        glLoadIdentity();
-    }
-    
-    switch(transformacion_activa){
-        case ESCALADO:
-            printf("Escalando\n");
-            glScalef(0.5f, 1.0f, 1.0f);
-            break;
-        case ROTACION:
-            printf("Rotando\n");
-            glRotatef(45.0f, 0.0f, -1.0f, 0.0f);
-            break;
-        case TRANSLACION:
-            printf("Translando\n");
-            glTranslatef(-1.0f, 0.0f, 0.0f);
-            break;
-    }
-
-
-    if (coordenada_activa == COORD_LOCAL)
-    {
-        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
-    }
-    else
-    {
-        glMultMatrixf(_selected_object->list_matrix->m);
-        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
-    }
-
-    n_elem_ptr->nextptr = _selected_object->list_matrix;
-    _selected_object->list_matrix = n_elem_ptr;
+    transf_matrix_set(n_elem_ptr);
 }
 
 void key_avpag_handler()
@@ -546,108 +486,53 @@ void key_avpag_handler()
     */
     list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
 
-    glMatrixMode(GL_MODELVIEW);
-    if (coordenada_activa == COORD_LOCAL)
+    transf_matrix_init();
+
+    switch (transformacion_activa)
     {
-        glLoadMatrixf(_selected_object->list_matrix->m);
-    }
-    else
-    {
-        glLoadIdentity();
+    case ESCALADO:
+        printf("Escalando\n");
+        glScalef(1.0f, 1.0f, 1.5f);
+        break;
+    case ROTACION:
+        printf("Rotando\n");
+        glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
+        break;
+    case TRANSLACION:
+        printf("Translando\n");
+        glTranslatef(0.0f, 0.0f, 1.0f);
+        break;
     }
 
-    if (coordenada_activa == COORD_LOCAL)
-    {
-        glLoadMatrixf(_selected_object->list_matrix->m);
-    }
-    else
-    {
-        glLoadIdentity();
-    }
-
-    switch(transformacion_activa){
-        case ESCALADO:
-            printf("Escalando\n");
-            glScalef(1.0f, 1.0f, 1.5f);
-            break;
-        case ROTACION:
-            printf("Rotando\n");
-            glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
-            break;
-        case TRANSLACION:
-            printf("Translando\n");
-            glTranslatef(0.0f, 0.0f, 1.0f);
-            break;
-    }
-
-    if (coordenada_activa == COORD_LOCAL)
-    {
-        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
-    }
-    else
-    {
-        glMultMatrixf(_selected_object->list_matrix->m);
-        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
-    }
-
-    n_elem_ptr->nextptr = _selected_object->list_matrix;
-    _selected_object->list_matrix = n_elem_ptr;
+    transf_matrix_set(n_elem_ptr);
 }
 /* TODO: terminar */
 void key_repag_handler()
 {
-
     /*
     Trasladar -Z; Escalar - Z; Rotar -Z
     */
     list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
 
-    glMatrixMode(GL_MODELVIEW);
-    if (coordenada_activa == COORD_LOCAL)
+    transf_matrix_init();
+
+    switch (transformacion_activa)
     {
-        glLoadMatrixf(_selected_object->list_matrix->m);
-    }
-    else
-    {
-        glLoadIdentity();
+    case ESCALADO:
+        printf("Escalando\n");
+        glScalef(1.0f, 1.0f, 0.5f);
+        break;
+    case ROTACION:
+        printf("Rotando\n");
+        glRotatef(45.0f, 0.0f, 0.0f, -1.0f);
+        break;
+    case TRANSLACION:
+        printf("Translando\n");
+        glTranslatef(0.0f, 0.0f, -1.0f);
+        break;
     }
 
-    if (coordenada_activa == COORD_LOCAL)
-    {
-        glLoadMatrixf(_selected_object->list_matrix->m);
-    }
-    else
-    {
-        glLoadIdentity();
-    }
-    printf("%d\n", translacion_activada);
-    switch(transformacion_activa){
-        case ESCALADO:
-            printf("Escalando\n");
-            glScalef(1.0f, 1.0f, 0.5f);
-            break;
-        case ROTACION:
-            printf("Rotando\n");
-            glRotatef(45.0f, 0.0f, 0.0f, -1.0f);
-            break;
-        case TRANSLACION:
-            printf("Translando\n");
-            glTranslatef(0.0f, 0.0f, -1.0f);
-            break;
-    }
-
-    if (coordenada_activa == COORD_LOCAL)
-    {
-        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
-    }
-    else
-    {
-        glMultMatrixf(_selected_object->list_matrix->m);
-        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
-    }
-
-    n_elem_ptr->nextptr = _selected_object->list_matrix;
-    _selected_object->list_matrix = n_elem_ptr;
+    transf_matrix_set(n_elem_ptr);
 }
 
 void key_plus_handler()
@@ -656,25 +541,8 @@ void key_plus_handler()
     Escalar + en todos los ejes (solo objetos)
     */
     list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
-
-    glMatrixMode(GL_MODELVIEW);
-    if (coordenada_activa == COORD_LOCAL)
-    {
-        glLoadMatrixf(_selected_object->list_matrix->m);
-    }
-    else
-    {
-        glLoadIdentity();
-    }
-
-    if (coordenada_activa == COORD_LOCAL)
-    {
-        glLoadMatrixf(_selected_object->list_matrix->m);
-    }
-    else
-    {
-        glLoadIdentity();
-    }
+    
+    transf_matrix_init();
 
     if (transformacion_activa == ESCALADO)
     {
@@ -682,18 +550,7 @@ void key_plus_handler()
         printf("Escalando\n");
     }
 
-    if (coordenada_activa == COORD_LOCAL)
-    {
-        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
-    }
-    else
-    {
-        glMultMatrixf(_selected_object->list_matrix->m);
-        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
-    }
-
-    n_elem_ptr->nextptr = _selected_object->list_matrix;
-    _selected_object->list_matrix = n_elem_ptr;
+    transf_matrix_set(n_elem_ptr);
 }
 
 void key_minus_handler()
@@ -702,25 +559,8 @@ void key_minus_handler()
     Escalar -  en todos los ejes (solo objetos)
     */
     list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
-
-    glMatrixMode(GL_MODELVIEW);
-    if (coordenada_activa == COORD_LOCAL)
-    {
-        glLoadMatrixf(_selected_object->list_matrix->m);
-    }
-    else
-    {
-        glLoadIdentity();
-    }
-
-    if (coordenada_activa == COORD_LOCAL)
-    {
-        glLoadMatrixf(_selected_object->list_matrix->m);
-    }
-    else
-    {
-        glLoadIdentity();
-    }
+    
+    transf_matrix_init();
 
     if (transformacion_activa == ESCALADO)
     {
@@ -728,22 +568,9 @@ void key_minus_handler()
         printf("Escalando\n");
     }
 
-    if (coordenada_activa == COORD_LOCAL)
-    {
-        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
-    }
-    else
-    {
-        glMultMatrixf(_selected_object->list_matrix->m);
-        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
-    }
-
-    n_elem_ptr->nextptr = _selected_object->list_matrix;
-    _selected_object->list_matrix = n_elem_ptr;
+    transf_matrix_set(n_elem_ptr);
 }
 
-
-/* (TODO): Arreglar que cuando no hay objeto, al pulsar tecla no de un segmentation fault */
 void specialKeyboard(int key, int x, int y)
 {
     if (_selected_object != 0)
