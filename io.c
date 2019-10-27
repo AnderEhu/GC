@@ -384,7 +384,7 @@ void key_up_handler()
         break;
     case ROTACION:
         printf("Rotando\n");
-        glRotatef(45.0f, 1.0f, 0.0f, 0.0f);
+        glRotatef(1.0f, 1.0f, 0.0f, 0.0f);
         break;
     case TRANSLACION:
         printf("Translando\n");
@@ -412,7 +412,7 @@ void key_down_handler()
         break;
     case ROTACION:
         printf("Rotando\n");
-        glRotatef(45.0f, -1.0f, 0.0f, 0.0f);
+        glRotatef(1.0f, -1.0f, 0.0f, 0.0f);
         break;
     case TRANSLACION:
         printf("Translando\n");
@@ -440,7 +440,7 @@ void key_right_handler()
         break;
     case ROTACION:
         printf("Rotando\n");
-        glRotatef(45.0f, 0.0f, 1.0f, 0.0f);
+        glRotatef(1.0f, 0.0f, 1.0f, 0.0f);
         break;
     case TRANSLACION:
         printf("Translando\n");
@@ -468,7 +468,7 @@ void key_left_handler()
         break;
     case ROTACION:
         printf("Rotando\n");
-        glRotatef(45.0f, 0.0f, -1.0f, 0.0f);
+        glRotatef(1.0f, 0.0f, -1.0f, 0.0f);
         break;
     case TRANSLACION:
         printf("Translando\n");
@@ -496,7 +496,7 @@ void key_avpag_handler()
         break;
     case ROTACION:
         printf("Rotando\n");
-        glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
+        glRotatef(1.0f, 0.0f, 0.0f, 1.0f);
         break;
     case TRANSLACION:
         printf("Translando\n");
@@ -524,7 +524,7 @@ void key_repag_handler()
         break;
     case ROTACION:
         printf("Rotando\n");
-        glRotatef(45.0f, 0.0f, 0.0f, -1.0f);
+        glRotatef(1.0f, 0.0f, 0.0f, -1.0f);
         break;
     case TRANSLACION:
         printf("Translando\n");

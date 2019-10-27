@@ -1,3 +1,4 @@
 - Terminar las teclas nuevas (AVPAG, REPAG, +, -)
 
 - Mirar lo de las coordenadas si está bien todo
+- Mirar escalado con avpag y repag (que haya homogeneidad)
