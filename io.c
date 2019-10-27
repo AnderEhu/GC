@@ -379,15 +379,15 @@ void key_up_handler()
     switch (transformacion_activa)
     {
     case ESCALADO:
-        printf("Escalando\n");
+        printf("Escalando up\n");
         glScalef(1.0f, 1.5f, 1.0f);
         break;
     case ROTACION:
-        printf("Rotando\n");
+        printf("Rotando up\n");
         glRotatef(1.0f, 1.0f, 0.0f, 0.0f);
         break;
     case TRANSLACION:
-        printf("Translando\n");
+        printf("Translando up\n");
         glTranslatef(0.0f, 1.0f, 0.0f);
         break;
     }
@@ -407,15 +407,15 @@ void key_down_handler()
     switch (transformacion_activa)
     {
     case ESCALADO:
-        printf("Escalando\n");
+        printf("Escalando down\n");
         glScalef(1.0f, 0.5f, 1.0f);
         break;
     case ROTACION:
-        printf("Rotando\n");
+        printf("Rotando down\n");
         glRotatef(1.0f, -1.0f, 0.0f, 0.0f);
         break;
     case TRANSLACION:
-        printf("Translando\n");
+        printf("Translando down\n");
         glTranslatef(0.0f, -1.0f, 0.0f);
         break;
     }
@@ -435,15 +435,15 @@ void key_right_handler()
     switch (transformacion_activa)
     {
     case ESCALADO:
-        printf("Escalando\n");
+        printf("Escalando right\n");
         glScalef(1.5f, 1.0f, 1.0f);
         break;
     case ROTACION:
-        printf("Rotando\n");
+        printf("Rotando right\n");
         glRotatef(1.0f, 0.0f, 1.0f, 0.0f);
         break;
     case TRANSLACION:
-        printf("Translando\n");
+        printf("Translando right\n");
         glTranslatef(1.0f, 0.0f, 0.0f);
         break;
     }
@@ -463,15 +463,15 @@ void key_left_handler()
     switch (transformacion_activa)
     {
     case ESCALADO:
-        printf("Escalando\n");
+        printf("Escalando left\n");
         glScalef(0.5f, 1.0f, 1.0f);
         break;
     case ROTACION:
-        printf("Rotando\n");
+        printf("Rotando left\n");
         glRotatef(1.0f, 0.0f, -1.0f, 0.0f);
         break;
     case TRANSLACION:
-        printf("Translando\n");
+        printf("Translando left\n");
         glTranslatef(-1.0f, 0.0f, 0.0f);
         break;
     }
@@ -491,15 +491,15 @@ void key_avpag_handler()
     switch (transformacion_activa)
     {
     case ESCALADO:
-        printf("Escalando\n");
+        printf("Escalando avpag\n");
         glScalef(1.0f, 1.0f, 1.5f);
         break;
     case ROTACION:
-        printf("Rotando\n");
+        printf("Rotando avpag\n");
         glRotatef(1.0f, 0.0f, 0.0f, 1.0f);
         break;
     case TRANSLACION:
-        printf("Translando\n");
+        printf("Translando avpag\n");
         glTranslatef(0.0f, 0.0f, 1.0f);
         break;
     }
@@ -519,15 +519,15 @@ void key_repag_handler()
     switch (transformacion_activa)
     {
     case ESCALADO:
-        printf("Escalando\n");
+        printf("Escalando repag\n");
         glScalef(1.0f, 1.0f, 0.5f);
         break;
     case ROTACION:
-        printf("Rotando\n");
+        printf("Rotando repag\n");
         glRotatef(1.0f, 0.0f, 0.0f, -1.0f);
         break;
     case TRANSLACION:
-        printf("Translando\n");
+        printf("Translando repag\n");
         glTranslatef(0.0f, 0.0f, -1.0f);
         break;
     }
@@ -547,7 +547,7 @@ void key_plus_handler()
     if (transformacion_activa == ESCALADO)
     {
         glScalef(1.5f, 1.5f, 1.5f);
-        printf("Escalando\n");
+        printf("Escalando +\n");
     }
 
     transf_matrix_set(n_elem_ptr);
@@ -565,7 +565,7 @@ void key_minus_handler()
     if (transformacion_activa == ESCALADO)
     {
         glScalef(0.5f, 0.5f, 0.5f);
-        printf("Escalando\n");
+        printf("Escalando -\n");
     }
 
     transf_matrix_set(n_elem_ptr);
