@@ -27,6 +27,9 @@
 #define CTRL_MINUS '-'
 #endif
 
+#define MODO_OBJ 0
+#define MODO_CAMARA 1
+
 #define TRANSLACION 0
 #define ROTACION 1
 #define ESCALADO 2
@@ -41,6 +44,7 @@ extern GLdouble _ortho_x_min, _ortho_x_max;
 extern GLdouble _ortho_y_min, _ortho_y_max;
 extern GLdouble _ortho_z_min, _ortho_z_max;
 
+int modo_activo = MODO_OBJ;
 int transformacion_activa = TRANSLACION;
 int coordenada_activa = COORD_GLOBAL;
 
@@ -187,7 +191,6 @@ void keyboard(unsigned char key, int x, int y)
             break;
         }
         break;
-
     case 9: /* <TAB> */
         if (_selected_object != 0)
         {
@@ -197,7 +200,6 @@ void keyboard(unsigned char key, int x, int y)
         if (_selected_object == 0)
             _selected_object = _first_object;
         break;
-
     case 127: /* <SUPR> */
         /*Erasing an object depends on whether it is the first one or not*/
         if (_selected_object == _first_object)
@@ -225,7 +227,6 @@ void keyboard(unsigned char key, int x, int y)
             _selected_object = auxiliar_object;
         }
         break;
-
     case CTRL_MINUS:
         if (glutGetModifiers() == GLUT_ACTIVE_CTRL)
         {
@@ -242,7 +243,6 @@ void keyboard(unsigned char key, int x, int y)
             _ortho_y_min = midy - he / 2;
         }
         break;
-
     case CTRL_PLUS:
         if (glutGetModifiers() == GLUT_ACTIVE_CTRL)
         {
@@ -259,61 +259,86 @@ void keyboard(unsigned char key, int x, int y)
             _ortho_y_min = midy - he / 2;
         }
         break;
-
     case '?':
         print_help();
         break;
-
     /* Tipo de transformacion */
     case 'm':
     case 'M':
-
-        if (transformacion_activa != TRANSLACION)
+        if (modo_activo == MODO_OBJ)
         {
-            transformacion_activa = TRANSLACION;
-            printf("Translacion activada!\n");
+            if (transformacion_activa != TRANSLACION)
+            {
+                transformacion_activa = TRANSLACION;
+                printf("Translacion activada!\n");
+            }   
+
+        } else
+        {
+            // modo camara
         }
-
+        
         break;
-
     case 'b':
     case 'B':
-        if (transformacion_activa != ROTACION)
+        if (modo_activo == MODO_OBJ)
         {
-            transformacion_activa = ROTACION;
-            printf("Rotacion activada!\n");
+            if (transformacion_activa != ROTACION)
+            {
+                transformacion_activa = ROTACION;
+                printf("Rotacion activada!\n");
+            }
+
+        } else
+        {
+            // modo camara
         }
         break;
-
     case 't':
     case 'T':
-        if (transformacion_activa != ESCALADO)
+        if (modo_activo == MODO_OBJ)
         {
-            transformacion_activa = ESCALADO;
-            printf("ESCALADO activada!\n");
+            if (transformacion_activa != ESCALADO)
+            {
+                transformacion_activa = ESCALADO;
+                printf("ESCALADO activada!\n");
+            }
+
+        } else
+        {
+            // modo camara
         }
-
         break;
-
     /* Sistema de referencia (modos excluyentes entre si) */
     case 'g':
     case 'G':
-        if (coordenada_activa != COORD_GLOBAL)
+        if (modo_activo == MODO_OBJ) 
         {
+            if (coordenada_activa != COORD_GLOBAL)
+            {
             coordenada_activa = COORD_GLOBAL;
             printf("Transformacion mundo activada!\n");
+            }
+        } else
+        {
+            // modo camara
         }
         break;
-
     case 'l':
     case 'L':
-        if (coordenada_activa != COORD_LOCAL)
+        if (modo_activo == MODO_OBJ)
         {
-            coordenada_activa = COORD_LOCAL;
-            printf("Transformacion local activada!\n");
+            if (coordenada_activa != COORD_LOCAL)
+            {
+                coordenada_activa = COORD_LOCAL;
+                printf("Transformacion local activada!\n");
+            }
+
+        } else
+        {
+            // modo camara
         }
         break;
-
     /* Elemento a transformar (en todo momento se debe en algun modo. Excluyentes entre si) */
     case 'o':
     case 'O':
@@ -321,7 +346,6 @@ void keyboard(unsigned char key, int x, int y)
         break;
 
     case 'k':
-    case 'K':
 
         break;
 
@@ -356,6 +380,13 @@ void keyboard(unsigned char key, int x, int y)
         break;
     case 27: /* <ESC> */
         exit(0);
+        break;
+    
+    case 'c': // cambiar de camara
+        break;
+    case 'C': // visualizar lo que ve el obj seleccionado (camara objeto)
+        break;
+    case 'K': // activar modo camara
         break;
 
     default:
@@ -506,7 +537,7 @@ void key_avpag_handler()
 
     transf_matrix_set(n_elem_ptr);
 }
-/* TODO: terminar */
+
 void key_repag_handler()
 {
     /*

@@ -2,3 +2,11 @@
 
 - Mirar lo de las coordenadas si está bien todo
 - Mirar escalado con avpag y repag (que haya homogeneidad)
+
+--------------------------------------------------------------------
+
+- Añadir los handlers para la camara
+- Añadir las condiciones para cuando se pulsan teclas (g, l, t, ...)
+- Añadir push de la matriz de cambio de sistema de referencia
+- Tiene que haber handlers para camara y para transformaciones
+- Ojito con los modos de operacion activos en cada momento
