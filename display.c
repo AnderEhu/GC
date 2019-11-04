@@ -110,6 +110,8 @@ void display(void)
     /* Now we start drawing the object */
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    // TODO: tomar aqui las decisiones
+    gluLookAt(0.0, 0.0, 5.0, 2.0, 2.0, 0.0, 0.0, 1.0, 0.0);
 
     /*First, we draw the axes*/
     draw_axes();
@@ -128,7 +130,9 @@ void display(void)
         }
 
         /* Draw the object; for each face create a new polygon with the corresponding vertices */
-        glLoadMatrixf(aux_obj->list_matrix->m);
+        glPushMatrix();
+        glMultMatrixf(aux_obj->list_matrix->m);
+        
         for (f = 0; f < aux_obj->num_faces; f++)
         {
             glBegin(GL_POLYGON);
@@ -141,6 +145,7 @@ void display(void)
             }
             glEnd();
         }
+        glPopMatrix();
         aux_obj = aux_obj->next;
     }
     /*Do the actual drawing*/
