@@ -50,6 +50,10 @@ int modo_activo = MODO_OBJ;
 int transformacion_activa = TRANSLACION;
 int coordenada_activa = COORD_GLOBAL;
 
+vector3 camera_pos;
+vector3 camera_front;
+vector3 camera_up;
+
 void key_up_handler();
 void key_down_handler();
 void key_right_handler();
@@ -107,6 +111,42 @@ void liberar_memoria_obj(object3d *objptr)
     // LIBERAR objeto
     free(objptr);
 }
+
+void selected_camera(vector3 camera_pos, vector3 camera_front, vector3 camera_up){
+    camera *cm = (camera*)malloc(sizeof(camera));
+    
+    /* Position */
+    cm->camera_pos = camera_pos;
+
+    /* Direction */
+    cm->camera_front = camera_front;
+
+    /* Vertical vector */
+    cm->camera_up = camera_up;
+
+    /* Pointer to first camera of the camer lista */
+    _camera_list_first = (list_camera*)malloc(sizeof(list_camera));
+
+    _camera_list_first->actual_camera = cm;
+
+    /* Set next camera */
+    _camera_list_first->nextptr = 0;
+
+    _selected_camera = _camera_list_first;
+
+    gluLookAt(
+        _selected_camera->actual_camera->camera_pos.x, 
+        _selected_camera->actual_camera->camera_pos.y, 
+        _selected_camera->actual_camera->camera_pos.z,
+        _selected_camera->actual_camera->camera_front.x,
+        _selected_camera->actual_camera->camera_front.y,
+        _selected_camera->actual_camera->camera_front.z,
+        _selected_camera->actual_camera->camera_up.x,
+        _selected_camera->actual_camera->camera_up.y,
+        _selected_camera->actual_camera->camera_up.z
+        );
+}
+
 /**
  * @brief This function just prints information about the use
  * of the keys
@@ -211,6 +251,12 @@ void keyboard(unsigned char key, int x, int y)
         {
             aux_camera = (camera*)malloc(sizeof(camera));
             aux_camera_obj = (list_camera*)malloc(sizeof(list_camera));
+
+
+            //vector3 camera_pos;
+            //vector3 camera_front;
+            //vector3 camera_up;
+
             // INTRODUCIR CAMARAS
         }
 
@@ -414,7 +460,25 @@ void keyboard(unsigned char key, int x, int y)
             _selected_camera = _camera_list_first;
         break;
     case 'C': // visualizar lo que ve el obj seleccionado (camara objeto)
-        break;
+        
+        camera_pos.x = _selected_object->max.z;
+        camera_pos.y = _selected_object->max.y / 2;
+        camera_pos.z = _selected_object->max.x / 2;
+
+        /* Direction */ //TODO//
+        camera_front.x = 0.0f;
+        camera_front.y = 0.0f;
+        camera_front.z = 0.0f;
+
+        /* Vertical vector */
+        camera_up.x = 0.0f;
+        camera_up.y = 1.0f;
+        camera_up.z = 0.0f;
+
+        selected_camera(camera_pos,camera_front,camera_up);
+
+
+            break;
     case 'K': // activar/descativar modo camara
         if (modo_activo != MODO_CAMARA) 
         {
