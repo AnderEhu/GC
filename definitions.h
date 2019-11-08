@@ -132,6 +132,28 @@ struct object3d
     list_matrix *list_matrix; /* display list matrix */
 };
 
+/****************************
+ * Structure to store the   *
+ * camera objects           *
+ ****************************/
+typedef struct
+{
+    vector3 camera_pos;
+    vector3 camera_front;
+    vector3 camera_up;
+} camera;
+
+/****************************
+ * Structure to store the   *
+ * camera objects list      *
+ ****************************/
+typedef struct list_camera
+{
+    camera *actual_camera;
+    struct list_camera* nextptr;
+} list_camera;
+
+
 typedef struct object3d object3d;
 
 #endif // DEFINITIONS_H

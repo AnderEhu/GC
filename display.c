@@ -33,6 +33,7 @@ extern GLdouble _ortho_z_min, _ortho_z_max;
 
 extern object3d *_first_object;
 extern object3d *_selected_object;
+extern list_camera *_camera_list;
 
 /**
  * @brief Function to draw the axes
@@ -110,8 +111,19 @@ void display(void)
     /* Now we start drawing the object */
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    
     // TODO: tomar aqui las decisiones
-    gluLookAt(0.0, 0.0, 5.0, 2.0, 2.0, 0.0, 0.0, 1.0, 0.0);
+    gluLookAt(
+        _camera_list->actual_camera->camera_pos.x, 
+        _camera_list->actual_camera->camera_pos.y, 
+        _camera_list->actual_camera->camera_pos.z,
+        _camera_list->actual_camera->camera_front.x,
+        _camera_list->actual_camera->camera_front.y,
+        _camera_list->actual_camera->camera_front.z,
+        _camera_list->actual_camera->camera_up.x,
+        _camera_list->actual_camera->camera_up.y,
+        _camera_list->actual_camera->camera_up.z
+        );
 
     /*First, we draw the axes*/
     draw_axes();

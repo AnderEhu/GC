@@ -39,6 +39,7 @@
 
 extern object3d *_first_object;
 extern object3d *_selected_object;
+extern list_camera *_camera_list;
 
 extern GLdouble _ortho_x_min, _ortho_x_max;
 extern GLdouble _ortho_y_min, _ortho_y_max;
@@ -153,6 +154,7 @@ void keyboard(unsigned char key, int x, int y)
     {
     case 'f':
     case 'F':
+
         /*Ask for file*/
         printf("%s", KG_MSSG_SELECT_FILE);
         scanf("%s", fname);
@@ -176,7 +178,7 @@ void keyboard(unsigned char key, int x, int y)
             /* Reservar memoria para list_matrix */
             aux_list = (list_matrix *)malloc(sizeof(list_matrix));
 
-            /* Obtenemos la matrix de indentidad del mopdel-view */
+            /* Obtenemos la matrix de indentidad del model-view */
             glMatrixMode(GL_MODELVIEW);
             glLoadIdentity();
             glGetFloatv(GL_MODELVIEW_MATRIX, aux_list->m);
@@ -271,13 +273,13 @@ void keyboard(unsigned char key, int x, int y)
             {
                 transformacion_activa = TRANSLACION;
                 printf("Translacion activada!\n");
-            }   
-
-        } else
+            }
+        }
+        else
         {
             // modo camara
         }
-        
+
         break;
     case 'b':
     case 'B':
@@ -288,8 +290,8 @@ void keyboard(unsigned char key, int x, int y)
                 transformacion_activa = ROTACION;
                 printf("Rotacion activada!\n");
             }
-
-        } else
+        }
+        else
         {
             // modo camara
         }
@@ -303,8 +305,8 @@ void keyboard(unsigned char key, int x, int y)
                 transformacion_activa = ESCALADO;
                 printf("ESCALADO activada!\n");
             }
-
-        } else
+        }
+        else
         {
             // modo camara
         }
@@ -312,14 +314,15 @@ void keyboard(unsigned char key, int x, int y)
     /* Sistema de referencia (modos excluyentes entre si) */
     case 'g':
     case 'G':
-        if (modo_activo == MODO_OBJ) 
+        if (modo_activo == MODO_OBJ)
         {
             if (coordenada_activa != COORD_GLOBAL)
             {
-            coordenada_activa = COORD_GLOBAL;
-            printf("Transformacion mundo activada!\n");
+                coordenada_activa = COORD_GLOBAL;
+                printf("Transformacion mundo activada!\n");
             }
-        } else
+        }
+        else
         {
             // modo camara
         }
@@ -333,8 +336,8 @@ void keyboard(unsigned char key, int x, int y)
                 coordenada_activa = COORD_LOCAL;
                 printf("Transformacion local activada!\n");
             }
-
-        } else
+        }
+        else
         {
             // modo camara
         }
@@ -381,7 +384,7 @@ void keyboard(unsigned char key, int x, int y)
     case 27: /* <ESC> */
         exit(0);
         break;
-    
+
     case 'c': // cambiar de camara
         break;
     case 'C': // visualizar lo que ve el obj seleccionado (camara objeto)
@@ -572,7 +575,7 @@ void key_plus_handler()
     Escalar + en todos los ejes (solo objetos)
     */
     list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
-    
+
     transf_matrix_init();
 
     if (transformacion_activa == ESCALADO)
@@ -590,7 +593,7 @@ void key_minus_handler()
     Escalar -  en todos los ejes (solo objetos)
     */
     list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
-    
+
     transf_matrix_init();
 
     if (transformacion_activa == ESCALADO)

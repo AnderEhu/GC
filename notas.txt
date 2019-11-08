@@ -10,3 +10,7 @@
 - Añadir push de la matriz de cambio de sistema de referencia
 - Tiene que haber handlers para camara y para transformaciones
 - Ojito con los modos de operacion activos en cada momento
+
+--------------------------------------------------------------------
+
+
