@@ -132,6 +132,16 @@ void print_help()
     printf("- Sistema de referencia\n");
     printf("<G, g> \t Activar transformaciones globales\n");
     printf("<T, t> \t Activar transformaciones locales\n");
+    printf("<c> \t Cambiar de camara\n");
+    printf("<C> \t Visualizar lo que ve el objeto\n");
+    printf("<K> \t Activar/desactivar modo camara\n");
+    printf("-Opciones con modo camara activado: \n");
+    printf("<G, g> \t Camara en modo analisis\n");
+    printf("<L, l> \t Camara en modo vuelo\n");
+    printf("<T, t> \t Cambio de volumen de vision\n");
+    printf("<B, b> \t Rotaciones a la camara\n");
+    printf("<M, m> \t Traslaciones a la camara\n");
+    printf("<P, p> \t Cambio de tipo de proyeccion (perpectiva/paralela)\n");
 
     printf("\n\n");
 }
@@ -150,67 +160,71 @@ void keyboard(unsigned char key, int x, int y)
     list_matrix *aux_list;
     GLdouble wd, he, midx, midy;
     int i;
+    camera *aux_camera = 0;
+    list_camera *aux_camera_obj = 0;
 
     switch (key)
     {
     case 'f':
     case 'F':
-
-        /*Ask for file*/
-        printf("%s", KG_MSSG_SELECT_FILE);
-        scanf("%s", fname);
-        /*Allocate memory for the structure and read the file*/
-        auxiliar_object = (object3d *)malloc(sizeof(object3d));
-        read = read_wavefront(fname, auxiliar_object);
-        switch (read)
-        {
-        /*Errors in the reading*/
-        case 1:
-            printf("%s: %s\n", fname, KG_MSSG_FILENOTFOUND);
-            break;
-        case 2:
-            printf("%s: %s\n", fname, KG_MSSG_INVALIDFILE);
-            break;
-        case 3:
-            printf("%s: %s\n", fname, KG_MSSG_EMPTYFILE);
-            break;
-        /*Read OK*/
-        case 0:
-            /* Reservar memoria para list_matrix */
-            aux_list = (list_matrix *)malloc(sizeof(list_matrix));
-
-            /* Obtenemos la matrix de indentidad del model-view */
-            glMatrixMode(GL_MODELVIEW);
-            glLoadIdentity();
-            glGetFloatv(GL_MODELVIEW_MATRIX, aux_list->m);
-            aux_list->nextptr = 0;
-            auxiliar_object->list_matrix = aux_list;
-
-            /*Insert the new object in the list*/
-            auxiliar_object->next = _first_object;
-            _first_object = auxiliar_object;
-            _selected_object = _first_object;
-            printf("%s\n", KG_MSSG_FILEREAD);
-            break;
-        }
-        break;
-    case 9: /* <TAB> */
         if (modo_activo == MODO_OBJ)
         {
-            if (_selected_object != 0) _selected_object = _selected_object->next;
-            /*The selection is circular, thus if we move out of the list we go back to the first element*/
-            if (_selected_object == 0) _selected_object = _first_object;
-        } else 
+            /*Ask for file*/
+            printf("%s", KG_MSSG_SELECT_FILE);
+            scanf("%s", fname);
+            /*Allocate memory for the structure and read the file*/
+            auxiliar_object = (object3d *)malloc(sizeof(object3d));
+            read = read_wavefront(fname, auxiliar_object);
+            switch (read)
+            {
+            /*Errors in the reading*/
+            case 1:
+                printf("%s: %s\n", fname, KG_MSSG_FILENOTFOUND);
+                break;
+            case 2:
+                printf("%s: %s\n", fname, KG_MSSG_INVALIDFILE);
+                break;
+            case 3:
+                printf("%s: %s\n", fname, KG_MSSG_EMPTYFILE);
+                break;
+            /*Read OK*/
+            case 0:
+                /* Reservar memoria para list_matrix */
+                aux_list = (list_matrix *)malloc(sizeof(list_matrix));
+
+                /* Obtenemos la matrix de indentidad del model-view */
+                glMatrixMode(GL_MODELVIEW);
+                glLoadIdentity();
+                glGetFloatv(GL_MODELVIEW_MATRIX, aux_list->m);
+                aux_list->nextptr = 0;
+                auxiliar_object->list_matrix = aux_list;
+
+                /*Insert the new object in the list*/
+                auxiliar_object->next = _first_object;
+                _first_object = auxiliar_object;
+                _selected_object = _first_object;
+                printf("%s\n", KG_MSSG_FILEREAD);
+                break;
+            }
+        }
+        else
         {
-            if (_selected_camera != 0) _selected_camera = _selected_camera->nextptr;
-            if (_selected_camera == 0) _selected_camera = _camera_list_first;
+            aux_camera = (camera*)malloc(sizeof(camera));
+            aux_camera_obj = (list_camera*)malloc(sizeof(list_camera));
+            // INTRODUCIR CAMARAS
         }
 
+        break;
+    case 9: /* <TAB> */
+        if (_selected_object != 0)
+            _selected_object = _selected_object->next;
+        /*The selection is circular, thus if we move out of the list we go back to the first element*/
+        if (_selected_object == 0)
+            _selected_object = _first_object;
         break;
     case 127: /* <SUPR> */
         // TODO: BORRAR CAMARA????
-        
-        
+
         /*Erasing an object depends on whether it is the first one or not*/
         if (_selected_object == _first_object)
         {
@@ -394,12 +408,24 @@ void keyboard(unsigned char key, int x, int y)
         break;
 
     case 'c': // cambiar de camara
+        if (_selected_camera != 0)
+            _selected_camera = _selected_camera->nextptr;
+        if (_selected_camera == 0)
+            _selected_camera = _camera_list_first;
         break;
     case 'C': // visualizar lo que ve el obj seleccionado (camara objeto)
         break;
-    case 'K': // activar modo camara
+    case 'K': // activar/descativar modo camara
+        if (modo_activo != MODO_CAMARA) 
+        {
+            modo_activo = MODO_CAMARA;
+            break;
+        } else 
+        {
+            modo_activo = MODO_OBJ;
+            break;
+        }
         break;
-
     default:
         /*In the default case we just print the code of the key. This is usefull to define new cases*/
         printf("%d %c\n", key, key);
