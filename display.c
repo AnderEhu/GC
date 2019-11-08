@@ -33,7 +33,7 @@ extern GLdouble _ortho_z_min, _ortho_z_max;
 
 extern object3d *_first_object;
 extern object3d *_selected_object;
-extern list_camera *_camera_list;
+extern list_camera *_selected_camera;
 
 /**
  * @brief Function to draw the axes
@@ -114,15 +114,15 @@ void display(void)
     
     // TODO: tomar aqui las decisiones
     gluLookAt(
-        _camera_list->actual_camera->camera_pos.x, 
-        _camera_list->actual_camera->camera_pos.y, 
-        _camera_list->actual_camera->camera_pos.z,
-        _camera_list->actual_camera->camera_front.x,
-        _camera_list->actual_camera->camera_front.y,
-        _camera_list->actual_camera->camera_front.z,
-        _camera_list->actual_camera->camera_up.x,
-        _camera_list->actual_camera->camera_up.y,
-        _camera_list->actual_camera->camera_up.z
+        _selected_camera->actual_camera->camera_pos.x, 
+        _selected_camera->actual_camera->camera_pos.y, 
+        _selected_camera->actual_camera->camera_pos.z,
+        _selected_camera->actual_camera->camera_front.x,
+        _selected_camera->actual_camera->camera_front.y,
+        _selected_camera->actual_camera->camera_front.z,
+        _selected_camera->actual_camera->camera_up.x,
+        _selected_camera->actual_camera->camera_up.y,
+        _selected_camera->actual_camera->camera_up.z
         );
 
     /*First, we draw the axes*/

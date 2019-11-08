@@ -38,7 +38,8 @@ GLdouble _ortho_z_min, _ortho_z_max; /*Variables for the control of the orthogra
 
 object3d *_first_object = 0;    /*List of objects*/
 object3d *_selected_object = 0; /*Object currently selected*/
-list_camera *_camera_list = 0;
+list_camera *_camera_list_first = 0;
+list_camera *_selected_camera = 0;
 
 /** GENERAL INITIALIZATION **/
 void initialization()
@@ -82,12 +83,15 @@ void set_default_camera()
     cm->camera_up.y = 1.0f;
     cm->camera_up.z = 0.0f;
 
-    _camera_list = (list_camera*)malloc(sizeof(list_camera));
+    /* Pointer to first camera of the camer lista */
+    _camera_list_first = (list_camera*)malloc(sizeof(list_camera));
 
-    _camera_list->actual_camera = cm;
+    _camera_list_first->actual_camera = cm;
 
     /* Set next camera */
-    _camera_list->nextptr = 0;
+    _camera_list_first->nextptr = 0;
+
+    _selected_camera = _camera_list_first;
 }
 /** MAIN FUNCTION **/
 int main(int argc, char **argv)

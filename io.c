@@ -39,7 +39,8 @@
 
 extern object3d *_first_object;
 extern object3d *_selected_object;
-extern list_camera *_camera_list;
+extern list_camera *_camera_list_first;
+extern list_camera *_selected_camera;
 
 extern GLdouble _ortho_x_min, _ortho_x_max;
 extern GLdouble _ortho_y_min, _ortho_y_max;
@@ -194,15 +195,22 @@ void keyboard(unsigned char key, int x, int y)
         }
         break;
     case 9: /* <TAB> */
-        if (_selected_object != 0)
+        if (modo_activo == MODO_OBJ)
         {
-            _selected_object = _selected_object->next;
+            if (_selected_object != 0) _selected_object = _selected_object->next;
+            /*The selection is circular, thus if we move out of the list we go back to the first element*/
+            if (_selected_object == 0) _selected_object = _first_object;
+        } else 
+        {
+            if (_selected_camera != 0) _selected_camera = _selected_camera->nextptr;
+            if (_selected_camera == 0) _selected_camera = _camera_list_first;
         }
-        /*The selection is circular, thus if we move out of the list we go back to the first element*/
-        if (_selected_object == 0)
-            _selected_object = _first_object;
+
         break;
     case 127: /* <SUPR> */
+        // TODO: BORRAR CAMARA????
+        
+        
         /*Erasing an object depends on whether it is the first one or not*/
         if (_selected_object == _first_object)
         {
