@@ -365,14 +365,14 @@ void keyboard(unsigned char key, int x, int y)
     */
     case 'e':
     case 'E':
-        if (_selected_object != 0)
+        if (_selected_object != 0 && transformacion_activa == ESCALADO)
         {
             transform(obj_plus_transf_values);
         }
         break;
     case 'r':
     case 'R':
-        if (_selected_object != 0)
+        if (_selected_object != 0 && transformacion_activa == ESCALADO)
         {
             transform(obj_minus_transf_values);
         }

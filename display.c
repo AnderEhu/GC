@@ -110,14 +110,13 @@ void display(void)
 
     /*First, we draw the axes*/
     draw_axes();
-    
+
     /* Now we start drawing the object */
     glMatrixMode(GL_MODELVIEW);
 
     glLoadIdentity();
 
     glLoadMatrixf(_selected_camera->actual_camera->m);
-
     /*Now each of the objects in the list*/
     while (aux_obj != 0)
     {
@@ -134,7 +133,6 @@ void display(void)
         /* Draw the object; for each face create a new polygon with the corresponding vertices */
         glPushMatrix();
         glMultMatrixf(aux_obj->list_matrix->m);
-
         for (f = 0; f < aux_obj->num_faces; f++)
         {
             glBegin(GL_POLYGON);
