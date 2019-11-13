@@ -138,9 +138,6 @@ struct object3d
  ****************************/
 typedef struct
 {
-    vector3 camera_pos;
-    vector3 camera_front;
-    vector3 camera_up;
     GLfloat m[16];
     GLfloat m_inv[16];
 } camera;

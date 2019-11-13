@@ -65,41 +65,6 @@ extern transf_values *obj_repag_transf_values;
 extern transf_values *obj_plus_transf_values;
 extern transf_values *obj_minus_transf_values;
 
-void selected_camera(vector3 camera_pos, vector3 camera_front, vector3 camera_up)
-{
-    camera *cm = (camera *)malloc(sizeof(camera));
-
-    /* Position */
-    cm->camera_pos = camera_pos;
-
-    /* Direction */
-    cm->camera_front = camera_front;
-
-    /* Vertical vector */
-    cm->camera_up = camera_up;
-
-    /* Pointer to first camera of the camer lista */
-    _camera_list_first = (list_camera *)malloc(sizeof(list_camera));
-
-    _camera_list_first->actual_camera = cm;
-
-    /* Set next camera */
-    _camera_list_first->nextptr = 0;
-
-    _selected_camera = _camera_list_first;
-
-    gluLookAt(
-        _selected_camera->actual_camera->camera_pos.x,
-        _selected_camera->actual_camera->camera_pos.y,
-        _selected_camera->actual_camera->camera_pos.z,
-        _selected_camera->actual_camera->camera_front.x,
-        _selected_camera->actual_camera->camera_front.y,
-        _selected_camera->actual_camera->camera_front.z,
-        _selected_camera->actual_camera->camera_up.x,
-        _selected_camera->actual_camera->camera_up.y,
-        _selected_camera->actual_camera->camera_up.z);
-}
-
 /**
  * @brief This function just prints information about the use
  * of the keys
@@ -409,8 +374,6 @@ void keyboard(unsigned char key, int x, int y)
         camera_up.x = 0.0f;
         camera_up.y = 1.0f;
         camera_up.z = 0.0f;
-
-        selected_camera(camera_pos, camera_front, camera_up);
 
         break;
     case 'K': // activar/descativar modo camara
