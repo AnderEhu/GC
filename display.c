@@ -108,25 +108,15 @@ void display(void)
         glOrtho(_ortho_x_min, _ortho_x_max, midpt - (he / 2), midpt + (he / 2), _ortho_z_min, _ortho_z_max);
     }
 
-    /* Now we start drawing the object */
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    
-    // TODO: tomar aqui las decisiones
-    gluLookAt(
-        _selected_camera->actual_camera->camera_pos.x, 
-        _selected_camera->actual_camera->camera_pos.y, 
-        _selected_camera->actual_camera->camera_pos.z,
-        _selected_camera->actual_camera->camera_front.x,
-        _selected_camera->actual_camera->camera_front.y,
-        _selected_camera->actual_camera->camera_front.z,
-        _selected_camera->actual_camera->camera_up.x,
-        _selected_camera->actual_camera->camera_up.y,
-        _selected_camera->actual_camera->camera_up.z
-        );
-
     /*First, we draw the axes*/
     draw_axes();
+    
+    /* Now we start drawing the object */
+    glMatrixMode(GL_MODELVIEW);
+
+    glLoadIdentity();
+
+    glLoadMatrixf(_selected_camera->actual_camera->m);
 
     /*Now each of the objects in the list*/
     while (aux_obj != 0)
@@ -144,7 +134,7 @@ void display(void)
         /* Draw the object; for each face create a new polygon with the corresponding vertices */
         glPushMatrix();
         glMultMatrixf(aux_obj->list_matrix->m);
-        
+
         for (f = 0; f < aux_obj->num_faces; f++)
         {
             glBegin(GL_POLYGON);

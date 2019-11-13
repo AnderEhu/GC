@@ -1,6 +1,4 @@
 - Terminar las teclas nuevas (AVPAG, REPAG, +, -)
-
-- Mirar lo de las coordenadas si está bien todo
 - Mirar escalado con avpag y repag (que haya homogeneidad)
 
 --------------------------------------------------------------------
@@ -14,3 +12,8 @@
 --------------------------------------------------------------------
 
 - Poder cargar cámaras por archivo?
+- Funcion para nueva camara
+- Una funcion para transformaciones
+- Al CTRL-Z mirar si liberamos memoria
+
+--------------------------------------------------------------------

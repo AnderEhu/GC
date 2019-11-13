@@ -58,7 +58,7 @@
 #define KG_COL_Z_AXIS_G 0.0f
 #define KG_COL_Z_AXIS_B 1.0f
 
-#define KG_MAX_DOUBLE 10E25
+#define KG_MAX_DOUBLE 10E25 
 
 /** STRUCTURES **/
 
@@ -141,6 +141,8 @@ typedef struct
     vector3 camera_pos;
     vector3 camera_front;
     vector3 camera_up;
+    GLfloat m[16];
+    GLfloat m_inv[16];
 } camera;
 
 /****************************
@@ -153,6 +155,12 @@ typedef struct list_camera
     struct list_camera* nextptr;
 } list_camera;
 
+typedef struct
+{
+    vector3 translate_v;
+    vector3 scale_v;
+    vector3 rotation_v;
+} transf_values;
 
 typedef struct object3d object3d;
 

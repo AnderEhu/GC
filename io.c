@@ -11,6 +11,8 @@
 #endif
 #include "definitions.h"
 #include "load_obj.h"
+#include "transformations.h"
+#include "util.h"
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -54,67 +56,19 @@ vector3 camera_pos;
 vector3 camera_front;
 vector3 camera_up;
 
-void key_up_handler();
-void key_down_handler();
-void key_right_handler();
-void key_left_handler();
-void key_avpag_handler();
-void key_repag_handler();
-void key_plus_handler();
-void key_minus_handler();
+extern transf_values *obj_up_transf_values;
+extern transf_values *obj_down_transf_values;
+extern transf_values *obj_right_transf_values;
+extern transf_values *obj_left_transf_values;
+extern transf_values *obj_avpag_transf_values;
+extern transf_values *obj_repag_transf_values;
+extern transf_values *obj_plus_transf_values;
+extern transf_values *obj_minus_transf_values;
 
-void transf_matrix_init()
+void selected_camera(vector3 camera_pos, vector3 camera_front, vector3 camera_up)
 {
-    glMatrixMode(GL_MODELVIEW);
-    if (coordenada_activa == COORD_LOCAL)
-    {
-        glLoadMatrixf(_selected_object->list_matrix->m);
-    }
-    else
-    {
-        glLoadIdentity();
-    }
-}
+    camera *cm = (camera *)malloc(sizeof(camera));
 
-void transf_matrix_set(list_matrix *n_elem_ptr)
-{
-    if (coordenada_activa == COORD_LOCAL)
-    {
-        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
-    }
-    else
-    {
-        glMultMatrixf(_selected_object->list_matrix->m);
-        glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
-    }
-
-    n_elem_ptr->nextptr = _selected_object->list_matrix;
-    _selected_object->list_matrix = n_elem_ptr;
-}
-
-void liberar_memoria_obj(object3d *objptr)
-{
-    int i;
-
-    // LIBERAR tabla de vertices
-    free(objptr->vertex_table);
-
-    // LIBERAR cada una de las entradas de las caras, recorriendo una a una
-    for (i = 0; i < objptr->num_faces; i++)
-    {
-        free(objptr->face_table[i].vertex_table);
-    }
-
-    // LIBERAR tabla de caras
-    free(objptr->face_table);
-
-    // LIBERAR objeto
-    free(objptr);
-}
-
-void selected_camera(vector3 camera_pos, vector3 camera_front, vector3 camera_up){
-    camera *cm = (camera*)malloc(sizeof(camera));
-    
     /* Position */
     cm->camera_pos = camera_pos;
 
@@ -125,7 +79,7 @@ void selected_camera(vector3 camera_pos, vector3 camera_front, vector3 camera_up
     cm->camera_up = camera_up;
 
     /* Pointer to first camera of the camer lista */
-    _camera_list_first = (list_camera*)malloc(sizeof(list_camera));
+    _camera_list_first = (list_camera *)malloc(sizeof(list_camera));
 
     _camera_list_first->actual_camera = cm;
 
@@ -135,16 +89,15 @@ void selected_camera(vector3 camera_pos, vector3 camera_front, vector3 camera_up
     _selected_camera = _camera_list_first;
 
     gluLookAt(
-        _selected_camera->actual_camera->camera_pos.x, 
-        _selected_camera->actual_camera->camera_pos.y, 
+        _selected_camera->actual_camera->camera_pos.x,
+        _selected_camera->actual_camera->camera_pos.y,
         _selected_camera->actual_camera->camera_pos.z,
         _selected_camera->actual_camera->camera_front.x,
         _selected_camera->actual_camera->camera_front.y,
         _selected_camera->actual_camera->camera_front.z,
         _selected_camera->actual_camera->camera_up.x,
         _selected_camera->actual_camera->camera_up.y,
-        _selected_camera->actual_camera->camera_up.z
-        );
+        _selected_camera->actual_camera->camera_up.z);
 }
 
 /**
@@ -249,15 +202,12 @@ void keyboard(unsigned char key, int x, int y)
         }
         else
         {
-            aux_camera = (camera*)malloc(sizeof(camera));
-            aux_camera_obj = (list_camera*)malloc(sizeof(list_camera));
+            aux_camera = (camera *)malloc(sizeof(camera));
+            aux_camera_obj = (list_camera *)malloc(sizeof(list_camera));
+
+            
 
 
-            //vector3 camera_pos;
-            //vector3 camera_front;
-            //vector3 camera_up;
-
-            // INTRODUCIR CAMARAS
         }
 
         break;
@@ -335,33 +285,18 @@ void keyboard(unsigned char key, int x, int y)
     /* Tipo de transformacion */
     case 'm':
     case 'M':
-        if (modo_activo == MODO_OBJ)
+        if (transformacion_activa != TRANSLACION)
         {
-            if (transformacion_activa != TRANSLACION)
-            {
-                transformacion_activa = TRANSLACION;
-                printf("Translacion activada!\n");
-            }
+            transformacion_activa = TRANSLACION;
+            printf("Translacion activada!\n");
         }
-        else
-        {
-            // modo camara
-        }
-
         break;
     case 'b':
     case 'B':
-        if (modo_activo == MODO_OBJ)
+        if (transformacion_activa != ROTACION)
         {
-            if (transformacion_activa != ROTACION)
-            {
-                transformacion_activa = ROTACION;
-                printf("Rotacion activada!\n");
-            }
-        }
-        else
-        {
-            // modo camara
+            transformacion_activa = ROTACION;
+            printf("Rotacion activada!\n");
         }
         break;
     case 't':
@@ -376,7 +311,7 @@ void keyboard(unsigned char key, int x, int y)
         }
         else
         {
-            // modo camara
+            // volumen vision
         }
         break;
     /* Sistema de referencia (modos excluyentes entre si) */
@@ -392,7 +327,7 @@ void keyboard(unsigned char key, int x, int y)
         }
         else
         {
-            // modo camara
+            // modo analisis mirando al objeto
         }
         break;
     case 'l':
@@ -407,7 +342,7 @@ void keyboard(unsigned char key, int x, int y)
         }
         else
         {
-            // modo camara
+            // modo vuelo, transformaciones local camara
         }
         break;
     /* Elemento a transformar (en todo momento se debe en algun modo. Excluyentes entre si) */
@@ -432,14 +367,14 @@ void keyboard(unsigned char key, int x, int y)
     case 'E':
         if (_selected_object != 0)
         {
-            key_plus_handler();
+            transform(obj_plus_transf_values);
         }
         break;
     case 'r':
     case 'R':
         if (_selected_object != 0)
         {
-            key_minus_handler();
+            transform(obj_minus_transf_values);
         }
         break;
     case 26:
@@ -460,7 +395,7 @@ void keyboard(unsigned char key, int x, int y)
             _selected_camera = _camera_list_first;
         break;
     case 'C': // visualizar lo que ve el obj seleccionado (camara objeto)
-        
+        // TODO: arreglar esto
         camera_pos.x = _selected_object->max.z;
         camera_pos.y = _selected_object->max.y / 2;
         camera_pos.z = _selected_object->max.x / 2;
@@ -475,17 +410,19 @@ void keyboard(unsigned char key, int x, int y)
         camera_up.y = 1.0f;
         camera_up.z = 0.0f;
 
-        selected_camera(camera_pos,camera_front,camera_up);
+        selected_camera(camera_pos, camera_front, camera_up);
 
-
-            break;
+        break;
     case 'K': // activar/descativar modo camara
-        if (modo_activo != MODO_CAMARA) 
+        if (modo_activo != MODO_CAMARA)
         {
+            printf("Modo camara activado!\n");
             modo_activo = MODO_CAMARA;
             break;
-        } else 
+        }
+        else
         {
+            printf("Modo objeto activado!\n");
             modo_activo = MODO_OBJ;
             break;
         }
@@ -499,238 +436,37 @@ void keyboard(unsigned char key, int x, int y)
     glutPostRedisplay();
 }
 
-void key_up_handler()
-{
-    /*
-    Trasladar +Y; Escalar + Y; Rotar +X
-    */
-    list_matrix *n_elem_ptr = (list_matrix *)malloc(sizeof(list_matrix));
-
-    transf_matrix_init();
-
-    switch (transformacion_activa)
-    {
-    case ESCALADO:
-        printf("Escalando up\n");
-        glScalef(1.0f, 1.5f, 1.0f);
-        break;
-    case ROTACION:
-        printf("Rotando up\n");
-        glRotatef(1.0f, 1.0f, 0.0f, 0.0f);
-        break;
-    case TRANSLACION:
-        printf("Translando up\n");
-        glTranslatef(0.0f, 1.0f, 0.0f);
-        break;
-    }
-
-    transf_matrix_set(n_elem_ptr);
-}
-
-void key_down_handler()
-{
-    /*
-    Trasladar -Y; Escalar - Y; Rotar -X
-    */
-    list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
-
-    transf_matrix_init();
-
-    switch (transformacion_activa)
-    {
-    case ESCALADO:
-        printf("Escalando down\n");
-        glScalef(1.0f, 0.5f, 1.0f);
-        break;
-    case ROTACION:
-        printf("Rotando down\n");
-        glRotatef(1.0f, -1.0f, 0.0f, 0.0f);
-        break;
-    case TRANSLACION:
-        printf("Translando down\n");
-        glTranslatef(0.0f, -1.0f, 0.0f);
-        break;
-    }
-
-    transf_matrix_set(n_elem_ptr);
-}
-
-void key_right_handler()
-{
-    /*
-    Trasladar +X; Escalar + X; Rotar +Y
-    */
-    list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
-
-    transf_matrix_init();
-
-    switch (transformacion_activa)
-    {
-    case ESCALADO:
-        printf("Escalando right\n");
-        glScalef(1.5f, 1.0f, 1.0f);
-        break;
-    case ROTACION:
-        printf("Rotando right\n");
-        glRotatef(1.0f, 0.0f, 1.0f, 0.0f);
-        break;
-    case TRANSLACION:
-        printf("Translando right\n");
-        glTranslatef(1.0f, 0.0f, 0.0f);
-        break;
-    }
-
-    transf_matrix_set(n_elem_ptr);
-}
-
-void key_left_handler()
-{
-    /*
-    Trasladar -X; Escalar - X; Rotar -Y
-    */
-    list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
-
-    transf_matrix_init();
-
-    switch (transformacion_activa)
-    {
-    case ESCALADO:
-        printf("Escalando left\n");
-        glScalef(0.5f, 1.0f, 1.0f);
-        break;
-    case ROTACION:
-        printf("Rotando left\n");
-        glRotatef(1.0f, 0.0f, -1.0f, 0.0f);
-        break;
-    case TRANSLACION:
-        printf("Translando left\n");
-        glTranslatef(-1.0f, 0.0f, 0.0f);
-        break;
-    }
-
-    transf_matrix_set(n_elem_ptr);
-}
-
-void key_avpag_handler()
-{
-    /*
-    Trasladar +Z; Escalar + Z; Rotar +Z
-    */
-    list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
-
-    transf_matrix_init();
-
-    switch (transformacion_activa)
-    {
-    case ESCALADO:
-        printf("Escalando avpag\n");
-        glScalef(1.0f, 1.0f, 1.5f);
-        break;
-    case ROTACION:
-        printf("Rotando avpag\n");
-        glRotatef(1.0f, 0.0f, 0.0f, 1.0f);
-        break;
-    case TRANSLACION:
-        printf("Translando avpag\n");
-        glTranslatef(0.0f, 0.0f, 1.0f);
-        break;
-    }
-
-    transf_matrix_set(n_elem_ptr);
-}
-
-void key_repag_handler()
-{
-    /*
-    Trasladar -Z; Escalar - Z; Rotar -Z
-    */
-    list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
-
-    transf_matrix_init();
-
-    switch (transformacion_activa)
-    {
-    case ESCALADO:
-        printf("Escalando repag\n");
-        glScalef(1.0f, 1.0f, 0.5f);
-        break;
-    case ROTACION:
-        printf("Rotando repag\n");
-        glRotatef(1.0f, 0.0f, 0.0f, -1.0f);
-        break;
-    case TRANSLACION:
-        printf("Translando repag\n");
-        glTranslatef(0.0f, 0.0f, -1.0f);
-        break;
-    }
-
-    transf_matrix_set(n_elem_ptr);
-}
-
-void key_plus_handler()
-{
-    /*
-    Escalar + en todos los ejes (solo objetos)
-    */
-    list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
-
-    transf_matrix_init();
-
-    if (transformacion_activa == ESCALADO)
-    {
-        glScalef(1.5f, 1.5f, 1.5f);
-        printf("Escalando +\n");
-    }
-
-    transf_matrix_set(n_elem_ptr);
-}
-
-void key_minus_handler()
-{
-    /*
-    Escalar -  en todos los ejes (solo objetos)
-    */
-    list_matrix *n_elem_ptr = malloc(sizeof(list_matrix));
-
-    transf_matrix_init();
-
-    if (transformacion_activa == ESCALADO)
-    {
-        glScalef(0.5f, 0.5f, 0.5f);
-        printf("Escalando -\n");
-    }
-
-    transf_matrix_set(n_elem_ptr);
-}
-
 void specialKeyboard(int key, int x, int y)
 {
-    if (_selected_object != 0)
+    if (modo_activo == MODO_OBJ)
     {
-        switch (key)
+        if (_selected_object != 0)
         {
-        case GLUT_KEY_UP:
-            key_up_handler();
-            break;
-        case GLUT_KEY_RIGHT:
-            key_right_handler();
-            break;
-        case GLUT_KEY_LEFT:
-            key_left_handler();
-            break;
-        case GLUT_KEY_DOWN:
-            key_down_handler();
-            break;
-        case GLUT_KEY_PAGE_UP: //Repag
-            key_repag_handler();
-            break;
-        case GLUT_KEY_PAGE_DOWN: //AVPAG
-            key_avpag_handler();
-            break;
-        default:
-            printf("%d %c\n", key, key);
-            break;
+            switch (key)
+            {
+            case GLUT_KEY_UP:
+                transform(obj_up_transf_values);
+                break;
+            case GLUT_KEY_RIGHT:
+                transform(obj_right_transf_values);
+                break;
+            case GLUT_KEY_LEFT:
+                transform(obj_left_transf_values);
+                break;
+            case GLUT_KEY_DOWN:
+                transform(obj_down_transf_values);
+                break;
+            case GLUT_KEY_PAGE_UP: //Repag
+                transform(obj_repag_transf_values);
+                break;
+            case GLUT_KEY_PAGE_DOWN: //AVPAG
+                transform(obj_avpag_transf_values);
+                break;
+            default:
+                printf("%d %c\n", key, key);
+                break;
+            }
+            glutPostRedisplay();
         }
-        glutPostRedisplay();
     }
 }
