@@ -13,6 +13,7 @@
 #include "load_obj.h"
 #include "transformations.h"
 #include "util.h"
+#include "camera.h"
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -167,12 +168,7 @@ void keyboard(unsigned char key, int x, int y)
         }
         else
         {
-            aux_camera = (camera *)malloc(sizeof(camera));
-            aux_camera_obj = (list_camera *)malloc(sizeof(list_camera));
-
-            
-
-
+            add_camera_from_input();
         }
 
         break;
@@ -354,10 +350,7 @@ void keyboard(unsigned char key, int x, int y)
         break;
 
     case 'c': // cambiar de camara
-        if (_selected_camera != 0)
-            _selected_camera = _selected_camera->nextptr;
-        if (_selected_camera == 0)
-            _selected_camera = _camera_list_first;
+        change_camera();
         break;
     case 'C': // visualizar lo que ve el obj seleccionado (camara objeto)
         // TODO: arreglar esto

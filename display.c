@@ -88,25 +88,7 @@ void display(void)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    /*When the window is wider than our original projection plane we extend the plane in the X axis*/
-    if ((_ortho_x_max - _ortho_x_min) / (_ortho_y_max - _ortho_y_min) < _window_ratio)
-    {
-        /* New width */
-        GLdouble wd = (_ortho_y_max - _ortho_y_min) * _window_ratio;
-        /* Midpoint in the X axis */
-        GLdouble midpt = (_ortho_x_min + _ortho_x_max) / 2;
-        /*Definition of the projection*/
-        glOrtho(midpt - (wd / 2), midpt + (wd / 2), _ortho_y_min, _ortho_y_max, _ortho_z_min, _ortho_z_max);
-    }
-    else
-    { /* In the opposite situation we extend the Y axis */
-        /* New height */
-        GLdouble he = (_ortho_x_max - _ortho_x_min) / _window_ratio;
-        /* Midpoint in the Y axis */
-        GLdouble midpt = (_ortho_y_min + _ortho_y_max) / 2;
-        /*Definition of the projection*/
-        glOrtho(_ortho_x_min, _ortho_x_max, midpt - (he / 2), midpt + (he / 2), _ortho_z_min, _ortho_z_max);
-    }
+    gluPerspective(45.0f, _window_ratio, 0.1, 100.0);
 
     /*First, we draw the axes*/
     draw_axes();

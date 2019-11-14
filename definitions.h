@@ -60,6 +60,9 @@
 
 #define KG_MAX_DOUBLE 10E25 
 
+#define PROJECTION_PERSPECTIVA 1
+#define PROJECTION_ORTOGRAFICA 2
+
 /** STRUCTURES **/
 
 /****************************
@@ -138,6 +141,11 @@ struct object3d
  ****************************/
 typedef struct
 {
+    GLint projection_type; // PROJECTION_PERSPECTIVA o PROJECTION_ORTOGRAFICA
+    GLfloat near, far;
+    GLfloat left, right;
+    GLfloat bottom, top;
+    GLfloat angle;
     GLfloat m[16];
     GLfloat m_inv[16];
 } camera;
