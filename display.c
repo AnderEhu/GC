@@ -88,7 +88,12 @@ void display(void)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    gluPerspective(45.0f, _window_ratio, 0.1, 100.0);
+    gluPerspective(
+        _selected_camera->actual_camera->angle, 
+        _window_ratio, 
+        _selected_camera->actual_camera->near,
+        _selected_camera->actual_camera->far
+        );
 
     /*First, we draw the axes*/
     draw_axes();

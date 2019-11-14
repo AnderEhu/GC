@@ -27,10 +27,27 @@
 extern list_camera *_camera_list_first;
 extern list_camera *_selected_camera;
 
+/* Sets the camera projection type */
 void set_camera_projection(camera *c)
 {
-    c->projection_type = PROJECTION_PERSPECTIVA;
-
+    // TODO: errors checkin
+    printf(" Inserting projection...\n");
+    printf(" Insert projection type: \n");
+    printf(" 1 - Perspective or 2 - Ortografic \n");
+    scanf("%d", &c->projection_type);
+    if (c->projection_type == PROJECTION_PERSPECTIVA)
+    {
+        printf(" Insert vision angle: \n");
+        scanf("%f", &c->angle);
+        printf(" Insert near point (must be > 0): \n");
+        scanf("%f", &c->near);
+        printf(" Insert far point (must be > near): \n");
+        scanf("%f", &c->far);
+    }
+    else
+    {
+        
+    }
 }
 
 list_camera* create_camera(vector3 camera_pos, vector3 camera_front, vector3 camera_up)
@@ -40,8 +57,6 @@ list_camera* create_camera(vector3 camera_pos, vector3 camera_front, vector3 cam
     list_camera *aux_list = (list_camera*)malloc(sizeof(list_camera));
 
     aux_list->nextptr = 0;
-
-    set_camera_projection(cm);
 
     aux_list->actual_camera = cm; // projection formated correctly at this point
     
@@ -106,6 +121,11 @@ void set_default_cameras()
     vector3 cam_vup = (vector3){ .x = 0.0f, .y = 1.0f, .z = 0.0f };
     
     aux_list = create_camera(cam_pos, cam_front, cam_vup);
+    
+    /* Default cameras projection is setted manually */
+    aux_list->actual_camera->angle = 45.0f;
+    aux_list->actual_camera->near = 0.1f;
+    aux_list->actual_camera->far = 100.0f;
 
     /* Pointer to first camera of the camera list */
     _camera_list_first = (list_camera *)malloc(sizeof(list_camera));
@@ -134,7 +154,7 @@ void add_camera_from_input()
     list_camera *aux_list = (list_camera*)malloc(sizeof(list_camera));
 
     printf(" --- Inserting camera --- \n");
-    printf(" Format: three componentes separated with space. \n");
+    printf(" Format: three componentes separated with spaces. \n");
     printf(" Example: 1 50 60, this sets x=1, y=50, z=60.\n");
     printf(" Insert position [x y z]: \n");
     scanf("%lf %lf %lf", &pos.x, &pos.y, &pos.z);
@@ -150,6 +170,8 @@ void add_camera_from_input()
     printf(" Adding camera to list... \n");
 
     add_camera_to_list(aux_list);
+
+    set_camera_projection(aux_list->actual_camera);
 
     printf(" Camera added to list.\n");
 }
