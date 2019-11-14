@@ -88,13 +88,27 @@ void display(void)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    gluPerspective(
-        _selected_camera->actual_camera->angle, 
-        _window_ratio, 
-        _selected_camera->actual_camera->near,
-        _selected_camera->actual_camera->far
+    if (_selected_camera->actual_camera->projection_type == PROJECTION_PERSPECTIVA)
+    {
+        gluPerspective(
+            _selected_camera->actual_camera->angle, 
+            _window_ratio, 
+            _selected_camera->actual_camera->near,
+            _selected_camera->actual_camera->far
         );
-
+    }
+    else
+    {
+        glOrtho(
+            _selected_camera->actual_camera->left,
+            _selected_camera->actual_camera->right,
+            _selected_camera->actual_camera->bottom,
+            _selected_camera->actual_camera->top,
+            _selected_camera->actual_camera->near,
+            _selected_camera->actual_camera->far
+        );
+    }
+    
     /*First, we draw the axes*/
     draw_axes();
 

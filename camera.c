@@ -39,15 +39,22 @@ void set_camera_projection(camera *c)
     {
         printf(" Insert vision angle: \n");
         scanf("%f", &c->angle);
-        printf(" Insert near point (must be > 0): \n");
-        scanf("%f", &c->near);
-        printf(" Insert far point (must be > near): \n");
-        scanf("%f", &c->far);
     }
     else
     {
-        
+        printf(" Insert left point: \n");
+        scanf("%f", &c->left);
+        printf(" Insert top point: \n");
+        scanf("%f", &c->top);
     }
+    printf(" Insert right point: \n");
+    scanf("%f", &c->right);
+    printf(" Insert bottom point: \n");
+    scanf("%f", &c->bottom);
+    printf(" Insert near point (must be > 0): \n");
+    scanf("%f", &c->near);
+    printf(" Insert far point (must be > near): \n");
+    scanf("%f", &c->far);
 }
 
 list_camera* create_camera(vector3 camera_pos, vector3 camera_front, vector3 camera_up)
@@ -123,6 +130,7 @@ void set_default_cameras()
     aux_list = create_camera(cam_pos, cam_front, cam_vup);
     
     /* Default cameras projection is setted manually */
+    aux_list->actual_camera->projection_type = PROJECTION_PERSPECTIVA;
     aux_list->actual_camera->angle = 45.0f;
     aux_list->actual_camera->near = 0.1f;
     aux_list->actual_camera->far = 100.0f;

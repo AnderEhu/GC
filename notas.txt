@@ -12,8 +12,9 @@
 --------------------------------------------------------------------
 
 - Poder cargar cámaras por archivo?
-- Funcion para nueva camara
 - Una funcion para transformaciones
 - Al CTRL-Z mirar si liberamos memoria
 
 --------------------------------------------------------------------
+
+- Transformaciones a la camara
