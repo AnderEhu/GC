@@ -9,6 +9,7 @@
 #endif
 #include "definitions.h"
 #include "load_obj.h"
+#include "camera.h"
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -40,6 +41,7 @@ transf_values *obj_avpag_transf_values;
 transf_values *obj_repag_transf_values;
 transf_values *obj_plus_transf_values;
 transf_values *obj_minus_transf_values;
+
 
 /* Initializes the transformations values */
 void init_transf_values()
@@ -104,7 +106,7 @@ void transf_matrix_init()
         }
         else
         {
-            glLoadIdentity();
+            // modo analisis
         }
     }
 }
@@ -129,8 +131,16 @@ void transf_matrix_set()
     }
     else
     {
-        // crear espacio mem para guardar la camara
-
+        if (coordenada_activa == COORD_LOCAL)
+        {
+            glGetFloatv(GL_MODELVIEW_MATRIX, _selected_camera->actual_camera->m_inv);
+            set_inv_m(_selected_camera);
+        }
+        else
+        {
+            //glMultMatrixf(_selected_object->list_matrix->m);
+            //glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
+        }
     }
 }
 
@@ -141,12 +151,15 @@ void transform(transf_values *values)
     switch (transformacion_activa)
     {
     case ESCALADO:
-        printf("Escalando\n");
-        glScalef(values->scale_v.x, values->scale_v.y, values->scale_v.z);
+        if (modo_activo == MODO_OBJ)
+        {
+            printf("Escalando\n");
+            glScalef(values->scale_v.x, values->scale_v.y, values->scale_v.z);
+        }
         break;
     case ROTACION:
         printf("Rotando\n");
-        glRotatef(1.0f, values->rotation_v.x, values->rotation_v.y, values->rotation_v.z);
+        glRotatef(10.0f, values->rotation_v.x, values->rotation_v.y, values->rotation_v.z);
         break;
     case TRANSLACION:
         printf("Translando\n");

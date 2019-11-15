@@ -91,26 +91,49 @@ void display(void)
     if (_selected_camera->actual_camera->projection_type == PROJECTION_PERSPECTIVA)
     {
         gluPerspective(
-            _selected_camera->actual_camera->angle, 
-            _window_ratio, 
+            _selected_camera->actual_camera->angle,
+            _window_ratio,
             _selected_camera->actual_camera->near,
-            _selected_camera->actual_camera->far
-        );
+            _selected_camera->actual_camera->far);
     }
     else
     {
-        glOrtho(
-            _selected_camera->actual_camera->left,
-            _selected_camera->actual_camera->right,
-            _selected_camera->actual_camera->bottom,
-            _selected_camera->actual_camera->top,
-            _selected_camera->actual_camera->near,
-            _selected_camera->actual_camera->far
-        );
+        /*When the window is wider than our original projection plane we extend the plane in the X axis*/
+        if ((_selected_camera->actual_camera->right - _selected_camera->actual_camera->left) / (_selected_camera->actual_camera->bottom - _selected_camera->actual_camera->top) < _window_ratio)
+        {
+            /* New width */
+            GLdouble wd = (_selected_camera->actual_camera->bottom - _selected_camera->actual_camera->top) * _window_ratio;
+            /* Midpoint in the X axis */
+            GLdouble midpt = (_selected_camera->actual_camera->left + _selected_camera->actual_camera->right) / 2;
+            /*Definition of the projection*/
+            glOrtho(
+                midpt - (wd / 2), 
+                midpt + (wd / 2), 
+                _selected_camera->actual_camera->top, 
+                _selected_camera->actual_camera->bottom, 
+                _selected_camera->actual_camera->near, 
+                _selected_camera->actual_camera->far
+            );
+        }
+        else
+        { /* In the opposite situation we extend the Y axis */
+            /* New height */
+            GLdouble he = (_selected_camera->actual_camera->right - _selected_camera->actual_camera->left) / _window_ratio;
+            /* Midpoint in the Y axis */
+            GLdouble midpt = (_selected_camera->actual_camera->top + _selected_camera->actual_camera->bottom) / 2;
+            /*Definition of the projection*/
+            glOrtho(
+                _selected_camera->actual_camera->left, 
+                _selected_camera->actual_camera->right, 
+                midpt - (he / 2), midpt + (he / 2), 
+                _selected_camera->actual_camera->near, 
+                _selected_camera->actual_camera->far
+            );
+        }
     }
-    
+
     /*First, we draw the axes*/
-    draw_axes();
+    // draw_axes();
 
     /* Now we start drawing the object */
     glMatrixMode(GL_MODELVIEW);

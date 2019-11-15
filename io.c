@@ -103,6 +103,31 @@ void print_help()
     printf("<P, p> \t Cambio de tipo de proyeccion (perpectiva/paralela)\n");
 
     printf("\n\n");
+
+    printf("--- INFO ---\n");
+    
+    if (modo_activo == MODO_OBJ)
+        printf(" + Activated mode: OBJECT_MODE\n");
+    else
+        printf(" + Activated mode: CAMERA_MODE\n");
+    
+    if (coordenada_activa == COORD_LOCAL)
+        printf(" + Coordinates activated system: LOCAL\n");
+    else
+        printf(" + Coordinates activated system: GLOBAL\n");
+    
+    if (transformacion_activa == TRANSLACION)
+    {
+        printf(" + Activated transformation: TRASLATION\n");
+    } 
+    else if (transformacion_activa == ROTACION)
+    {
+        printf(" + Activated transformation: ROTATION\n");
+    }
+    else
+    {
+        printf(" + Activated transformation: SCALE\n");
+    }
 }
 
 /**
@@ -170,7 +195,6 @@ void keyboard(unsigned char key, int x, int y)
         {
             add_camera_from_input();
         }
-
         break;
     case 9: /* <TAB> */
         if (_selected_object != 0)
@@ -181,31 +205,37 @@ void keyboard(unsigned char key, int x, int y)
         break;
     case 127: /* <SUPR> */
         // TODO: BORRAR CAMARA????
-
-        /*Erasing an object depends on whether it is the first one or not*/
-        if (_selected_object == _first_object)
+        if (_selected_object == 0)
         {
-            /*To remove the first object we just set the first as the current's next*/
-            _first_object = _first_object->next;
-            /*Once updated the pointer to the first object it is save to free the memory*/
-
-            liberar_memoria_obj(_selected_object);
-
-            /*Finally, set the selected to the new first one*/
-            _selected_object = _first_object;
+            printf("Warning: No hay objetos para borrar!\n");
         }
         else
         {
-            /*In this case we need to get the previous element to the one we want to erase*/
-            auxiliar_object = _first_object;
-            while (auxiliar_object->next != _selected_object)
-                auxiliar_object = auxiliar_object->next;
-            /*Now we bypass the element to erase*/
-            auxiliar_object->next = _selected_object->next;
-            /*free the memory*/
-            liberar_memoria_obj(_selected_object);
-            /*and update the selection*/
-            _selected_object = auxiliar_object;
+            /*Erasing an object depends on whether it is the first one or not*/
+            if (_selected_object == _first_object)
+            {
+                /*To remove the first object we just set the first as the current's next*/
+                _first_object = _first_object->next;
+                /*Once updated the pointer to the first object it is save to free the memory*/
+
+                liberar_memoria_obj(_selected_object);
+
+                /*Finally, set the selected to the new first one*/
+                _selected_object = _first_object;
+            }
+            else
+            {
+                /*In this case we need to get the previous element to the one we want to erase*/
+                auxiliar_object = _first_object;
+                while (auxiliar_object->next != _selected_object)
+                    auxiliar_object = auxiliar_object->next;
+                /*Now we bypass the element to erase*/
+                auxiliar_object->next = _selected_object->next;
+                /*free the memory*/
+                liberar_memoria_obj(_selected_object);
+                /*and update the selection*/
+                _selected_object = auxiliar_object;
+            }
         }
         break;
     case CTRL_MINUS:
@@ -293,17 +323,10 @@ void keyboard(unsigned char key, int x, int y)
         break;
     case 'l':
     case 'L':
-        if (modo_activo == MODO_OBJ)
+        if (coordenada_activa != COORD_LOCAL)
         {
-            if (coordenada_activa != COORD_LOCAL)
-            {
-                coordenada_activa = COORD_LOCAL;
-                printf("Transformacion local activada!\n");
-            }
-        }
-        else
-        {
-            // modo vuelo, transformaciones local camara
+            coordenada_activa = COORD_LOCAL;
+            printf("Transformacion local activada!\n");
         }
         break;
     /* Elemento a transformar (en todo momento se debe en algun modo. Excluyentes entre si) */
@@ -394,35 +417,32 @@ void keyboard(unsigned char key, int x, int y)
 
 void specialKeyboard(int key, int x, int y)
 {
-    if (modo_activo == MODO_OBJ)
+    if (_selected_object != 0)
     {
-        if (_selected_object != 0)
+        switch (key)
         {
-            switch (key)
-            {
-            case GLUT_KEY_UP:
-                transform(obj_up_transf_values);
-                break;
-            case GLUT_KEY_RIGHT:
-                transform(obj_right_transf_values);
-                break;
-            case GLUT_KEY_LEFT:
-                transform(obj_left_transf_values);
-                break;
-            case GLUT_KEY_DOWN:
-                transform(obj_down_transf_values);
-                break;
-            case GLUT_KEY_PAGE_UP: //Repag
-                transform(obj_repag_transf_values);
-                break;
-            case GLUT_KEY_PAGE_DOWN: //AVPAG
-                transform(obj_avpag_transf_values);
-                break;
-            default:
-                printf("%d %c\n", key, key);
-                break;
-            }
-            glutPostRedisplay();
+        case GLUT_KEY_UP:
+            transform(obj_up_transf_values);
+            break;
+        case GLUT_KEY_RIGHT:
+            transform(obj_right_transf_values);
+            break;
+        case GLUT_KEY_LEFT:
+            transform(obj_left_transf_values);
+            break;
+        case GLUT_KEY_DOWN:
+            transform(obj_down_transf_values);
+            break;
+        case GLUT_KEY_PAGE_UP: //Repag
+            transform(obj_repag_transf_values);
+            break;
+        case GLUT_KEY_PAGE_DOWN: //AVPAG
+            transform(obj_avpag_transf_values);
+            break;
+        default:
+            printf("%d %c\n", key, key);
+            break;
         }
+        glutPostRedisplay();
     }
 }

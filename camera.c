@@ -44,13 +44,13 @@ void set_camera_projection(camera *c)
     {
         printf(" Insert left point: \n");
         scanf("%f", &c->left);
+        printf(" Insert right point: \n");
+        scanf("%f", &c->right);
         printf(" Insert top point: \n");
         scanf("%f", &c->top);
+        printf(" Insert bottom point: \n");
+        scanf("%f", &c->bottom);
     }
-    printf(" Insert right point: \n");
-    scanf("%f", &c->right);
-    printf(" Insert bottom point: \n");
-    scanf("%f", &c->bottom);
     printf(" Insert near point (must be > 0): \n");
     scanf("%f", &c->near);
     printf(" Insert far point (must be > near): \n");
@@ -79,7 +79,7 @@ list_camera* create_camera(vector3 camera_pos, vector3 camera_front, vector3 cam
         camera_up.x,
         camera_up.y,
         camera_up.z
-        );
+    );
 
     glGetFloatv(GL_MODELVIEW_MATRIX, aux_list->actual_camera->m);
 
@@ -89,23 +89,21 @@ list_camera* create_camera(vector3 camera_pos, vector3 camera_front, vector3 cam
     zc.x zc.y zc.z -e.zc
     0    0    0   1
     */
-   // reorganize for the m inverse
-   // TODO: check
     aux_list->actual_camera->m_inv[0] = aux_list->actual_camera->m[0];
     aux_list->actual_camera->m_inv[1] = aux_list->actual_camera->m[4];
     aux_list->actual_camera->m_inv[2] = aux_list->actual_camera->m[8];
-    aux_list->actual_camera->m_inv[3] = camera_pos.x;
+    aux_list->actual_camera->m_inv[3] = 0;
     aux_list->actual_camera->m_inv[4] = aux_list->actual_camera->m[1];
     aux_list->actual_camera->m_inv[5] = aux_list->actual_camera->m[5];
     aux_list->actual_camera->m_inv[6] = aux_list->actual_camera->m[9];
-    aux_list->actual_camera->m_inv[7] = camera_pos.y;
+    aux_list->actual_camera->m_inv[7] = 0;
     aux_list->actual_camera->m_inv[8] = aux_list->actual_camera->m[2];
     aux_list->actual_camera->m_inv[9] = aux_list->actual_camera->m[6];
     aux_list->actual_camera->m_inv[10] = aux_list->actual_camera->m[10];
-    aux_list->actual_camera->m_inv[11] = camera_pos.z;
-    aux_list->actual_camera->m_inv[12] = 0;
-    aux_list->actual_camera->m_inv[13] = 0;
-    aux_list->actual_camera->m_inv[14] = 0;
+    aux_list->actual_camera->m_inv[11] = 0;
+    aux_list->actual_camera->m_inv[12] = camera_pos.x;
+    aux_list->actual_camera->m_inv[13] = camera_pos.y;
+    aux_list->actual_camera->m_inv[14] = camera_pos.z;
     aux_list->actual_camera->m_inv[15] = 1;
 
     return aux_list;
@@ -144,6 +142,12 @@ void set_default_cameras()
 
     /* Set the selected camera pointer */
     _selected_camera = _camera_list_first;
+
+    /* Info message for default camera */
+    printf(
+        " + Default camera loaded at: x=%.1f y=%.1f z=%.1f, looking to x=%.1f y=%.1f z=%.1f.\n", 
+        cam_pos.x, cam_pos.y, cam_pos.z, cam_front.x, cam_front.y, cam_front.z
+    );
 }
 
 /* Changes camera to the next camera of the camera list (circular list) */
@@ -182,4 +186,39 @@ void add_camera_from_input()
     set_camera_projection(aux_list->actual_camera);
 
     printf(" Camera added to list.\n");
+}
+
+void set_inv_m(list_camera *c)
+{
+    c->actual_camera->m[0] = c->actual_camera->m_inv[0];
+    c->actual_camera->m[4] = c->actual_camera->m_inv[1];
+    c->actual_camera->m[8] = c->actual_camera->m_inv[2];
+    c->actual_camera->m[12] = -(
+        c->actual_camera->m_inv[12] * c->actual_camera->m_inv[0] +
+        c->actual_camera->m_inv[13] * c->actual_camera->m_inv[1] +
+        c->actual_camera->m_inv[14] * c->actual_camera->m_inv[2]
+        );
+
+    c->actual_camera->m[1] = c->actual_camera->m_inv[4];
+    c->actual_camera->m[5] = c->actual_camera->m_inv[5];
+    c->actual_camera->m[9] = c->actual_camera->m_inv[6];
+    c->actual_camera->m[13] = -(
+        c->actual_camera->m_inv[12] * c->actual_camera->m_inv[4] +
+        c->actual_camera->m_inv[13] * c->actual_camera->m_inv[5] +
+        c->actual_camera->m_inv[14] * c->actual_camera->m_inv[6]
+        );
+
+    c->actual_camera->m[2] = c->actual_camera->m_inv[8];
+    c->actual_camera->m[6] = c->actual_camera->m_inv[9];
+    c->actual_camera->m[10] = c->actual_camera->m_inv[10];
+    c->actual_camera->m[14] = -(
+        c->actual_camera->m_inv[12] * c->actual_camera->m_inv[8] +
+        c->actual_camera->m_inv[13] * c->actual_camera->m_inv[9] +
+        c->actual_camera->m_inv[14] * c->actual_camera->m_inv[10]
+        );
+
+    c->actual_camera->m[3] = 0;
+    c->actual_camera->m[7] = 0;
+    c->actual_camera->m[11] = 0;
+    c->actual_camera->m[15] = 1;
 }

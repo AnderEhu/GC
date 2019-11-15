@@ -66,7 +66,6 @@ void initialization()
 int main(int argc, char **argv)
 {
     /*First of all, print the help information*/
-    //set_default_camera();
     print_help();
 
     /* glut initializations */
