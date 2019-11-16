@@ -332,15 +332,15 @@ void keyboard(unsigned char key, int x, int y)
     /* Elemento a transformar (en todo momento se debe en algun modo. Excluyentes entre si) */
     case 'o':
     case 'O':
-
+        if (modo_activo != MODO_OBJ) 
+        {
+            modo_activo = MODO_OBJ;
+            printf("Modo objeto activado!\n");
+        }
         break;
-
-    case 'k':
-
-        break;
-
     case 'a':
     case 'A':
+        /* Transformaciones a la LUZ */
         break;
         /* 
     TODO: -- CAMBIAR --
@@ -392,6 +392,7 @@ void keyboard(unsigned char key, int x, int y)
         camera_up.z = 0.0f;
 
         break;
+    case 'k':
     case 'K': // activar/descativar modo camara
         if (modo_activo != MODO_CAMARA)
         {
