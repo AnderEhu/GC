@@ -222,3 +222,8 @@ void set_inv_m(list_camera *c)
     c->actual_camera->m[11] = 0;
     c->actual_camera->m[15] = 1;
 }
+
+vector3 get_camera_e()
+{
+    return (vector3) { .x = _selected_camera->actual_camera->m_inv[12], .y = _selected_camera->actual_camera->m_inv[13], .z =  _selected_camera->actual_camera->m_inv[14] };
+}

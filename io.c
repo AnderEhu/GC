@@ -308,17 +308,10 @@ void keyboard(unsigned char key, int x, int y)
     /* Sistema de referencia (modos excluyentes entre si) */
     case 'g':
     case 'G':
-        if (modo_activo == MODO_OBJ)
+        if (coordenada_activa != COORD_GLOBAL)
         {
-            if (coordenada_activa != COORD_GLOBAL)
-            {
-                coordenada_activa = COORD_GLOBAL;
-                printf("Transformacion mundo activada!\n");
-            }
-        }
-        else
-        {
-            // modo analisis mirando al objeto
+            coordenada_activa = COORD_GLOBAL;
+            printf("Transformacion mundo activada!\n");
         }
         break;
     case 'l':

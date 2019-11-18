@@ -86,6 +86,8 @@ void init_transf_values()
 
 void transf_matrix_init()
 {
+    vector3 orig_obj;
+    vector3 cam_e;
     glMatrixMode(GL_MODELVIEW);
     if (modo_activo == MODO_OBJ)
     {
@@ -99,7 +101,8 @@ void transf_matrix_init()
         }
     }
     else
-    { // modo camara
+    { 
+        // modo camara
         if (coordenada_activa == COORD_LOCAL)
         {
             glLoadMatrixf(_selected_camera->actual_camera->m_inv);
@@ -107,12 +110,16 @@ void transf_matrix_init()
         else
         {
             // modo analisis
+            cam_e = get_camera_e();
+            glLoadIdentity();
+            glTranslatef(-_selected_object->list_matrix->m[12], -_selected_object->list_matrix->m[13], -_selected_object->list_matrix->m[14]);
         }
     }
 }
 
 void transf_matrix_set()
 {
+    vector3 orig_obj;
     if (modo_activo == MODO_OBJ)
     {
         list_matrix *n_elem_ptr = (list_matrix *)malloc(sizeof(list_matrix));
@@ -138,8 +145,10 @@ void transf_matrix_set()
         }
         else
         {
-            //glMultMatrixf(_selected_object->list_matrix->m);
-            //glGetFloatv(GL_MODELVIEW_MATRIX, n_elem_ptr->m);
+            glTranslatef(_selected_object->list_matrix->m[12], _selected_object->list_matrix->m[13], _selected_object->list_matrix->m[14]);
+            glMultMatrixf(_selected_camera->actual_camera->m_inv);
+            glGetFloatv(GL_MODELVIEW_MATRIX, _selected_camera->actual_camera->m_inv);
+            set_inv_m(_selected_camera);
         }
     }
 }
@@ -159,7 +168,12 @@ void transform(transf_values *values)
         break;
     case ROTACION:
         printf("Rotando\n");
-        glRotatef(10.0f, values->rotation_v.x, values->rotation_v.y, values->rotation_v.z);
+        //
+        if (modo_activo == MODO_OBJ)
+            glRotatef(10.0f, values->rotation_v.x, values->rotation_v.y, values->rotation_v.z);
+        else
+            // CAMBIAR y adecuar para eje Y y para negativos
+            glRotatef(10.0f, _selected_camera->actual_camera->m_inv[0], _selected_camera->actual_camera->m_inv[1], _selected_camera->actual_camera->m_inv[2]);
         break;
     case TRANSLACION:
         printf("Translando\n");

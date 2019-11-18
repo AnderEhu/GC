@@ -1,4 +1,4 @@
-// PARA COMPILAR LINUX: gcc dibujar-puntos.c -lGL -lGLU -lglut -o program
+// PARA COMPILAR LINUX: gcc *.c -lGL -lGLU -lglut -o program
 // PARA COMPILAR EN MAC: gcc *.c -framework OpenGL -framework GLUT -lm -o program
 #ifndef GL_SILENCE_DEPRECATION
 #define GL_SILENCE_DEPRECATION true
