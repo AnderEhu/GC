@@ -336,7 +336,7 @@ void keyboard(unsigned char key, int x, int y)
         /* Transformaciones a la LUZ */
         break;
         /* 
-    TODO: -- CAMBIAR --
+    TODO: ----- ¡¡¡CAMBIAR!!! -----
     101 e -> +
     114 r -> -
     */
@@ -411,27 +411,106 @@ void keyboard(unsigned char key, int x, int y)
 
 void specialKeyboard(int key, int x, int y)
 {
+    transf_values *t_cam;
     if (_selected_object != 0)
     {
         switch (key)
         {
         case GLUT_KEY_UP:
-            transform(obj_up_transf_values);
+            if (modo_activo == MODO_CAMARA && coordenada_activa == COORD_GLOBAL)
+            {
+                t_cam = (transf_values*)malloc(sizeof(transf_values));
+                t_cam->rotation_v = (vector3) { 
+                    .x = -_selected_camera->actual_camera->m_inv[0], 
+                    .y = -_selected_camera->actual_camera->m_inv[1], 
+                    .z = -_selected_camera->actual_camera->m_inv[2] 
+                };
+                transform(t_cam);
+            }  
+            else 
+            {
+               transform(obj_up_transf_values);
+            }
             break;
         case GLUT_KEY_RIGHT:
-            transform(obj_right_transf_values);
+            if (modo_activo == MODO_CAMARA && coordenada_activa == COORD_GLOBAL)
+            {
+                t_cam = (transf_values*)malloc(sizeof(transf_values));
+                t_cam->rotation_v = (vector3) { 
+                    .x = -_selected_camera->actual_camera->m_inv[4], 
+                    .y = -_selected_camera->actual_camera->m_inv[5], 
+                    .z = -_selected_camera->actual_camera->m_inv[6] 
+                };
+                transform(t_cam);
+            } 
+            else 
+            {
+                transform(obj_right_transf_values);
+            }
             break;
         case GLUT_KEY_LEFT:
-            transform(obj_left_transf_values);
+            if (modo_activo == MODO_CAMARA && coordenada_activa == COORD_GLOBAL)
+            {
+                t_cam = (transf_values*)malloc(sizeof(transf_values));
+                t_cam->rotation_v = (vector3) { 
+                    .x = _selected_camera->actual_camera->m_inv[4], 
+                    .y = _selected_camera->actual_camera->m_inv[5], 
+                    .z = _selected_camera->actual_camera->m_inv[6] 
+                };
+                transform(t_cam);
+            }
+            else 
+            {
+                transform(obj_left_transf_values);
+            }
             break;
         case GLUT_KEY_DOWN:
-            transform(obj_down_transf_values);
+            if (modo_activo == MODO_CAMARA && coordenada_activa == COORD_GLOBAL)
+            {
+                t_cam = (transf_values*)malloc(sizeof(transf_values));
+                t_cam->rotation_v = (vector3) { 
+                    .x = _selected_camera->actual_camera->m_inv[0], 
+                    .y = _selected_camera->actual_camera->m_inv[1], 
+                    .z = _selected_camera->actual_camera->m_inv[2] 
+                };
+                transform(t_cam);
+            } 
+            else 
+            {
+                transform(obj_down_transf_values);
+            }
             break;
         case GLUT_KEY_PAGE_UP: //Repag
-            transform(obj_repag_transf_values);
+            if (modo_activo == MODO_CAMARA && coordenada_activa == COORD_GLOBAL)
+            {
+                t_cam = (transf_values*)malloc(sizeof(transf_values));
+                t_cam->translate_v = (vector3) { 
+                    .x = -_selected_camera->actual_camera->m_inv[8], 
+                    .y = -_selected_camera->actual_camera->m_inv[9], 
+                    .z = -_selected_camera->actual_camera->m_inv[10] 
+                };
+                transform(t_cam);
+            }
+            else
+            {
+                transform(obj_repag_transf_values);
+            }
             break;
         case GLUT_KEY_PAGE_DOWN: //AVPAG
-            transform(obj_avpag_transf_values);
+            if (modo_activo == MODO_CAMARA && coordenada_activa == COORD_GLOBAL)
+            {
+                t_cam = (transf_values*)malloc(sizeof(transf_values));
+                t_cam->translate_v = (vector3) { 
+                    .x = _selected_camera->actual_camera->m_inv[8], 
+                    .y = _selected_camera->actual_camera->m_inv[9], 
+                    .z = _selected_camera->actual_camera->m_inv[10] 
+                };
+                transform(t_cam);
+            }
+            else 
+            {
+                transform(obj_avpag_transf_values);
+            }
             break;
         default:
             printf("%d %c\n", key, key);

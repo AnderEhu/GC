@@ -167,13 +167,9 @@ void transform(transf_values *values)
         }
         break;
     case ROTACION:
+        // TODO: mirar direccion rotacion cuando es cam && local
         printf("Rotando\n");
-        //
-        if (modo_activo == MODO_OBJ)
-            glRotatef(10.0f, values->rotation_v.x, values->rotation_v.y, values->rotation_v.z);
-        else
-            // CAMBIAR y adecuar para eje Y y para negativos
-            glRotatef(10.0f, _selected_camera->actual_camera->m_inv[0], _selected_camera->actual_camera->m_inv[1], _selected_camera->actual_camera->m_inv[2]);
+        glRotatef(10.0f, values->rotation_v.x, values->rotation_v.y, values->rotation_v.z);
         break;
     case TRANSLACION:
         printf("Translando\n");
