@@ -400,6 +400,10 @@ void keyboard(unsigned char key, int x, int y)
             break;
         }
         break;
+    /* Cambiar tipo proyeccion */
+    case 'p':
+    case 'P':
+        break;
     default:
         /*In the default case we just print the code of the key. This is usefull to define new cases*/
         printf("%d %c\n", key, key);

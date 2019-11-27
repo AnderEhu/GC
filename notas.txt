@@ -1,20 +1,23 @@
+*** REVISAR ***
+
 - Terminar las teclas nuevas (AVPAG, REPAG, +, -)
 - Mirar escalado con avpag y repag (que haya homogeneidad)
-
---------------------------------------------------------------------
-
-- Añadir los handlers para la camara
 - Añadir las condiciones para cuando se pulsan teclas (g, l, t, ...)
-- Añadir push de la matriz de cambio de sistema de referencia
-- Tiene que haber handlers para camara y para transformaciones
 - Ojito con los modos de operacion activos en cada momento
-
---------------------------------------------------------------------
-
-- Poder cargar cámaras por archivo?
-- Una funcion para transformaciones
 - Al CTRL-Z mirar si liberamos memoria
-
---------------------------------------------------------------------
-
 - Transformaciones a la camara
+
+------------------------------------------------------------------------------------
+
+*** POR HACER ***
+
+- Camara mirando objeto tiene que transformar camara al transformar objeto,
+camara fija mirando a donde mira el obj, y transformar los objetos
+- Realizar manual de USUARIO
+- Cambiar tipo proyeccion (p, P)
+- Implementar avpag, repag, etc. para cuando actuamos con volumen de vision
+- Implementar (+, -) para volumen de vision
+- Controlar las posibles opciones cuando estamos en modo cam + coord global...
+- Añadir SOLO dos posibles proyecciones, una paralela y otra perspectiva (las añadimos nosotros),
+y cuando cambia con (p, P), se le cambia entre esas dos. (No se pueden añadir po teclado)
+
