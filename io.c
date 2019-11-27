@@ -33,7 +33,7 @@
 #define MODO_OBJ 0
 #define MODO_CAMARA 1
 
-#define TRANSLACION 0
+#define TRASLACION 0
 #define ROTACION 1
 #define ESCALADO 2
 
@@ -50,7 +50,7 @@ extern GLdouble _ortho_y_min, _ortho_y_max;
 extern GLdouble _ortho_z_min, _ortho_z_max;
 
 int modo_activo = MODO_OBJ;
-int transformacion_activa = TRANSLACION;
+int transformacion_activa = TRASLACION;
 int coordenada_activa = COORD_GLOBAL;
 
 vector3 camera_pos;
@@ -116,7 +116,7 @@ void print_help()
     else
         printf(" + Coordinates activated system: GLOBAL\n");
     
-    if (transformacion_activa == TRANSLACION)
+    if (transformacion_activa == TRASLACION)
     {
         printf(" + Activated transformation: TRASLATION\n");
     } 
@@ -276,9 +276,9 @@ void keyboard(unsigned char key, int x, int y)
     /* Tipo de transformacion */
     case 'm':
     case 'M':
-        if (transformacion_activa != TRANSLACION)
+        if (transformacion_activa != TRASLACION)
         {
-            transformacion_activa = TRANSLACION;
+            transformacion_activa = TRASLACION;
             printf("Translacion activada!\n");
         }
         break;
