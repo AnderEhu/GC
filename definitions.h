@@ -137,15 +137,23 @@ struct object3d
 
 /****************************
  * Structure to store the   *
+ * camera projections       *
+ ****************************/
+typedef struct 
+{
+    GLint type;
+    GLfloat near, far;
+    GLfloat left, right;
+    GLfloat bottom, top;
+} projection;
+
+/****************************
+ * Structure to store the   *
  * camera objects           *
  ****************************/
 typedef struct
 {
-    GLint projection_type; // PROJECTION_PERSPECTIVA o PROJECTION_ORTOGRAFICA
-    GLfloat near, far;
-    GLfloat left, right;
-    GLfloat bottom, top;
-    GLfloat angle;
+    projection proj;
     GLfloat m[16];
     GLfloat m_inv[16];
 } camera;

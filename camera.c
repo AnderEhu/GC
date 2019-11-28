@@ -27,34 +27,20 @@
 extern list_camera *_camera_list_first;
 extern list_camera *_selected_camera;
 
-/* Sets the camera projection type */
-void set_camera_projection(camera *c)
+projection *global_perspective, *global_ortho;
+
+/* Sets the camera projections */
+void set_camera_projections()
 {
-    // TODO: errors checkin
-    printf(" Inserting projection...\n");
-    printf(" Insert projection type: \n");
-    printf(" 1 - Perspective or 2 - Ortografic \n");
-    scanf("%d", &c->projection_type);
-    if (c->projection_type == PROJECTION_PERSPECTIVA)
-    {
-        printf(" Insert vision angle: \n");
-        scanf("%f", &c->angle);
-    }
-    else
-    {
-        printf(" Insert left point: \n");
-        scanf("%f", &c->left);
-        printf(" Insert right point: \n");
-        scanf("%f", &c->right);
-        printf(" Insert top point: \n");
-        scanf("%f", &c->top);
-        printf(" Insert bottom point: \n");
-        scanf("%f", &c->bottom);
-    }
-    printf(" Insert near point (must be > 0): \n");
-    scanf("%f", &c->near);
-    printf(" Insert far point (must be > near): \n");
-    scanf("%f", &c->far);
+    global_perspective = (projection*)malloc(sizeof(projection));
+    global_ortho = (projection*)malloc(sizeof(projection));
+
+    global_perspective->type = PROJECTION_PERSPECTIVA;
+    global_ortho->type = PROJECTION_ORTOGRAFICA;
+
+    
+
+
 }
 
 list_camera* create_camera(vector3 camera_pos, vector3 camera_front, vector3 camera_up)
