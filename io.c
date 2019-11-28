@@ -294,17 +294,10 @@ void keyboard(unsigned char key, int x, int y)
         break;
     case 't':
     case 'T':
-        if (modo_activo == MODO_OBJ)
+        if (transformacion_activa != ESCALADO)
         {
-            if (transformacion_activa != ESCALADO)
-            {
-                transformacion_activa = ESCALADO;
-                printf("ESCALADO activada!\n");
-            }
-        }
-        else
-        {
-            // volumen vision
+            transformacion_activa = ESCALADO;
+            printf("ESCALADO activada!\n");
         }
         break;
     /* Sistema de referencia (modos excluyentes entre si) */
@@ -406,10 +399,12 @@ void keyboard(unsigned char key, int x, int y)
     case 'p':
     case 'P':
         if (_selected_camera->actual_camera->proj->type == PROJECTION_PERSPECTIVA) {
-            printf("Cambiando de perspectiva a ortografica...\n");
+            printf("Perspectiva -> Ortografica\n");
             _selected_camera->actual_camera->proj = global_ortho;
-        } else {
-            printf("Cambiando de ortografica a perspectiva...\n");
+        } 
+        else 
+        {
+            printf("Ortografica -> Perspectiva\n");
             _selected_camera->actual_camera->proj = global_perspective;
         }
         break;
@@ -430,15 +425,34 @@ void specialKeyboard(int key, int x, int y)
         switch (key)
         {
         case GLUT_KEY_UP:
-            if (modo_activo == MODO_CAMARA && coordenada_activa == COORD_GLOBAL)
+            if (modo_activo == MODO_CAMARA)
             {
-                t_cam = (transf_values*)malloc(sizeof(transf_values));
-                t_cam->rotation_v = (vector3) { 
-                    .x = -_selected_camera->actual_camera->m_inv[0], 
-                    .y = -_selected_camera->actual_camera->m_inv[1], 
-                    .z = -_selected_camera->actual_camera->m_inv[2] 
-                };
-                transform(t_cam);
+                switch (transformacion_activa) {
+                    case ESCALADO:
+                        _selected_camera->actual_camera->proj->top -= 0.1;
+                        _selected_camera->actual_camera->proj->bottom += 0.1;
+                        break;
+                    case ROTACION:
+                        if (coordenada_activa == COORD_GLOBAL)
+                        {
+                            t_cam = (transf_values*)malloc(sizeof(transf_values));
+                            t_cam->rotation_v = (vector3) { 
+                                .x = -_selected_camera->actual_camera->m_inv[0], 
+                                .y = -_selected_camera->actual_camera->m_inv[1], 
+                                .z = -_selected_camera->actual_camera->m_inv[2] 
+                            };
+                            transform(t_cam);
+                        }
+                        else
+                        {
+                            transform(obj_up_transf_values);
+                        }
+                        break;
+                    case TRASLACION:
+                        if (coordenada_activa == COORD_LOCAL) transform(obj_up_transf_values);
+                        break;
+                    default: break;
+                }
             }  
             else 
             {
@@ -446,15 +460,34 @@ void specialKeyboard(int key, int x, int y)
             }
             break;
         case GLUT_KEY_RIGHT:
-            if (modo_activo == MODO_CAMARA && coordenada_activa == COORD_GLOBAL)
+            if (modo_activo == MODO_CAMARA)
             {
-                t_cam = (transf_values*)malloc(sizeof(transf_values));
-                t_cam->rotation_v = (vector3) { 
-                    .x = -_selected_camera->actual_camera->m_inv[4], 
-                    .y = -_selected_camera->actual_camera->m_inv[5], 
-                    .z = -_selected_camera->actual_camera->m_inv[6] 
-                };
-                transform(t_cam);
+                switch (transformacion_activa) {
+                    case ESCALADO:
+                        _selected_camera->actual_camera->proj->left -= 0.1;
+                        _selected_camera->actual_camera->proj->right += 0.1;
+                        break;
+                    case ROTACION:
+                        if (coordenada_activa == COORD_GLOBAL)
+                        {
+                            t_cam = (transf_values*)malloc(sizeof(transf_values));
+                            t_cam->rotation_v = (vector3) { 
+                                .x = -_selected_camera->actual_camera->m_inv[4], 
+                                .y = -_selected_camera->actual_camera->m_inv[5], 
+                                .z = -_selected_camera->actual_camera->m_inv[6] 
+                            };
+                            transform(t_cam);
+                        }
+                        else
+                        {
+                            transform(obj_right_transf_values);
+                        }
+                        break;
+                    case TRASLACION:
+                        if (coordenada_activa == COORD_LOCAL) transform(obj_right_transf_values);
+                        break;
+                    default: break;
+                }
             } 
             else 
             {
@@ -462,15 +495,34 @@ void specialKeyboard(int key, int x, int y)
             }
             break;
         case GLUT_KEY_LEFT:
-            if (modo_activo == MODO_CAMARA && coordenada_activa == COORD_GLOBAL)
+            if (modo_activo == MODO_CAMARA)
             {
-                t_cam = (transf_values*)malloc(sizeof(transf_values));
-                t_cam->rotation_v = (vector3) { 
-                    .x = _selected_camera->actual_camera->m_inv[4], 
-                    .y = _selected_camera->actual_camera->m_inv[5], 
-                    .z = _selected_camera->actual_camera->m_inv[6] 
-                };
-                transform(t_cam);
+                switch (transformacion_activa) {
+                    case ESCALADO:
+                        _selected_camera->actual_camera->proj->left += 0.1;
+                        _selected_camera->actual_camera->proj->right -= 0.1;
+                        break;
+                    case ROTACION:
+                        if (coordenada_activa == COORD_GLOBAL)
+                        {
+                            t_cam = (transf_values*)malloc(sizeof(transf_values));
+                            t_cam->rotation_v = (vector3) { 
+                                .x = _selected_camera->actual_camera->m_inv[4], 
+                                .y = _selected_camera->actual_camera->m_inv[5], 
+                                .z = _selected_camera->actual_camera->m_inv[6] 
+                            };
+                            transform(t_cam);
+                        }
+                        else
+                        {
+                            transform(obj_left_transf_values);
+                        }
+                        break;
+                    case TRASLACION:
+                        if (coordenada_activa == COORD_LOCAL) transform(obj_left_transf_values);
+                        break;
+                    default: break;
+                }
             }
             else 
             {
@@ -478,15 +530,34 @@ void specialKeyboard(int key, int x, int y)
             }
             break;
         case GLUT_KEY_DOWN:
-            if (modo_activo == MODO_CAMARA && coordenada_activa == COORD_GLOBAL)
+            if (modo_activo == MODO_CAMARA)
             {
-                t_cam = (transf_values*)malloc(sizeof(transf_values));
-                t_cam->rotation_v = (vector3) { 
-                    .x = _selected_camera->actual_camera->m_inv[0], 
-                    .y = _selected_camera->actual_camera->m_inv[1], 
-                    .z = _selected_camera->actual_camera->m_inv[2] 
-                };
-                transform(t_cam);
+                switch (transformacion_activa) {
+                    case ESCALADO:
+                        _selected_camera->actual_camera->proj->top += 0.1;
+                        _selected_camera->actual_camera->proj->bottom -= 0.1;
+                        break;
+                    case ROTACION:
+                        if (coordenada_activa == COORD_GLOBAL)
+                        {
+                            t_cam = (transf_values*)malloc(sizeof(transf_values));
+                            t_cam->rotation_v = (vector3) { 
+                                .x = _selected_camera->actual_camera->m_inv[0], 
+                                .y = _selected_camera->actual_camera->m_inv[1], 
+                                .z = _selected_camera->actual_camera->m_inv[2] 
+                            };
+                            transform(t_cam);
+                        }
+                        else
+                        {
+                            transform(obj_down_transf_values);
+                        }
+                        break;
+                    case TRASLACION:
+                        if (coordenada_activa == COORD_LOCAL) transform(obj_down_transf_values);
+                        break;
+                    default: break;
+                }
             } 
             else 
             {
@@ -494,15 +565,34 @@ void specialKeyboard(int key, int x, int y)
             }
             break;
         case GLUT_KEY_PAGE_UP: //Repag
-            if (modo_activo == MODO_CAMARA && coordenada_activa == COORD_GLOBAL)
+            if (modo_activo == MODO_CAMARA)
             {
-                t_cam = (transf_values*)malloc(sizeof(transf_values));
-                t_cam->translate_v = (vector3) { 
-                    .x = -_selected_camera->actual_camera->m_inv[8], 
-                    .y = -_selected_camera->actual_camera->m_inv[9], 
-                    .z = -_selected_camera->actual_camera->m_inv[10] 
-                };
-                transform(t_cam);
+                switch (transformacion_activa)
+                {
+                    case ESCALADO:
+                        _selected_camera->actual_camera->proj->near -= 0.1;
+                        _selected_camera->actual_camera->proj->far -= 0.1;
+                        break;
+                    case ROTACION:
+                        if (coordenada_activa == COORD_LOCAL) transform(obj_repag_transf_values);
+                        break;
+                    case TRASLACION:
+                        if (coordenada_activa == COORD_GLOBAL)
+                        {
+                            t_cam = (transf_values*)malloc(sizeof(transf_values));
+                            t_cam->translate_v = (vector3) { 
+                                .x = -_selected_camera->actual_camera->m_inv[8], 
+                                .y = -_selected_camera->actual_camera->m_inv[9], 
+                                .z = -_selected_camera->actual_camera->m_inv[10] 
+                            };
+                            transform(t_cam);
+                        }
+                        else 
+                        {
+                            transform(obj_repag_transf_values);
+                        }
+                    default: break;
+                }
             }
             else
             {
@@ -512,13 +602,32 @@ void specialKeyboard(int key, int x, int y)
         case GLUT_KEY_PAGE_DOWN: //AVPAG
             if (modo_activo == MODO_CAMARA && coordenada_activa == COORD_GLOBAL)
             {
-                t_cam = (transf_values*)malloc(sizeof(transf_values));
-                t_cam->translate_v = (vector3) { 
-                    .x = _selected_camera->actual_camera->m_inv[8], 
-                    .y = _selected_camera->actual_camera->m_inv[9], 
-                    .z = _selected_camera->actual_camera->m_inv[10] 
-                };
-                transform(t_cam);
+                switch (transformacion_activa)
+                {
+                    case ESCALADO:
+                        _selected_camera->actual_camera->proj->near += 0.1;
+                        _selected_camera->actual_camera->proj->far += 0.1;
+                        break;
+                    case ROTACION:
+                        if (coordenada_activa == COORD_LOCAL) transform(obj_avpag_transf_values);
+                        break;
+                    case TRASLACION:
+                        if (coordenada_activa == COORD_GLOBAL)
+                        {
+                            t_cam = (transf_values*)malloc(sizeof(transf_values));
+                            t_cam->translate_v = (vector3) { 
+                                .x = _selected_camera->actual_camera->m_inv[8], 
+                                .y = _selected_camera->actual_camera->m_inv[9], 
+                                .z = _selected_camera->actual_camera->m_inv[10] 
+                            };
+                            transform(t_cam);
+                        }
+                        else 
+                        {
+                            transform(obj_avpag_transf_values);
+                        }
+                    default: break;
+                }
             }
             else 
             {
