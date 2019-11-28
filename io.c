@@ -355,6 +355,7 @@ void keyboard(unsigned char key, int x, int y)
         {
             printf("CTRL-Z aplicado.\n");
             _selected_object->list_matrix = _selected_object->list_matrix->nextptr;
+            if (camera_modo_obj == 1) add_camera_mode_obj(_selected_object);
         }
         break;
     case 27: /* <ESC> */
@@ -365,9 +366,15 @@ void keyboard(unsigned char key, int x, int y)
         change_camera();
         break;
     case 'C': // visualizar lo que ve el obj seleccionado (camara objeto)
-
-        add_camera_obj(_selected_object);
-
+        if (camera_modo_obj == 0)
+        {
+            camera_modo_obj = 1;
+            add_camera_mode_obj(_selected_object);
+        }
+        else
+        {
+            camera_modo_obj = 0;
+        }
         break;
     case 'k':
     case 'K': // activar/descativar modo camara

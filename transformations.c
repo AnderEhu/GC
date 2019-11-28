@@ -32,6 +32,7 @@ extern list_camera *_selected_camera;
 extern int modo_activo;
 extern int transformacion_activa;
 extern int coordenada_activa;
+extern int camera_modo_obj;
 
 transf_values *obj_up_transf_values;
 transf_values *obj_down_transf_values;
@@ -135,6 +136,10 @@ void transf_matrix_set()
 
         n_elem_ptr->nextptr = _selected_object->list_matrix;
         _selected_object->list_matrix = n_elem_ptr;
+
+        if (camera_modo_obj == 1) {
+            add_camera_mode_obj(_selected_object);
+        }
     }
     else
     {

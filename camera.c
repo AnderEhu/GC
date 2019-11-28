@@ -185,32 +185,39 @@ void add_camera_from_input()
     printf(" Camera added to list.\n");
 }
 
-void add_camera_obj(object3d *obj)
+void add_camera_mode_obj(object3d *obj)
 {
-    vector3 pos, front, vup;
-    list_camera *aux_list = (list_camera*)malloc(sizeof(list_camera));
-    
-    pos.x = (obj->min.x + obj->max.x) / 2;
-    pos.y = (obj->min.y + obj->max.y) / 2;
-    pos.z = obj->min.z;
+    _selected_camera->actual_camera->m[0] = obj->list_matrix->m[0];
+    _selected_camera->actual_camera->m[4] = obj->list_matrix->m[1];
+    _selected_camera->actual_camera->m[8] = obj->list_matrix->m[2];
+    _selected_camera->actual_camera->m[12] = -(
+        obj->list_matrix->m[12] * obj->list_matrix->m[0] +
+        obj->list_matrix->m[13] * obj->list_matrix->m[1] +
+        obj->list_matrix->m[14] * obj->list_matrix->m[2]
+        );
 
-    front.x = (obj->min.x + obj->max.x) / 2;
-    front.y = (obj->min.y + obj->max.y) / 2;
-    front.z = 0;
+    _selected_camera->actual_camera->m[1] = obj->list_matrix->m[4];
+    _selected_camera->actual_camera->m[5] = obj->list_matrix->m[5];
+    _selected_camera->actual_camera->m[9] = obj->list_matrix->m[6];
+    _selected_camera->actual_camera->m[13] = -(
+        obj->list_matrix->m[12] * obj->list_matrix->m[4] +
+        obj->list_matrix->m[13] * obj->list_matrix->m[5] +
+        obj->list_matrix->m[14] * obj->list_matrix->m[6]
+        );
 
-    vup.x = 0;
-    vup.y = 1;
-    vup.z = 0;
+    _selected_camera->actual_camera->m[2] = obj->list_matrix->m[8];
+    _selected_camera->actual_camera->m[6] = obj->list_matrix->m[9];
+    _selected_camera->actual_camera->m[10] = obj->list_matrix->m[10];
+    _selected_camera->actual_camera->m[14] = -(
+        obj->list_matrix->m[12] * obj->list_matrix->m[8] +
+        obj->list_matrix->m[13] * obj->list_matrix->m[9] +
+        obj->list_matrix->m[14] * obj->list_matrix->m[10]
+        );
 
-    aux_list = create_camera(pos, front, vup);
-
-    printf(" Adding camera to list... \n");
-
-    add_camera_to_list(aux_list);
-
-    aux_list->actual_camera->proj = global_perspective;
-
-    printf(" Camera added to list.\n");
+    _selected_camera->actual_camera->m[3] = 0;
+    _selected_camera->actual_camera->m[7] = 0;
+    _selected_camera->actual_camera->m[11] = 0;
+    _selected_camera->actual_camera->m[15] = 1;
 }
 
 void set_inv_m(list_camera *c)
