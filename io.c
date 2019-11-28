@@ -398,14 +398,17 @@ void keyboard(unsigned char key, int x, int y)
     /* Cambiar tipo proyeccion */
     case 'p':
     case 'P':
-        if (_selected_camera->actual_camera->proj->type == PROJECTION_PERSPECTIVA) {
+        if (modo_activo == MODO_CAMARA)
+        {
+            if (_selected_camera->actual_camera->proj->type == PROJECTION_PERSPECTIVA) {
             printf("Perspectiva -> Ortografica\n");
             _selected_camera->actual_camera->proj = global_ortho;
-        } 
-        else 
-        {
-            printf("Ortografica -> Perspectiva\n");
-            _selected_camera->actual_camera->proj = global_perspective;
+            } 
+            else 
+            {
+                printf("Ortografica -> Perspectiva\n");
+                _selected_camera->actual_camera->proj = global_perspective;
+            }
         }
         break;
     default:
