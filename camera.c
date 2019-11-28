@@ -29,8 +29,8 @@ extern list_camera *_selected_camera;
 
 projection *global_perspective, *global_ortho;
 
-/* Sets the camera projections */
-void set_camera_projections()
+/* Initialize the camera projections */
+void init_camera_projections()
 {
     global_perspective = (projection*)malloc(sizeof(projection));
     global_ortho = (projection*)malloc(sizeof(projection));
@@ -38,9 +38,22 @@ void set_camera_projections()
     global_perspective->type = PROJECTION_PERSPECTIVA;
     global_ortho->type = PROJECTION_ORTOGRAFICA;
 
-    
+    /* PERSPECTIVA */
+    global_perspective->left = -0.1;
+    global_perspective->right = 0.1;
+    global_perspective->bottom = -0.1;
+    global_perspective->top = 0.1;
+    global_perspective->near = 0.1;
+    global_perspective->far = 100;
+    global_perspective->angle = 45.0f;
 
-
+    /* ORTOGRAFICA */
+    global_ortho->left = -3.0;
+    global_ortho->right = 3;
+    global_ortho->bottom = -3.0;
+    global_ortho->top = 3.0;
+    global_ortho->near = 0.1;
+    global_ortho->far = 100;
 }
 
 list_camera* create_camera(vector3 camera_pos, vector3 camera_front, vector3 camera_up)
@@ -105,6 +118,7 @@ void add_camera_to_list(list_camera *l_camera)
 /* Sets the default camera adding the first camera of the camera list */
 void set_default_cameras()
 {
+    init_camera_projections();
     list_camera *aux_list = (list_camera*)malloc(sizeof(list_camera));
 
     vector3 cam_pos = (vector3){ .x = 4.0f, .y = 3.0f, .z = 3.0f };
@@ -114,10 +128,7 @@ void set_default_cameras()
     aux_list = create_camera(cam_pos, cam_front, cam_vup);
     
     /* Default cameras projection is setted manually */
-    aux_list->actual_camera->projection_type = PROJECTION_PERSPECTIVA;
-    aux_list->actual_camera->angle = 45.0f;
-    aux_list->actual_camera->near = 0.1f;
-    aux_list->actual_camera->far = 100.0f;
+    aux_list->actual_camera->proj = global_perspective;
 
     /* Pointer to first camera of the camera list */
     _camera_list_first = (list_camera *)malloc(sizeof(list_camera));
@@ -169,7 +180,7 @@ void add_camera_from_input()
 
     add_camera_to_list(aux_list);
 
-    set_camera_projection(aux_list->actual_camera);
+    aux_list->actual_camera->proj = global_perspective;
 
     printf(" Camera added to list.\n");
 }

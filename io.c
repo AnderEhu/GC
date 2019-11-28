@@ -49,6 +49,8 @@ extern GLdouble _ortho_x_min, _ortho_x_max;
 extern GLdouble _ortho_y_min, _ortho_y_max;
 extern GLdouble _ortho_z_min, _ortho_z_max;
 
+extern projection *global_perspective, *global_ortho;
+
 int modo_activo = MODO_OBJ;
 int transformacion_activa = TRASLACION;
 int coordenada_activa = COORD_GLOBAL;
@@ -403,6 +405,13 @@ void keyboard(unsigned char key, int x, int y)
     /* Cambiar tipo proyeccion */
     case 'p':
     case 'P':
+        if (_selected_camera->actual_camera->proj->type == PROJECTION_PERSPECTIVA) {
+            printf("Cambiando de perspectiva a ortografica...\n");
+            _selected_camera->actual_camera->proj = global_ortho;
+        } else {
+            printf("Cambiando de ortografica a perspectiva...\n");
+            _selected_camera->actual_camera->proj = global_perspective;
+        }
         break;
     default:
         /*In the default case we just print the code of the key. This is usefull to define new cases*/

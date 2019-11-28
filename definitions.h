@@ -145,6 +145,7 @@ typedef struct
     GLfloat near, far;
     GLfloat left, right;
     GLfloat bottom, top;
+    GLfloat angle;
 } projection;
 
 /****************************
@@ -153,7 +154,7 @@ typedef struct
  ****************************/
 typedef struct
 {
-    projection proj;
+    projection *proj;
     GLfloat m[16];
     GLfloat m_inv[16];
 } camera;

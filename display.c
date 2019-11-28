@@ -88,24 +88,25 @@ void display(void)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    if (_selected_camera->actual_camera->projection_type == PROJECTION_PERSPECTIVA)
+    if (_selected_camera->actual_camera->proj->type == PROJECTION_PERSPECTIVA)
     {
         gluPerspective(
-            _selected_camera->actual_camera->angle,
+            _selected_camera->actual_camera->proj->angle,
             _window_ratio,
-            _selected_camera->actual_camera->near,
-            _selected_camera->actual_camera->far);
+            _selected_camera->actual_camera->proj->near,
+            _selected_camera->actual_camera->proj->far
+        );
     }
     else
     {
         // TODO: revisar
         glOrtho(
-                _selected_camera->actual_camera->left, 
-                _selected_camera->actual_camera->right, 
-                _selected_camera->actual_camera->top, 
-                _selected_camera->actual_camera->bottom, 
-                _selected_camera->actual_camera->near, 
-                _selected_camera->actual_camera->far
+            _selected_camera->actual_camera->proj->left * _window_ratio, 
+            _selected_camera->actual_camera->proj->right * _window_ratio, 
+            _selected_camera->actual_camera->proj->bottom,
+            _selected_camera->actual_camera->proj->top, 
+            _selected_camera->actual_camera->proj->near, 
+            _selected_camera->actual_camera->proj->far
         );
     }
 
