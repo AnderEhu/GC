@@ -185,6 +185,34 @@ void add_camera_from_input()
     printf(" Camera added to list.\n");
 }
 
+void add_camera_obj(object3d *obj)
+{
+    vector3 pos, front, vup;
+    list_camera *aux_list = (list_camera*)malloc(sizeof(list_camera));
+    
+    pos.x = (obj->min.x + obj->max.x) / 2;
+    pos.y = (obj->min.y + obj->max.y) / 2;
+    pos.z = obj->min.z;
+
+    front.x = (obj->min.x + obj->max.x) / 2;
+    front.y = (obj->min.y + obj->max.y) / 2;
+    front.z = 0;
+
+    vup.x = 0;
+    vup.y = 1;
+    vup.z = 0;
+
+    aux_list = create_camera(pos, front, vup);
+
+    printf(" Adding camera to list... \n");
+
+    add_camera_to_list(aux_list);
+
+    aux_list->actual_camera->proj = global_perspective;
+
+    printf(" Camera added to list.\n");
+}
+
 void set_inv_m(list_camera *c)
 {
     c->actual_camera->m[0] = c->actual_camera->m_inv[0];

@@ -54,6 +54,7 @@ extern projection *global_perspective, *global_ortho;
 int modo_activo = MODO_OBJ;
 int transformacion_activa = TRASLACION;
 int coordenada_activa = COORD_GLOBAL;
+int camera_modo_obj = 0; // 0 desactivada, 1 activada
 
 vector3 camera_pos;
 vector3 camera_front;
@@ -364,20 +365,8 @@ void keyboard(unsigned char key, int x, int y)
         change_camera();
         break;
     case 'C': // visualizar lo que ve el obj seleccionado (camara objeto)
-        // TODO: arreglar esto
-        camera_pos.x = _selected_object->max.z;
-        camera_pos.y = _selected_object->max.y / 2;
-        camera_pos.z = _selected_object->max.x / 2;
 
-        /* Direction */ //TODO//
-        camera_front.x = 0.0f;
-        camera_front.y = 0.0f;
-        camera_front.z = 0.0f;
-
-        /* Vertical vector */
-        camera_up.x = 0.0f;
-        camera_up.y = 1.0f;
-        camera_up.z = 0.0f;
+        add_camera_obj(_selected_object);
 
         break;
     case 'k':
@@ -401,8 +390,8 @@ void keyboard(unsigned char key, int x, int y)
         if (modo_activo == MODO_CAMARA)
         {
             if (_selected_camera->actual_camera->proj->type == PROJECTION_PERSPECTIVA) {
-            printf("Perspectiva -> Ortografica\n");
-            _selected_camera->actual_camera->proj = global_ortho;
+                printf("Perspectiva -> Ortografica\n");
+                _selected_camera->actual_camera->proj = global_ortho;
             } 
             else 
             {
