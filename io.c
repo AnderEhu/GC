@@ -366,15 +366,8 @@ void keyboard(unsigned char key, int x, int y)
         change_camera();
         break;
     case 'C': // visualizar lo que ve el obj seleccionado (camara objeto)
-        if (camera_modo_obj == 0)
-        {
-            camera_modo_obj = 1;
-            add_camera_mode_obj(_selected_object);
-        }
-        else
-        {
-            camera_modo_obj = 0;
-        }
+        camera_modo_obj = 1;
+        add_camera_mode_obj(_selected_object);
         break;
     case 'k':
     case 'K': // activar/descativar modo camara

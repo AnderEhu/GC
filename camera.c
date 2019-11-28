@@ -185,41 +185,6 @@ void add_camera_from_input()
     printf(" Camera added to list.\n");
 }
 
-void add_camera_mode_obj(object3d *obj)
-{
-    _selected_camera->actual_camera->m[0] = obj->list_matrix->m[0];
-    _selected_camera->actual_camera->m[4] = obj->list_matrix->m[1];
-    _selected_camera->actual_camera->m[8] = obj->list_matrix->m[2];
-    _selected_camera->actual_camera->m[12] = -(
-        obj->list_matrix->m[12] * obj->list_matrix->m[0] +
-        obj->list_matrix->m[13] * obj->list_matrix->m[1] +
-        obj->list_matrix->m[14] * obj->list_matrix->m[2]
-        );
-
-    _selected_camera->actual_camera->m[1] = obj->list_matrix->m[4];
-    _selected_camera->actual_camera->m[5] = obj->list_matrix->m[5];
-    _selected_camera->actual_camera->m[9] = obj->list_matrix->m[6];
-    _selected_camera->actual_camera->m[13] = -(
-        obj->list_matrix->m[12] * obj->list_matrix->m[4] +
-        obj->list_matrix->m[13] * obj->list_matrix->m[5] +
-        obj->list_matrix->m[14] * obj->list_matrix->m[6]
-        );
-
-    _selected_camera->actual_camera->m[2] = obj->list_matrix->m[8];
-    _selected_camera->actual_camera->m[6] = obj->list_matrix->m[9];
-    _selected_camera->actual_camera->m[10] = obj->list_matrix->m[10];
-    _selected_camera->actual_camera->m[14] = -(
-        obj->list_matrix->m[12] * obj->list_matrix->m[8] +
-        obj->list_matrix->m[13] * obj->list_matrix->m[9] +
-        obj->list_matrix->m[14] * obj->list_matrix->m[10]
-        );
-
-    _selected_camera->actual_camera->m[3] = 0;
-    _selected_camera->actual_camera->m[7] = 0;
-    _selected_camera->actual_camera->m[11] = 0;
-    _selected_camera->actual_camera->m[15] = 1;
-}
-
 void set_inv_m(list_camera *c)
 {
     c->actual_camera->m[0] = c->actual_camera->m_inv[0];
@@ -253,6 +218,59 @@ void set_inv_m(list_camera *c)
     c->actual_camera->m[7] = 0;
     c->actual_camera->m[11] = 0;
     c->actual_camera->m[15] = 1;
+}
+
+void add_camera_mode_obj(object3d *obj)
+{
+    _selected_camera->actual_camera->m_inv[0] = obj->list_matrix->m[0];
+    _selected_camera->actual_camera->m_inv[1] = obj->list_matrix->m[4];
+    _selected_camera->actual_camera->m_inv[2] = -obj->list_matrix->m[8];
+    _selected_camera->actual_camera->m_inv[3] = 0;
+    _selected_camera->actual_camera->m_inv[4] = obj->list_matrix->m[1];
+    _selected_camera->actual_camera->m_inv[5] = obj->list_matrix->m[5];
+    _selected_camera->actual_camera->m_inv[6] = -obj->list_matrix->m[9];
+    _selected_camera->actual_camera->m_inv[7] = 0;
+    _selected_camera->actual_camera->m_inv[8] = obj->list_matrix->m[2];
+    _selected_camera->actual_camera->m_inv[9] = obj->list_matrix->m[6];
+    _selected_camera->actual_camera->m_inv[10] = -obj->list_matrix->m[10];
+    _selected_camera->actual_camera->m_inv[11] = 0;
+    _selected_camera->actual_camera->m_inv[12] = obj->list_matrix->m[12];
+    _selected_camera->actual_camera->m_inv[13] = obj->list_matrix->m[13];
+    _selected_camera->actual_camera->m_inv[14] = obj->list_matrix->m[14];
+    _selected_camera->actual_camera->m_inv[15] = 1;
+
+    set_inv_m(_selected_camera);
+    /*_selected_camera->actual_camera->m[0] = obj->list_matrix->m[0];
+    _selected_camera->actual_camera->m[4] = obj->list_matrix->m[1];
+    _selected_camera->actual_camera->m[8] = -obj->list_matrix->m[2];
+    _selected_camera->actual_camera->m[12] = -(
+        obj->list_matrix->m[12] * obj->list_matrix->m[0] +
+        obj->list_matrix->m[13] * obj->list_matrix->m[1] +
+        obj->list_matrix->m[14] * obj->list_matrix->m[2]
+        );
+
+    _selected_camera->actual_camera->m[1] = obj->list_matrix->m[4];
+    _selected_camera->actual_camera->m[5] = obj->list_matrix->m[5];
+    _selected_camera->actual_camera->m[9] = -obj->list_matrix->m[6];
+    _selected_camera->actual_camera->m[13] = -(
+        obj->list_matrix->m[12] * obj->list_matrix->m[4] +
+        obj->list_matrix->m[13] * obj->list_matrix->m[5] +
+        obj->list_matrix->m[14] * obj->list_matrix->m[6]
+        );
+
+    _selected_camera->actual_camera->m[2] = obj->list_matrix->m[8];
+    _selected_camera->actual_camera->m[6] = obj->list_matrix->m[9];
+    _selected_camera->actual_camera->m[10] = -obj->list_matrix->m[10];
+    _selected_camera->actual_camera->m[14] = -(
+        obj->list_matrix->m[12] * obj->list_matrix->m[8] +
+        obj->list_matrix->m[13] * obj->list_matrix->m[9] +
+        obj->list_matrix->m[14] * obj->list_matrix->m[10]
+        );
+
+    _selected_camera->actual_camera->m[3] = 0;
+    _selected_camera->actual_camera->m[7] = 0;
+    _selected_camera->actual_camera->m[11] = 0;
+    _selected_camera->actual_camera->m[15] = 1;*/
 }
 
 vector3 get_camera_e()
