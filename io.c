@@ -242,19 +242,21 @@ void keyboard(unsigned char key, int x, int y)
         }
         break;
     case CTRL_MINUS:
-        if (glutGetModifiers() == GLUT_ACTIVE_CTRL)
+        if (modo_activo == MODO_CAMARA)
         {
             /*Increase the projection plane; compute the new dimensions*/
-            wd = (_ortho_x_max - _ortho_x_min) / KG_STEP_ZOOM;
-            he = (_ortho_y_max - _ortho_y_min) / KG_STEP_ZOOM;
+            wd = (_selected_camera->actual_camera->proj->right -_selected_camera->actual_camera->proj->left) / KG_STEP_ZOOM;
+            he = (_selected_camera->actual_camera->proj->bottom -_selected_camera->actual_camera->proj->top) / KG_STEP_ZOOM;
+           
             /*In order to avoid moving the center of the plane, we get its coordinates*/
-            midx = (_ortho_x_max + _ortho_x_min) / 2;
-            midy = (_ortho_y_max + _ortho_y_min) / 2;
+            midx = (_selected_camera->actual_camera->proj->right + _selected_camera->actual_camera->proj->left) / 2;
+            midy = (_selected_camera->actual_camera->proj->bottom + _selected_camera->actual_camera->proj->top) / 2;
+            
             /*The the new limits are set, keeping the center of the plane*/
-            _ortho_x_max = midx + wd / 2;
-            _ortho_x_min = midx - wd / 2;
-            _ortho_y_max = midy + he / 2;
-            _ortho_y_min = midy - he / 2;
+            _selected_camera->actual_camera->proj->right = midx + wd / 2;
+            _selected_camera->actual_camera->proj->left = midx - wd / 2;
+            _selected_camera->actual_camera->proj->bottom = midy + he / 2;
+            _selected_camera->actual_camera->proj->top = midy - he / 2;
         } 
         else
         {
@@ -265,19 +267,21 @@ void keyboard(unsigned char key, int x, int y)
         }
         break;
     case CTRL_PLUS:
-        if (glutGetModifiers() == GLUT_ACTIVE_CTRL)
+        if (modo_activo == MODO_CAMARA)
         {
             /*Decrease the projection plane; compute the new dimensions*/
-            wd = (_ortho_x_max - _ortho_x_min) * KG_STEP_ZOOM;
-            he = (_ortho_y_max - _ortho_y_min) * KG_STEP_ZOOM;
+            wd = (_selected_camera->actual_camera->proj->right -_selected_camera->actual_camera->proj->left) * KG_STEP_ZOOM;
+            he = (_selected_camera->actual_camera->proj->bottom -_selected_camera->actual_camera->proj->top) * KG_STEP_ZOOM;
+            
             /*In order to avoid moving the center of the plane, we get its coordinates*/
-            midx = (_ortho_x_max + _ortho_x_min) / 2;
-            midy = (_ortho_y_max + _ortho_y_min) / 2;
+            midx = (_selected_camera->actual_camera->proj->right + _selected_camera->actual_camera->proj->left) / 2;
+            midy = (_selected_camera->actual_camera->proj->bottom + _selected_camera->actual_camera->proj->top) / 2;
+            
             /*The the new limits are set, keeping the center of the plane*/
-            _ortho_x_max = midx + wd / 2;
-            _ortho_x_min = midx - wd / 2;
-            _ortho_y_max = midy + he / 2;
-            _ortho_y_min = midy - he / 2;
+            _selected_camera->actual_camera->proj->right = midx + wd / 2;
+            _selected_camera->actual_camera->proj->left = midx - wd / 2;
+            _selected_camera->actual_camera->proj->bottom = midy + he / 2;
+            _selected_camera->actual_camera->proj->top = midy - he / 2;
         }
         else
         {
