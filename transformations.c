@@ -87,8 +87,6 @@ void init_transf_values()
 
 void transf_matrix_init()
 {
-    vector3 orig_obj;
-    vector3 cam_e;
     glMatrixMode(GL_MODELVIEW);
     if (modo_activo == MODO_OBJ)
     {
@@ -111,7 +109,6 @@ void transf_matrix_init()
         else
         {
             // modo analisis
-            cam_e = get_camera_e();
             glLoadIdentity();
             glTranslatef(-_selected_object->list_matrix->m[12], -_selected_object->list_matrix->m[13], -_selected_object->list_matrix->m[14]);
         }
@@ -120,7 +117,6 @@ void transf_matrix_init()
 
 void transf_matrix_set()
 {
-    vector3 orig_obj;
     if (modo_activo == MODO_OBJ)
     {
         list_matrix *n_elem_ptr = (list_matrix *)malloc(sizeof(list_matrix));
