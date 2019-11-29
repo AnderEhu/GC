@@ -168,8 +168,7 @@ void add_camera_from_input()
     scanf("%lf %lf %lf", &pos.x, &pos.y, &pos.z);
     printf(" Insert front [x y z]: \n");
     scanf("%lf %lf %lf", &front.x, &front.y, &front.z);
-    printf(" Insert verticality [x y z]: \n");
-    scanf("%lf %lf %lf", &vup.x, &vup.y, &vup.z);
+    vup = (vector3) { .x = 0, .y = 1, .z = 0 };
 
     printf(" Inserting camera...\n");
 
