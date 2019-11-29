@@ -64,7 +64,6 @@ list_camera* create_camera(vector3 camera_pos, vector3 camera_front, vector3 cam
     aux_list->nextptr = 0;
 
     aux_list->actual_camera = cm; // projection formated correctly at this point
-    
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     gluLookAt(
@@ -240,12 +239,16 @@ void add_camera_mode_obj(object3d *obj)
     set_inv_m(_selected_camera);
 }
 
-void exit_camera_mode_obj(object3d *obj)
+void centre_camera_to_obj(object3d *obj)
 {
-    
-}
+    list_camera *aux_list = (list_camera*)malloc(sizeof(list_camera));
+    aux_list = create_camera(
+        (vector3) { .x = _selected_camera->actual_camera->m_inv[12], .y = _selected_camera->actual_camera->m_inv[13], .z = _selected_camera->actual_camera->m_inv[14] }, 
+        (vector3) { .x = obj->list_matrix->m[12], .y = obj->list_matrix->m[13], .z = obj->list_matrix->m[14] },
+        (vector3) { .x = 0, .y = 1, .z = 0 }
+    );
 
-vector3 get_camera_e()
-{
-    return (vector3) { .x = _selected_camera->actual_camera->m_inv[12], .y = _selected_camera->actual_camera->m_inv[13], .z =  _selected_camera->actual_camera->m_inv[14] };
+    aux_list->nextptr = _selected_camera->nextptr;
+    aux_list->actual_camera->proj = _selected_camera->actual_camera->proj;
+    _selected_camera = aux_list;
 }

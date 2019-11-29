@@ -324,6 +324,7 @@ void keyboard(unsigned char key, int x, int y)
     case 'G':
         if (coordenada_activa != COORD_GLOBAL)
         {
+            if (modo_activo == MODO_CAMARA) centre_camera_to_obj(_selected_object);
             coordenada_activa = COORD_GLOBAL;
             printf("Transformacion mundo activada!\n");
         }
@@ -354,6 +355,7 @@ void keyboard(unsigned char key, int x, int y)
         {
             printf("CTRL-Z aplicado.\n");
             _selected_object->list_matrix = _selected_object->list_matrix->nextptr;
+            
             if (camera_modo_obj == 1) add_camera_mode_obj(_selected_object);
         }
         break;
@@ -380,14 +382,9 @@ void keyboard(unsigned char key, int x, int y)
     case 'K': // activar/descativar modo camara
         if (modo_activo != MODO_CAMARA)
         {
+            if (coordenada_activa == COORD_GLOBAL) centre_camera_to_obj(_selected_object);
             printf("Modo camara activado!\n");
             modo_activo = MODO_CAMARA;
-            break;
-        }
-        else
-        {
-            printf("Modo objeto activado!\n");
-            modo_activo = MODO_OBJ;
             break;
         }
         break;
@@ -435,7 +432,7 @@ void specialKeyboard(int key, int x, int y)
                         if (coordenada_activa == COORD_GLOBAL)
                         {
                             t_cam = (transf_values*)malloc(sizeof(transf_values));
-                            t_cam->rotation_v = (vector3) { 
+                            t_cam->rotation_v = (vector3) {
                                 .x = -_selected_camera->actual_camera->m_inv[0], 
                                 .y = -_selected_camera->actual_camera->m_inv[1], 
                                 .z = -_selected_camera->actual_camera->m_inv[2] 
@@ -471,9 +468,9 @@ void specialKeyboard(int key, int x, int y)
                         {
                             t_cam = (transf_values*)malloc(sizeof(transf_values));
                             t_cam->rotation_v = (vector3) { 
-                                .x = -_selected_camera->actual_camera->m_inv[4], 
-                                .y = -_selected_camera->actual_camera->m_inv[5], 
-                                .z = -_selected_camera->actual_camera->m_inv[6] 
+                                .x = _selected_camera->actual_camera->m_inv[4], 
+                                .y = _selected_camera->actual_camera->m_inv[5], 
+                                .z = _selected_camera->actual_camera->m_inv[6] 
                             };
                             transform(t_cam);
                         }
@@ -506,9 +503,9 @@ void specialKeyboard(int key, int x, int y)
                         {
                             t_cam = (transf_values*)malloc(sizeof(transf_values));
                             t_cam->rotation_v = (vector3) { 
-                                .x = _selected_camera->actual_camera->m_inv[4], 
-                                .y = _selected_camera->actual_camera->m_inv[5], 
-                                .z = _selected_camera->actual_camera->m_inv[6] 
+                                .x = -_selected_camera->actual_camera->m_inv[4], 
+                                .y = -_selected_camera->actual_camera->m_inv[5], 
+                                .z = -_selected_camera->actual_camera->m_inv[6] 
                             };
                             transform(t_cam);
                         }

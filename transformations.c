@@ -168,7 +168,6 @@ void transform(transf_values *values)
         }
         break;
     case ROTACION:
-        // TODO: mirar direccion rotacion cuando es cam && local
         printf("Rotando\n");
         glRotatef(10.0f, values->rotation_v.x, values->rotation_v.y, values->rotation_v.z);
         break;
