@@ -255,6 +255,13 @@ void keyboard(unsigned char key, int x, int y)
             _ortho_x_min = midx - wd / 2;
             _ortho_y_max = midy + he / 2;
             _ortho_y_min = midy - he / 2;
+        } 
+        else
+        {
+            if (_selected_object != 0 && transformacion_activa == ESCALADO)
+            {
+                transform(obj_minus_transf_values);
+            } 
         }
         break;
     case CTRL_PLUS:
@@ -271,6 +278,13 @@ void keyboard(unsigned char key, int x, int y)
             _ortho_x_min = midx - wd / 2;
             _ortho_y_max = midy + he / 2;
             _ortho_y_min = midy - he / 2;
+        }
+        else
+        {
+            if (_selected_object != 0 && transformacion_activa == ESCALADO)
+            {
+                transform(obj_plus_transf_values);
+            }
         }
         break;
     case '?':
@@ -330,26 +344,7 @@ void keyboard(unsigned char key, int x, int y)
     case 'a':
     case 'A':
         /* Transformaciones a la LUZ */
-        break;
-        /* 
-    TODO: ----- ¡¡¡CAMBIAR!!! -----
-    101 e -> +
-    114 r -> -
-    */
-    case 'e':
-    case 'E':
-        if (_selected_object != 0 && transformacion_activa == ESCALADO)
-        {
-            transform(obj_plus_transf_values);
-        }
-        break;
-    case 'r':
-    case 'R':
-        if (_selected_object != 0 && transformacion_activa == ESCALADO)
-        {
-            transform(obj_minus_transf_values);
-        }
-        break;
+        break; 
     case 26:
         if (_selected_object->list_matrix->nextptr != 0)
         {
