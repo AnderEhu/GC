@@ -240,37 +240,11 @@ void add_camera_mode_obj(object3d *obj)
     _selected_camera->actual_camera->m_inv[15] = 1;
 
     set_inv_m(_selected_camera);
-    /*_selected_camera->actual_camera->m[0] = obj->list_matrix->m[0];
-    _selected_camera->actual_camera->m[4] = obj->list_matrix->m[1];
-    _selected_camera->actual_camera->m[8] = -obj->list_matrix->m[2];
-    _selected_camera->actual_camera->m[12] = -(
-        obj->list_matrix->m[12] * obj->list_matrix->m[0] +
-        obj->list_matrix->m[13] * obj->list_matrix->m[1] +
-        obj->list_matrix->m[14] * obj->list_matrix->m[2]
-        );
+}
 
-    _selected_camera->actual_camera->m[1] = obj->list_matrix->m[4];
-    _selected_camera->actual_camera->m[5] = obj->list_matrix->m[5];
-    _selected_camera->actual_camera->m[9] = -obj->list_matrix->m[6];
-    _selected_camera->actual_camera->m[13] = -(
-        obj->list_matrix->m[12] * obj->list_matrix->m[4] +
-        obj->list_matrix->m[13] * obj->list_matrix->m[5] +
-        obj->list_matrix->m[14] * obj->list_matrix->m[6]
-        );
-
-    _selected_camera->actual_camera->m[2] = obj->list_matrix->m[8];
-    _selected_camera->actual_camera->m[6] = obj->list_matrix->m[9];
-    _selected_camera->actual_camera->m[10] = -obj->list_matrix->m[10];
-    _selected_camera->actual_camera->m[14] = -(
-        obj->list_matrix->m[12] * obj->list_matrix->m[8] +
-        obj->list_matrix->m[13] * obj->list_matrix->m[9] +
-        obj->list_matrix->m[14] * obj->list_matrix->m[10]
-        );
-
-    _selected_camera->actual_camera->m[3] = 0;
-    _selected_camera->actual_camera->m[7] = 0;
-    _selected_camera->actual_camera->m[11] = 0;
-    _selected_camera->actual_camera->m[15] = 1;*/
+void exit_camera_mode_obj(object3d *obj)
+{
+    
 }
 
 vector3 get_camera_e()

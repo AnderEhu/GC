@@ -6,3 +6,5 @@ void change_camera();
 void set_inv_m(list_camera *c);
 vector3 get_camera_e();
 void add_camera_mode_obj(object3d *obj);
+void add_camera_to_list(list_camera *l_camera);
+void set_default_cameras();
