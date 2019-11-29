@@ -145,7 +145,6 @@ typedef struct
     GLfloat near, far;
     GLfloat left, right;
     GLfloat bottom, top;
-    GLfloat angle;
 } projection;
 
 /****************************

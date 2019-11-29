@@ -98,12 +98,6 @@ void display(void)
             _selected_camera->actual_camera->proj->near, 
             _selected_camera->actual_camera->proj->far
         );
-        /*gluPerspective(
-            _selected_camera->actual_camera->proj->angle,
-            _window_ratio,
-            _selected_camera->actual_camera->proj->near,
-            _selected_camera->actual_camera->proj->far
-        );*/
     }
     else
     {

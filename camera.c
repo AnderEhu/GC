@@ -45,14 +45,13 @@ void init_camera_projections()
     global_perspective->top = 0.1;
     global_perspective->near = 0.1;
     global_perspective->far = 100;
-    global_perspective->angle = 45.0f;
 
     /* ORTOGRAFICA */
     global_ortho->left = -3.0;
     global_ortho->right = 3;
     global_ortho->bottom = -3.0;
     global_ortho->top = 3.0;
-    global_ortho->near = 0.1;
+    global_ortho->near = 0.0;
     global_ortho->far = 100;
 }
 

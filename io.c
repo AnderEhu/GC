@@ -424,8 +424,8 @@ void specialKeyboard(int key, int x, int y)
             {
                 switch (transformacion_activa) {
                     case ESCALADO:
-                        _selected_camera->actual_camera->proj->top -= 0.1;
-                        _selected_camera->actual_camera->proj->bottom += 0.1;
+                        _selected_camera->actual_camera->proj->top -= 0.01;
+                        _selected_camera->actual_camera->proj->bottom += 0.01;
                         break;
                     case ROTACION:
                         if (coordenada_activa == COORD_GLOBAL)
@@ -459,8 +459,8 @@ void specialKeyboard(int key, int x, int y)
             {
                 switch (transformacion_activa) {
                     case ESCALADO:
-                        _selected_camera->actual_camera->proj->left -= 0.1;
-                        _selected_camera->actual_camera->proj->right += 0.1;
+                        _selected_camera->actual_camera->proj->left -= 0.01;
+                        _selected_camera->actual_camera->proj->right += 0.01;
                         break;
                     case ROTACION:
                         if (coordenada_activa == COORD_GLOBAL)
@@ -494,8 +494,8 @@ void specialKeyboard(int key, int x, int y)
             {
                 switch (transformacion_activa) {
                     case ESCALADO:
-                        _selected_camera->actual_camera->proj->left += 0.1;
-                        _selected_camera->actual_camera->proj->right -= 0.1;
+                        _selected_camera->actual_camera->proj->left += 0.01;
+                        _selected_camera->actual_camera->proj->right -= 0.01;
                         break;
                     case ROTACION:
                         if (coordenada_activa == COORD_GLOBAL)
@@ -529,8 +529,8 @@ void specialKeyboard(int key, int x, int y)
             {
                 switch (transformacion_activa) {
                     case ESCALADO:
-                        _selected_camera->actual_camera->proj->top += 0.1;
-                        _selected_camera->actual_camera->proj->bottom -= 0.1;
+                        _selected_camera->actual_camera->proj->top += 0.01;
+                        _selected_camera->actual_camera->proj->bottom -= 0.01;
                         break;
                     case ROTACION:
                         if (coordenada_activa == COORD_GLOBAL)
@@ -565,8 +565,8 @@ void specialKeyboard(int key, int x, int y)
                 switch (transformacion_activa)
                 {
                     case ESCALADO:
-                        _selected_camera->actual_camera->proj->near -= 0.1;
-                        _selected_camera->actual_camera->proj->far -= 0.1;
+                        _selected_camera->actual_camera->proj->near -= 0.01;
+                        _selected_camera->actual_camera->proj->far -= 0.01;
                         break;
                     case ROTACION:
                         if (coordenada_activa == COORD_LOCAL) transform(obj_repag_transf_values);
@@ -600,8 +600,8 @@ void specialKeyboard(int key, int x, int y)
                 switch (transformacion_activa)
                 {
                     case ESCALADO:
-                        _selected_camera->actual_camera->proj->near += 0.1;
-                        _selected_camera->actual_camera->proj->far += 0.1;
+                        _selected_camera->actual_camera->proj->near += 0.01;
+                        _selected_camera->actual_camera->proj->far += 0.01;
                         break;
                     case ROTACION:
                         if (coordenada_activa == COORD_LOCAL) transform(obj_avpag_transf_values);
