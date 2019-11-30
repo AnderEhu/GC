@@ -187,7 +187,7 @@ void set_inv_m(list_camera *c)
     c->actual_camera->m[0] = c->actual_camera->m_inv[0];
     c->actual_camera->m[4] = c->actual_camera->m_inv[1];
     c->actual_camera->m[8] = c->actual_camera->m_inv[2];
-    c->actual_camera->m[12] = -(
+    c->actual_camera->m[12] = -1*(
         c->actual_camera->m_inv[12] * c->actual_camera->m_inv[0] +
         c->actual_camera->m_inv[13] * c->actual_camera->m_inv[1] +
         c->actual_camera->m_inv[14] * c->actual_camera->m_inv[2]
@@ -196,7 +196,7 @@ void set_inv_m(list_camera *c)
     c->actual_camera->m[1] = c->actual_camera->m_inv[4];
     c->actual_camera->m[5] = c->actual_camera->m_inv[5];
     c->actual_camera->m[9] = c->actual_camera->m_inv[6];
-    c->actual_camera->m[13] = -(
+    c->actual_camera->m[13] = -1*(
         c->actual_camera->m_inv[12] * c->actual_camera->m_inv[4] +
         c->actual_camera->m_inv[13] * c->actual_camera->m_inv[5] +
         c->actual_camera->m_inv[14] * c->actual_camera->m_inv[6]
@@ -205,7 +205,7 @@ void set_inv_m(list_camera *c)
     c->actual_camera->m[2] = c->actual_camera->m_inv[8];
     c->actual_camera->m[6] = c->actual_camera->m_inv[9];
     c->actual_camera->m[10] = c->actual_camera->m_inv[10];
-    c->actual_camera->m[14] = -(
+    c->actual_camera->m[14] = -1*(
         c->actual_camera->m_inv[12] * c->actual_camera->m_inv[8] +
         c->actual_camera->m_inv[13] * c->actual_camera->m_inv[9] +
         c->actual_camera->m_inv[14] * c->actual_camera->m_inv[10]
@@ -245,8 +245,7 @@ void centre_camera_to_obj(object3d *obj)
     aux_list = create_camera(
         (vector3) { .x = _selected_camera->actual_camera->m_inv[12], .y = _selected_camera->actual_camera->m_inv[13], .z = _selected_camera->actual_camera->m_inv[14] }, 
         (vector3) { .x = obj->list_matrix->m[12], .y = obj->list_matrix->m[13], .z = obj->list_matrix->m[14] },
-        (vector3) { .x = 0, .y = 1, .z = 0 }
-    );
+        (vector3) { .x = 0, .y = 1, .z = 0 });
 
     aux_list->nextptr = _selected_camera->nextptr;
     aux_list->actual_camera->proj = _selected_camera->actual_camera->proj;

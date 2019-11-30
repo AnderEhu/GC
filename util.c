@@ -1,5 +1,6 @@
 #include "definitions.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 void liberar_memoria_obj(object3d *objptr)
 {
@@ -19,4 +20,30 @@ void liberar_memoria_obj(object3d *objptr)
 
     // LIBERAR objeto
     free(objptr);
+}
+
+void set_identity(GLfloat *m)
+{
+    int i, j;
+
+    for (i = 0; i < 4; i++)
+        for (j = 0; j < 4; j++)
+        {
+            m[i * 4 + j] = 0;
+            if (i == j) m[i * 4 + j] = 1;
+        }
+}
+
+void print_4x4_matrix(GLfloat *m)
+{
+    int i, j;
+    printf("\n");
+    for (i = 0; i < 4; i++)
+    {
+        for (j = 0; j < 4; j++)
+        {
+            printf("%f \t", m[4 * i + j]);
+        }
+        printf("\n");
+    }
 }
