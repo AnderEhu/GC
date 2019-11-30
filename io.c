@@ -205,9 +205,11 @@ void keyboard(unsigned char key, int x, int y)
         /*The selection is circular, thus if we move out of the list we go back to the first element*/
         if (_selected_object == 0)
             _selected_object = _first_object;
-        
-        if (modo_activo == MODO_CAMARA && coordenada_activa == COORD_GLOBAL) centre_camera_to_obj(_selected_object);
-        if (camera_modo_obj == 1) add_camera_mode_obj(_selected_object);
+
+        if (modo_activo == MODO_CAMARA && coordenada_activa == COORD_GLOBAL)
+            centre_camera_to_obj(_selected_object);
+        if (camera_modo_obj == 1)
+            add_camera_mode_obj(_selected_object);
         break;
     case 127: /* <SUPR> */
         // TODO: BORRAR CAMARA????
@@ -368,7 +370,8 @@ void keyboard(unsigned char key, int x, int y)
         exit(0);
         break;
     case 'c': // cambiar de camara
-        if (camera_modo_obj == 0) change_camera();
+        if (camera_modo_obj == 0)
+            change_camera();
         break;
     case 'C': // visualizar lo que ve el obj seleccionado (camara objeto)
         if (camera_modo_obj == 0)
@@ -386,7 +389,8 @@ void keyboard(unsigned char key, int x, int y)
     case 'K': // activar/descativar modo camara
         if (camera_modo_obj == 0 && modo_activo != MODO_CAMARA)
         {
-            if (coordenada_activa == COORD_GLOBAL) centre_camera_to_obj(_selected_object);
+            if (coordenada_activa == COORD_GLOBAL)
+                centre_camera_to_obj(_selected_object);
             printf("Modo camara activado!\n");
             modo_activo = MODO_CAMARA;
             break;
@@ -638,4 +642,3 @@ void specialKeyboard(int key, int x, int y)
         glutPostRedisplay();
     }
 }
-
