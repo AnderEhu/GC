@@ -205,6 +205,8 @@ void keyboard(unsigned char key, int x, int y)
         /*The selection is circular, thus if we move out of the list we go back to the first element*/
         if (_selected_object == 0)
             _selected_object = _first_object;
+        
+        if (modo_activo == MODO_CAMARA && coordenada_activa == COORD_GLOBAL) centre_camera_to_obj(_selected_object);
         break;
     case 127: /* <SUPR> */
         // TODO: BORRAR CAMARA????
@@ -568,12 +570,15 @@ void specialKeyboard(int key, int x, int y)
                 case TRASLACION:
                     if (coordenada_activa == COORD_GLOBAL)
                     {
-                        t_cam = (transf_values *)malloc(sizeof(transf_values));
-                        t_cam->translate_v = (vector3){
-                            .x = -_selected_camera->actual_camera->m_inv[8],
-                            .y = -_selected_camera->actual_camera->m_inv[9],
-                            .z = -_selected_camera->actual_camera->m_inv[10]};
-                        transform(t_cam);
+                        if (distance_camera_to_obj() > 2.5)
+                        {
+                            t_cam = (transf_values *)malloc(sizeof(transf_values));
+                            t_cam->translate_v = (vector3){
+                                .x = -_selected_camera->actual_camera->m_inv[8],
+                                .y = -_selected_camera->actual_camera->m_inv[9],
+                                .z = -_selected_camera->actual_camera->m_inv[10]};
+                            transform(t_cam);
+                        }
                     }
                     else
                     {
@@ -604,12 +609,15 @@ void specialKeyboard(int key, int x, int y)
                 case TRASLACION:
                     if (coordenada_activa == COORD_GLOBAL)
                     {
-                        t_cam = (transf_values *)malloc(sizeof(transf_values));
-                        t_cam->translate_v = (vector3){
-                            .x = _selected_camera->actual_camera->m_inv[8],
-                            .y = _selected_camera->actual_camera->m_inv[9],
-                            .z = _selected_camera->actual_camera->m_inv[10]};
-                        transform(t_cam);
+                        if (distance_camera_to_obj() < 100)
+                        {
+                            t_cam = (transf_values *)malloc(sizeof(transf_values));
+                            t_cam->translate_v = (vector3){
+                                .x = _selected_camera->actual_camera->m_inv[8],
+                                .y = _selected_camera->actual_camera->m_inv[9],
+                                .z = _selected_camera->actual_camera->m_inv[10]};
+                            transform(t_cam);
+                        }
                     }
                     else
                     {

@@ -226,16 +226,27 @@ void analysis_mode(int x, int y)
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    
+
     glMultMatrixf(m_minus_at);
     glMultMatrixf(m_rot);
     glMultMatrixf(m_plus_at);
     glGetFloatv(GL_MODELVIEW_MATRIX, m_rot);
-    
+
     glLoadIdentity();
     glMultMatrixf(_selected_camera->actual_camera->m_inv);
     glMultMatrixf(m_rot);
     glGetFloatv(GL_MODELVIEW_MATRIX, _selected_camera->actual_camera->m_inv);
 
     set_inv_m(_selected_camera);
+}
+
+GLfloat distance_camera_to_obj()
+{
+    GLfloat pX, pY, pZ;
+
+    pX = _selected_object->list_matrix->m[12] - _selected_camera->actual_camera->m_inv[12];
+    pY = _selected_object->list_matrix->m[13] - _selected_camera->actual_camera->m_inv[13];
+    pZ = _selected_object->list_matrix->m[14] - _selected_camera->actual_camera->m_inv[14];
+
+    return sqrt(pow(pX, 2) + pow(pY, 2) + pow(pZ, 2));
 }
