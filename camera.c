@@ -109,6 +109,7 @@ list_camera* create_camera(vector3 camera_pos, vector3 camera_front, vector3 cam
 /* Adds camera to the camera list */
 void add_camera_to_list(list_camera *l_camera) 
 {
+    if (_camera_list_first->nextptr == 0) _camera_list_first->nextptr = l_camera;
     _selected_camera->nextptr = l_camera;
     _selected_camera = l_camera;
 }
