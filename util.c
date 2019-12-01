@@ -30,7 +30,8 @@ void set_identity(GLfloat *m)
         for (j = 0; j < 4; j++)
         {
             m[i * 4 + j] = 0;
-            if (i == j) m[i * 4 + j] = 1;
+            if (i == j)
+                m[i * 4 + j] = 1;
         }
 }
 

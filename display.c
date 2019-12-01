@@ -87,28 +87,26 @@ void display(void)
     /* Define the projection */
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    
+
     if (_selected_camera->actual_camera->proj->type == PROJECTION_PERSPECTIVA)
     {
         glFrustum(
-            _selected_camera->actual_camera->proj->left, 
-            _selected_camera->actual_camera->proj->right, 
+            _selected_camera->actual_camera->proj->left,
+            _selected_camera->actual_camera->proj->right,
             _selected_camera->actual_camera->proj->bottom,
-            _selected_camera->actual_camera->proj->top, 
-            _selected_camera->actual_camera->proj->near, 
-            _selected_camera->actual_camera->proj->far
-        );
+            _selected_camera->actual_camera->proj->top,
+            _selected_camera->actual_camera->proj->near,
+            _selected_camera->actual_camera->proj->far);
     }
     else
     {
         glOrtho(
-            _selected_camera->actual_camera->proj->left * _window_ratio, 
-            _selected_camera->actual_camera->proj->right * _window_ratio, 
+            _selected_camera->actual_camera->proj->left * _window_ratio,
+            _selected_camera->actual_camera->proj->right * _window_ratio,
             _selected_camera->actual_camera->proj->bottom,
-            _selected_camera->actual_camera->proj->top, 
-            _selected_camera->actual_camera->proj->near, 
-            _selected_camera->actual_camera->proj->far
-        );
+            _selected_camera->actual_camera->proj->top,
+            _selected_camera->actual_camera->proj->near,
+            _selected_camera->actual_camera->proj->far);
     }
 
     /*First, we draw the axes*/

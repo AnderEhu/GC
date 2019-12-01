@@ -32,8 +32,8 @@ projection *global_perspective, *global_ortho;
 /* Initialize the camera projections */
 void init_camera_projections()
 {
-    global_perspective = (projection*)malloc(sizeof(projection));
-    global_ortho = (projection*)malloc(sizeof(projection));
+    global_perspective = (projection *)malloc(sizeof(projection));
+    global_ortho = (projection *)malloc(sizeof(projection));
 
     global_perspective->type = PROJECTION_PERSPECTIVA;
     global_ortho->type = PROJECTION_ORTOGRAFICA;
@@ -55,11 +55,11 @@ void init_camera_projections()
     global_ortho->far = 100;
 }
 
-list_camera* create_camera(vector3 camera_pos, vector3 camera_front, vector3 camera_up)
+list_camera *create_camera(vector3 camera_pos, vector3 camera_front, vector3 camera_up)
 {
-    camera *cm = (camera*)malloc(sizeof(camera));
+    camera *cm = (camera *)malloc(sizeof(camera));
     GLfloat *inv = (GLfloat *)malloc(sizeof(GLfloat) * 16);
-    list_camera *aux_list = (list_camera*)malloc(sizeof(list_camera));
+    list_camera *aux_list = (list_camera *)malloc(sizeof(list_camera));
 
     aux_list->nextptr = 0;
 
@@ -75,8 +75,7 @@ list_camera* create_camera(vector3 camera_pos, vector3 camera_front, vector3 cam
         camera_front.z,
         camera_up.x,
         camera_up.y,
-        camera_up.z
-    );
+        camera_up.z);
 
     glGetFloatv(GL_MODELVIEW_MATRIX, aux_list->actual_camera->m);
 
@@ -107,9 +106,10 @@ list_camera* create_camera(vector3 camera_pos, vector3 camera_front, vector3 cam
 }
 
 /* Adds camera to the camera list */
-void add_camera_to_list(list_camera *l_camera) 
+void add_camera_to_list(list_camera *l_camera)
 {
-    if (_camera_list_first->nextptr == 0) _camera_list_first->nextptr = l_camera;
+    if (_camera_list_first->nextptr == 0)
+        _camera_list_first->nextptr = l_camera;
     _selected_camera->nextptr = l_camera;
     _selected_camera = l_camera;
 }
@@ -118,14 +118,14 @@ void add_camera_to_list(list_camera *l_camera)
 void set_default_cameras()
 {
     init_camera_projections();
-    list_camera *aux_list = (list_camera*)malloc(sizeof(list_camera));
+    list_camera *aux_list = (list_camera *)malloc(sizeof(list_camera));
 
-    vector3 cam_pos = (vector3){ .x = 4.0f, .y = 3.0f, .z = 3.0f };
-    vector3 cam_front = (vector3){ .x = 0.0f, .y = 0.0f, .z = 0.0f };
-    vector3 cam_vup = (vector3){ .x = 0.0f, .y = 1.0f, .z = 0.0f };
-    
+    vector3 cam_pos = (vector3){.x = 4.0f, .y = 3.0f, .z = 3.0f};
+    vector3 cam_front = (vector3){.x = 0.0f, .y = 0.0f, .z = 0.0f};
+    vector3 cam_vup = (vector3){.x = 0.0f, .y = 1.0f, .z = 0.0f};
+
     aux_list = create_camera(cam_pos, cam_front, cam_vup);
-    
+
     /* Default cameras projection is setted manually */
     aux_list->actual_camera->proj = global_perspective;
 
@@ -141,9 +141,8 @@ void set_default_cameras()
 
     /* Info message for default camera */
     printf(
-        " + Default camera loaded at: x=%.1f y=%.1f z=%.1f, looking to x=%.1f y=%.1f z=%.1f.\n", 
-        cam_pos.x, cam_pos.y, cam_pos.z, cam_front.x, cam_front.y, cam_front.z
-    );
+        " + Default camera loaded at: x=%.1f y=%.1f z=%.1f, looking to x=%.1f y=%.1f z=%.1f.\n",
+        cam_pos.x, cam_pos.y, cam_pos.z, cam_front.x, cam_front.y, cam_front.z);
 }
 
 /* Changes camera to the next camera of the camera list (circular list) */
@@ -159,7 +158,7 @@ void change_camera()
 void add_camera_from_input()
 {
     vector3 pos, front, vup;
-    list_camera *aux_list = (list_camera*)malloc(sizeof(list_camera));
+    list_camera *aux_list = (list_camera *)malloc(sizeof(list_camera));
 
     printf(" --- Inserting camera --- \n");
     printf(" Format: three componentes separated with spaces. \n");
@@ -168,7 +167,7 @@ void add_camera_from_input()
     scanf("%lf %lf %lf", &pos.x, &pos.y, &pos.z);
     printf(" Insert front [x y z]: \n");
     scanf("%lf %lf %lf", &front.x, &front.y, &front.z);
-    vup = (vector3) { .x = 0, .y = 1, .z = 0 };
+    vup = (vector3){.x = 0, .y = 1, .z = 0};
 
     printf(" Inserting camera...\n");
 
@@ -188,29 +187,23 @@ void set_inv_m(list_camera *c)
     c->actual_camera->m[0] = c->actual_camera->m_inv[0];
     c->actual_camera->m[4] = c->actual_camera->m_inv[1];
     c->actual_camera->m[8] = c->actual_camera->m_inv[2];
-    c->actual_camera->m[12] = -1*(
-        c->actual_camera->m_inv[12] * c->actual_camera->m_inv[0] +
-        c->actual_camera->m_inv[13] * c->actual_camera->m_inv[1] +
-        c->actual_camera->m_inv[14] * c->actual_camera->m_inv[2]
-        );
+    c->actual_camera->m[12] = -1 * (c->actual_camera->m_inv[12] * c->actual_camera->m_inv[0] +
+                                    c->actual_camera->m_inv[13] * c->actual_camera->m_inv[1] +
+                                    c->actual_camera->m_inv[14] * c->actual_camera->m_inv[2]);
 
     c->actual_camera->m[1] = c->actual_camera->m_inv[4];
     c->actual_camera->m[5] = c->actual_camera->m_inv[5];
     c->actual_camera->m[9] = c->actual_camera->m_inv[6];
-    c->actual_camera->m[13] = -1*(
-        c->actual_camera->m_inv[12] * c->actual_camera->m_inv[4] +
-        c->actual_camera->m_inv[13] * c->actual_camera->m_inv[5] +
-        c->actual_camera->m_inv[14] * c->actual_camera->m_inv[6]
-        );
+    c->actual_camera->m[13] = -1 * (c->actual_camera->m_inv[12] * c->actual_camera->m_inv[4] +
+                                    c->actual_camera->m_inv[13] * c->actual_camera->m_inv[5] +
+                                    c->actual_camera->m_inv[14] * c->actual_camera->m_inv[6]);
 
     c->actual_camera->m[2] = c->actual_camera->m_inv[8];
     c->actual_camera->m[6] = c->actual_camera->m_inv[9];
     c->actual_camera->m[10] = c->actual_camera->m_inv[10];
-    c->actual_camera->m[14] = -1*(
-        c->actual_camera->m_inv[12] * c->actual_camera->m_inv[8] +
-        c->actual_camera->m_inv[13] * c->actual_camera->m_inv[9] +
-        c->actual_camera->m_inv[14] * c->actual_camera->m_inv[10]
-        );
+    c->actual_camera->m[14] = -1 * (c->actual_camera->m_inv[12] * c->actual_camera->m_inv[8] +
+                                    c->actual_camera->m_inv[13] * c->actual_camera->m_inv[9] +
+                                    c->actual_camera->m_inv[14] * c->actual_camera->m_inv[10]);
 
     c->actual_camera->m[3] = 0;
     c->actual_camera->m[7] = 0;
@@ -242,11 +235,11 @@ void add_camera_mode_obj(object3d *obj)
 
 void centre_camera_to_obj(object3d *obj)
 {
-    list_camera *aux_list = (list_camera*)malloc(sizeof(list_camera));
+    list_camera *aux_list = (list_camera *)malloc(sizeof(list_camera));
     aux_list = create_camera(
-        (vector3) { .x = _selected_camera->actual_camera->m_inv[12], .y = _selected_camera->actual_camera->m_inv[13], .z = _selected_camera->actual_camera->m_inv[14] }, 
-        (vector3) { .x = obj->list_matrix->m[12], .y = obj->list_matrix->m[13], .z = obj->list_matrix->m[14] },
-        (vector3) { .x = 0, .y = 1, .z = 0 });
+        (vector3){.x = _selected_camera->actual_camera->m_inv[12], .y = _selected_camera->actual_camera->m_inv[13], .z = _selected_camera->actual_camera->m_inv[14]},
+        (vector3){.x = obj->list_matrix->m[12], .y = obj->list_matrix->m[13], .z = obj->list_matrix->m[14]},
+        (vector3){.x = 0, .y = 1, .z = 0});
 
     aux_list->nextptr = _selected_camera->nextptr;
     aux_list->actual_camera->proj = _selected_camera->actual_camera->proj;
