@@ -376,11 +376,14 @@ void keyboard(unsigned char key, int x, int y)
         if (camera_modo_obj == 0)
         {
             camera_modo_obj = 1;
+            modo_activo = MODO_OBJ;
+            printf("Visualizando desde objeto (modo objeto activado)\n");
             add_camera_mode_obj(_selected_object);
         }
         else
         {
             camera_modo_obj = 0;
+            printf("Saliendo de camara modo objeto...\n");
             set_default_cameras();
         }
         break;

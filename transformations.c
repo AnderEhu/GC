@@ -59,7 +59,7 @@ void init_transf_values()
     obj_plus_transf_values = (transf_values *)malloc(sizeof(transf_values));
     obj_minus_transf_values = (transf_values *)malloc(sizeof(transf_values));
 
-    obj_up_transf_values->scale_v = (vector3){.x = 1.0f, .y = 1.5f, .z = 1.0f};
+    obj_up_transf_values->scale_v = (vector3){.x = 1.0f, .y = 2.0f, .z = 1.0f};
     obj_up_transf_values->translate_v = (vector3){.x = 0.0f, .y = 1.0f, .z = 0.0f};
     obj_up_transf_values->rotation_v = (vector3){.x = 1.0f, .y = 0.0f, .z = 0.0f};
 
@@ -67,7 +67,7 @@ void init_transf_values()
     obj_down_transf_values->translate_v = (vector3){.x = 0.0f, .y = -1.0f, .z = 0.0f};
     obj_down_transf_values->rotation_v = (vector3){.x = -1.0f, .y = 0.0f, .z = 0.0f};
 
-    obj_right_transf_values->scale_v = (vector3){.x = 1.5f, .y = 1.0f, .z = 1.0f};
+    obj_right_transf_values->scale_v = (vector3){.x = 2.0f, .y = 1.0f, .z = 1.0f};
     obj_right_transf_values->translate_v = (vector3){.x = 1.0f, .y = 0.0f, .z = 0.0f};
     obj_right_transf_values->rotation_v = (vector3){.x = 0.0f, .y = 1.0f, .z = 0.0f};
 
@@ -75,7 +75,7 @@ void init_transf_values()
     obj_left_transf_values->translate_v = (vector3){.x = -1.0f, .y = 0.0f, .z = 0.0f};
     obj_left_transf_values->rotation_v = (vector3){.x = 0.0f, .y = -1.0f, .z = 0.0f};
 
-    obj_avpag_transf_values->scale_v = (vector3){.x = 1.0f, .y = 1.0f, .z = 1.5f};
+    obj_avpag_transf_values->scale_v = (vector3){.x = 1.0f, .y = 1.0f, .z = 2.0f};
     obj_avpag_transf_values->translate_v = (vector3){.x = 0.0f, .y = 0.0f, .z = 1.0f};
     obj_avpag_transf_values->rotation_v = (vector3){.x = 0.0f, .y = 0.0f, .z = 1.0f};
 
@@ -83,7 +83,7 @@ void init_transf_values()
     obj_repag_transf_values->translate_v = (vector3){.x = 0.0f, .y = 0.0f, .z = -1.0f};
     obj_repag_transf_values->rotation_v = (vector3){.x = 0.0f, .y = 0.0f, .z = -1.0f};
 
-    obj_plus_transf_values->scale_v = (vector3){.x = 1.5f, .y = 1.5f, .z = 1.5f};
+    obj_plus_transf_values->scale_v = (vector3){.x = 2.0f, .y = 2.0f, .z = 2.0f};
 
     obj_minus_transf_values->scale_v = (vector3){.x = 0.5f, .y = 0.5f, .z = 0.5f};
 }
