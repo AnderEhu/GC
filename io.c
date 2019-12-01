@@ -212,7 +212,6 @@ void keyboard(unsigned char key, int x, int y)
             add_camera_mode_obj(_selected_object);
         break;
     case 127: /* <SUPR> */
-        // TODO: BORRAR CAMARA????
         if (_selected_object == 0)
         {
             printf("Warning: No hay objetos para borrar!\n");
