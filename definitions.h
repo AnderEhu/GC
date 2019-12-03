@@ -63,6 +63,11 @@
 #define PROJECTION_PERSPECTIVA 1
 #define PROJECTION_ORTOGRAFICA 2
 
+#define LUZ_TIPO_FOCO 0
+#define LUZ_TIPO_SOL 1
+#define LUZ_TIPO_BOMBILLA 2
+
+
 /** STRUCTURES **/
 
 /****************************
@@ -111,7 +116,23 @@ typedef struct
 {
     GLint num_vertices;  /* number of vertices in the face */
     GLint *vertex_table; /* table with the index of each vertex */
+    vector3 normal_vector;
 } face;
+
+typedef struct
+{
+    GLfloat i_refrac;
+    vector3 Ka, Kd;
+    GLfloat ns;
+} material;
+
+typedef struct
+{
+    GLint is_on;
+    GLint type;
+    GLfloat angulo;
+    GLfloat intensidad;
+} luz;
 
 typedef struct list_matrix
 {
@@ -133,6 +154,7 @@ struct object3d
     point3 max;               /* coordinates' bigger bounds */
     struct object3d *next;    /* next element in the pile of objects */
     list_matrix *list_matrix; /* display list matrix */
+    material *material;       /* structure to save object material */
 };
 
 /****************************

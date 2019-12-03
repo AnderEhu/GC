@@ -1,0 +1,5 @@
+Las 4 primeras fuentes de luz son:
+- Sol (puede rotar)
+- Bombilla (se puede mover)
+- Foco desde objeto (como modo camara pero con luz)
+- Foco sinmas (como modo camara local)

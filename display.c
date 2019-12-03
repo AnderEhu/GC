@@ -73,16 +73,39 @@ void reshape(int width, int height)
     _window_ratio = (GLdouble)width / (GLdouble)height;
 }
 
+vector3 calc_vect_normal(vertex *vertex_table, GLint i1, GLint i2, GLint i3)
+{
+    vector3 U, V, v_normal;
+
+    U.x = vertex_table[i2].coord.x - vertex_table[i1].coord.x;
+    U.y = vertex_table[i2].coord.y - vertex_table[i1].coord.y;
+    U.z = vertex_table[i2].coord.z - vertex_table[i1].coord.z;
+
+    V.x = vertex_table[i3].coord.x - vertex_table[i1].coord.x;
+    V.y = vertex_table[i3].coord.y - vertex_table[i1].coord.y;
+    V.z = vertex_table[i3].coord.z - vertex_table[i1].coord.z;
+
+
+    v_normal.x = (U.y * V.z) - (U.z * V.y);
+    v_normal.y = (U.z * V.x) - (U.x * V.z);
+    v_normal.z = (U.x * V.y) - (U.y * V.x);
+
+    return v_normal;
+}
+
 /**
  * @brief Callback display function
  */
 void display(void)
 {
     GLint v_index, v, f;
+    GLint i1, i2, i3;
     object3d *aux_obj = _first_object;
+    vector3 v_normal;
 
     /* Clear the screen */
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
+
 
     /* Define the projection */
     glMatrixMode(GL_PROJECTION);
@@ -139,10 +162,22 @@ void display(void)
             glBegin(GL_POLYGON);
             for (v = 0; v < aux_obj->face_table[f].num_vertices; v++)
             {
+                i1 = aux_obj->face_table[f].vertex_table[0];
+                i2 = aux_obj->face_table[f].vertex_table[1];
+                i3 = aux_obj->face_table[f].vertex_table[2];
+
+                v_normal = calc_vect_normal(aux_obj->vertex_table, i1, i2, i3);
+
+                aux_obj->face_table[f].normal_vector = v_normal;
+
                 v_index = aux_obj->face_table[f].vertex_table[v];
                 glVertex3d(aux_obj->vertex_table[v_index].coord.x,
                            aux_obj->vertex_table[v_index].coord.y,
                            aux_obj->vertex_table[v_index].coord.z);
+                
+                glNormal3d(aux_obj->face_table[f].normal_vector.x,
+                           aux_obj->face_table[f].normal_vector.y,
+                           aux_obj->face_table[f].normal_vector.z);
             }
             glEnd();
         }
@@ -151,4 +186,5 @@ void display(void)
     }
     /*Do the actual drawing*/
     glFlush();
+    glutSwapBuffers();
 }
