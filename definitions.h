@@ -105,6 +105,7 @@ typedef struct
 {
     point3 coord;    /* coordinates,x, y, z */
     GLint num_faces; /* number of faces that share this vertex */
+    vector3 normal_vector;
 } vertex;
 
 /****************************
@@ -121,8 +122,9 @@ typedef struct
 
 typedef struct
 {
-    GLfloat i_refrac;
-    vector3 Ka, Kd;
+    GLfloat Ka[4];
+    GLfloat Kd[4];
+    GLfloat Ks[4];
     GLfloat ns;
 } material;
 
