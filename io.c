@@ -14,6 +14,7 @@
 #include "transformations.h"
 #include "util.h"
 #include "camera.h"
+#include "light.h"
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -32,6 +33,7 @@
 
 #define MODO_OBJ 0
 #define MODO_CAMARA 1
+#define MODO_LUZ 2
 
 #define TRASLACION 0
 #define ROTACION 1
@@ -55,7 +57,7 @@ int modo_activo = MODO_OBJ;
 int transformacion_activa = TRASLACION;
 int coordenada_activa = COORD_GLOBAL;
 int camera_modo_obj = 0; // 0 desactivada, 1 activada
-int light_activated = 0;
+int light_activated = 1;
 
 vector3 camera_pos;
 vector3 camera_front;
@@ -69,6 +71,8 @@ extern transf_values *obj_avpag_transf_values;
 extern transf_values *obj_repag_transf_values;
 extern transf_values *obj_plus_transf_values;
 extern transf_values *obj_minus_transf_values;
+
+extern luz global_lights[];
 
 /**
  * @brief This function just prints information about the use
@@ -654,8 +658,28 @@ void specialKeyboard(int key, int x, int y)
             }
             break;
         case GLUT_KEY_F1: // sol
+            if (global_lights[0].is_on == 0)
+            {
+                global_lights[0].is_on = 1;
+                glEnable(GL_LIGHT0);
+            }
+            else
+            {
+                global_lights[0].is_on = 0;
+                glDisable(GL_LIGHT0);
+            }
             break;
         case GLUT_KEY_F2: // bombilla
+            if (global_lights[1].is_on == 0)
+            {
+                global_lights[1].is_on = 1;
+                glEnable(GL_LIGHT1);
+            }
+            else
+            {
+                global_lights[1].is_on = 0;
+                glDisable(GL_LIGHT1);
+            }
             break;
         case GLUT_KEY_F3: // foco
             break;

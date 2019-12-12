@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include "definitions.h"
 #include "math.h"
+#include "light.h"
 
 /** EXTERNAL VARIABLES **/
 
@@ -36,6 +37,7 @@ extern GLdouble _ortho_z_min, _ortho_z_max;
 extern object3d *_first_object;
 extern object3d *_selected_object;
 extern list_camera *_selected_camera;
+extern luz global_lights[];
 
 /**
  * @brief Callback reshape function. We just store the new proportions of the window
@@ -128,7 +130,8 @@ void display(void)
     glLoadMatrixf(_selected_camera->actual_camera->m);
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
     glMaterialfv(GL_FRONT, GL_SHININESS, mat_shine);
-    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    if (global_lights[0].is_on == 1) glLightfv(GL_LIGHT0, GL_POSITION, global_lights[0].position);
+    if (global_lights[1].is_on == 1) glLightfv(GL_LIGHT1, GL_POSITION, global_lights[1].position);
     
     /*Now each of the objects in the list*/
     while (aux_obj != 0)

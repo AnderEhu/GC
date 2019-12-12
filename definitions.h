@@ -131,9 +131,12 @@ typedef struct
 typedef struct
 {
     GLint is_on;
-    GLint type;
-    GLfloat angulo;
-    GLfloat intensidad;
+    GLfloat ambient[4];
+    GLfloat spot_direction[3];
+    GLfloat specular[4];
+    GLfloat diffuse[4];
+    GLfloat position[4];
+    GLfloat angle;
 } luz;
 
 typedef struct list_matrix

@@ -1,0 +1,1 @@
+void set_default_lights();
