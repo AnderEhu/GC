@@ -1,4 +1,4 @@
-// PARA COMPILAR LINUX: gcc *.c -lGL -lGLU -lglut -o program
+// PARA COMPILAR LINUX: gcc *.c -lGL -lGLU -lglut -lm -o program
 // PARA COMPILAR EN MAC: gcc *.c -framework OpenGL -framework GLUT -lm -o program
 #ifndef GL_SILENCE_DEPRECATION
 #define GL_SILENCE_DEPRECATION true
@@ -41,6 +41,7 @@ object3d *_first_object = 0;    /*List of objects*/
 object3d *_selected_object = 0; /*Object currently selected*/
 list_camera *_camera_list_first = 0;
 list_camera *_selected_camera = 0;
+GLint flat_smooth = 0;
 
 
 /** GENERAL INITIALIZATION **/
@@ -75,20 +76,22 @@ int main(int argc, char **argv)
     glutInitWindowSize(KG_WINDOW_WIDTH, KG_WINDOW_HEIGHT);
     glutInitWindowPosition(KG_WINDOW_X, KG_WINDOW_Y);
     glutCreateWindow(KG_WINDOW_TITLE);
-
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // queremos poligonos opacos
     
-    glEnable(GL_DEPTH_TEST); // activar el test de profundidad (Z-buffer)
-
-    //if (flat_smooth) glShadeModel(GL_SMOOTH);  // hacen falta los vectores normales de cada vertice
-    //else 
-    glShadeModel(GL_FLAT);  // basta con vector normal del poligono
-
     /* set the callback functions */
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
     glutSpecialFunc(specialKeyboard);
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // queremos poligonos opacos
+    
+    glEnable(GL_DEPTH_TEST); // activar el test de profundidad (Z-buffer)
+    glEnable(GL_LIGHTING); // activar luz
+    glEnable(GL_LIGHT0);
+    glEnable(GL_NORMALIZE);
+
+    if (flat_smooth) glShadeModel(GL_SMOOTH);  // hacen falta los vectores normales de cada vertice
+    else glShadeModel(GL_FLAT);  // basta con vector normal del poligono
 
     /* this initialization has to be AFTER the creation of the window */
     initialization();

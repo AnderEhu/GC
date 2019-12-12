@@ -22,7 +22,9 @@
 #include <GL/glu.h>
 #endif
 
+#include <stdio.h>
 #include "definitions.h"
+#include "math.h"
 
 /** EXTERNAL VARIABLES **/
 
@@ -34,31 +36,6 @@ extern GLdouble _ortho_z_min, _ortho_z_max;
 extern object3d *_first_object;
 extern object3d *_selected_object;
 extern list_camera *_selected_camera;
-
-/**
- * @brief Function to draw the axes
- */
-void draw_axes()
-{
-    /*Draw X axis*/
-    glColor3f(KG_COL_X_AXIS_R, KG_COL_X_AXIS_G, KG_COL_X_AXIS_B);
-    glBegin(GL_LINES);
-    glVertex3d(KG_MAX_DOUBLE, 0, 0);
-    glVertex3d(-1 * KG_MAX_DOUBLE, 0, 0);
-    glEnd();
-    /*Draw Y axis*/
-    glColor3f(KG_COL_Y_AXIS_R, KG_COL_Y_AXIS_G, KG_COL_Y_AXIS_B);
-    glBegin(GL_LINES);
-    glVertex3d(0, KG_MAX_DOUBLE, 0);
-    glVertex3d(0, -1 * KG_MAX_DOUBLE, 0);
-    glEnd();
-    /*Draw Z axis*/
-    glColor3f(KG_COL_Z_AXIS_R, KG_COL_Z_AXIS_G, KG_COL_Z_AXIS_B);
-    glBegin(GL_LINES);
-    glVertex3d(0, 0, KG_MAX_DOUBLE);
-    glVertex3d(0, 0, -1 * KG_MAX_DOUBLE);
-    glEnd();
-}
 
 /**
  * @brief Callback reshape function. We just store the new proportions of the window
@@ -102,10 +79,19 @@ void display(void)
     GLint i1, i2, i3;
     object3d *aux_obj = _first_object;
     vector3 v_normal;
+    GLfloat norma;
+    vector3 v_normal_init = (vector3) { .x = 0, .y = 0, .z = 0 };
+
+    /*GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat mat_shininess[] = { 50.0 };*/
+    GLfloat light_position[] = { 0.0, 1.0, 0.0, 0.0 };
+    GLfloat mat_ambient[] = { 0.25f, 0.148f, 0.06475f, 1.0f  };
+    GLfloat mat_diffuse[] = { 0.4f, 0.2368f, 0.1036f, 1.0f };
+    GLfloat mat_specular[] = { 0.774597f, 0.458561f, 0.200621f, 1.0f };
+    GLfloat mat_shine[] = { 76.8f };
 
     /* Clear the screen */
     glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
-
 
     /* Define the projection */
     glMatrixMode(GL_PROJECTION);
@@ -139,8 +125,11 @@ void display(void)
     glMatrixMode(GL_MODELVIEW);
 
     glLoadIdentity();
-
     glLoadMatrixf(_selected_camera->actual_camera->m);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shine);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    
     /*Now each of the objects in the list*/
     while (aux_obj != 0)
     {
@@ -160,17 +149,28 @@ void display(void)
         for (f = 0; f < aux_obj->num_faces; f++)
         {
             glBegin(GL_POLYGON);
+            
+            i1 = aux_obj->face_table[f].vertex_table[0];
+            i2 = aux_obj->face_table[f].vertex_table[1];
+            i3 = aux_obj->face_table[f].vertex_table[2];
+
+            v_normal = calc_vect_normal(aux_obj->vertex_table, i1, i2, i3);
+
+            //printf("%lf %lf %lf\n", v_normal.x, v_normal.y, v_normal.z);
+
             for (v = 0; v < aux_obj->face_table[f].num_vertices; v++)
             {
-                i1 = aux_obj->face_table[f].vertex_table[0];
-                i2 = aux_obj->face_table[f].vertex_table[1];
-                i3 = aux_obj->face_table[f].vertex_table[2];
-
-                v_normal = calc_vect_normal(aux_obj->vertex_table, i1, i2, i3);
-
+                v_index = aux_obj->face_table[f].vertex_table[v];
                 aux_obj->face_table[f].normal_vector = v_normal;
 
-                v_index = aux_obj->face_table[f].vertex_table[v];
+                aux_obj->vertex_table[v_index].normal_vector = v_normal_init;
+
+                //printf("%lf %lf %lf\n", aux_obj->face_table[f].normal_vector.x, aux_obj->face_table[f].normal_vector.y, aux_obj->face_table[f].normal_vector.z);
+                
+                aux_obj->vertex_table[v_index].normal_vector.x += aux_obj->face_table[f].normal_vector.x;
+                aux_obj->vertex_table[v_index].normal_vector.y += aux_obj->face_table[f].normal_vector.y;
+                aux_obj->vertex_table[v_index].normal_vector.z += aux_obj->face_table[f].normal_vector.z;
+
                 glVertex3d(aux_obj->vertex_table[v_index].coord.x,
                            aux_obj->vertex_table[v_index].coord.y,
                            aux_obj->vertex_table[v_index].coord.z);
@@ -181,6 +181,28 @@ void display(void)
             }
             glEnd();
         }
+
+        // hacer unitario
+        for (f = 0; f < aux_obj->num_faces; f++)
+        {
+            for (v = 0; v < aux_obj->face_table[f].num_vertices; v++)
+            {
+                v_index = aux_obj->face_table[f].vertex_table[v];
+                
+                norma = sqrt(
+                    pow(aux_obj->vertex_table[v_index].normal_vector.x, 2) + 
+                    pow(aux_obj->vertex_table[v_index].normal_vector.y, 2) + 
+                    pow(aux_obj->vertex_table[v_index].normal_vector.z, 2)
+                );
+
+                aux_obj->vertex_table[v_index].normal_vector.x /= norma;
+                aux_obj->vertex_table[v_index].normal_vector.y /= norma;
+                aux_obj->vertex_table[v_index].normal_vector.z /= norma;
+
+                //printf("%f %f %f\n", aux_obj->vertex_table[v_index].normal_vector.x, aux_obj->vertex_table[v_index].normal_vector.y, aux_obj->vertex_table[v_index].normal_vector.z);
+            }
+        }
+        
         glPopMatrix();
         aux_obj = aux_obj->next;
     }

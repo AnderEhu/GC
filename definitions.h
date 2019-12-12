@@ -9,7 +9,7 @@
 
 /** DEFINITIONS **/
 
-#define KG_WINDOW_TITLE "Práctica GPO"
+#define KG_WINDOW_TITLE "Ander Alonso / Unai Sainz de la Maza"
 #define KG_WINDOW_WIDTH 600
 #define KG_WINDOW_HEIGHT 400
 #define KG_WINDOW_X 50

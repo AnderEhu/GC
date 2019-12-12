@@ -44,7 +44,7 @@ extern object3d *_first_object;
 extern object3d *_selected_object;
 extern list_camera *_camera_list_first;
 extern list_camera *_selected_camera;
-
+extern GLint flat_smooth;
 extern GLdouble _ortho_x_min, _ortho_x_max;
 extern GLdouble _ortho_y_min, _ortho_y_max;
 extern GLdouble _ortho_z_min, _ortho_z_max;
@@ -55,6 +55,7 @@ int modo_activo = MODO_OBJ;
 int transformacion_activa = TRASLACION;
 int coordenada_activa = COORD_GLOBAL;
 int camera_modo_obj = 0; // 0 desactivada, 1 activada
+int light_activated = 0;
 
 vector3 camera_pos;
 vector3 camera_front;
@@ -149,6 +150,7 @@ void keyboard(unsigned char key, int x, int y)
     int i;
     camera *aux_camera = 0;
     list_camera *aux_camera_obj = 0;
+    
 
     switch (key)
     {
@@ -190,6 +192,8 @@ void keyboard(unsigned char key, int x, int y)
                 auxiliar_object->next = _first_object;
                 _first_object = auxiliar_object;
                 _selected_object = _first_object;
+                
+
                 printf("%s\n", KG_MSSG_FILEREAD);
                 break;
             }
@@ -635,6 +639,36 @@ void specialKeyboard(int key, int x, int y)
             else
             {
                 transform(obj_avpag_transf_values);
+            }
+            break;
+        case GLUT_KEY_F9: // activa / desactiva luz
+            if (light_activated == 0) 
+            {
+                light_activated = 1;
+                glEnable(GL_LIGHTING);
+            }
+            else 
+            {
+                light_activated = 0;
+                glDisable(GL_LIGHTING);
+            }
+            break;
+        case GLUT_KEY_F1: // sol
+            break;
+        case GLUT_KEY_F2: // bombilla
+            break;
+        case GLUT_KEY_F3: // foco
+            break;
+        case GLUT_KEY_F12: // flat / smooth
+            if (flat_smooth == 0)
+            {
+                flat_smooth = 1; // activar smooth
+                glShadeModel(GL_SMOOTH);
+            }
+            else
+            {
+                flat_smooth = 0;
+                glShadeModel(GL_FLAT);
             }
             break;
         default:
