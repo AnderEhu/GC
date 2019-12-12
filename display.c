@@ -129,6 +129,7 @@ void display(void)
     glLoadIdentity();
     glLoadMatrixf(_selected_camera->actual_camera->m);
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
     glMaterialfv(GL_FRONT, GL_SHININESS, mat_shine);
     if (global_lights[0].is_on == 1) glLightfv(GL_LIGHT0, GL_POSITION, global_lights[0].position);
     if (global_lights[1].is_on == 1) glLightfv(GL_LIGHT1, GL_POSITION, global_lights[1].position);
