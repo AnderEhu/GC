@@ -64,7 +64,6 @@ vector3 calc_vect_normal(vertex *vertex_table, GLint i1, GLint i2, GLint i3)
     V.y = vertex_table[i3].coord.y - vertex_table[i1].coord.y;
     V.z = vertex_table[i3].coord.z - vertex_table[i1].coord.z;
 
-
     v_normal.x = (U.y * V.z) - (U.z * V.y);
     v_normal.y = (U.z * V.x) - (U.x * V.z);
     v_normal.z = (U.x * V.y) - (U.y * V.x);
@@ -82,18 +81,25 @@ void display(void)
     object3d *aux_obj = _first_object;
     vector3 v_normal;
     GLfloat norma;
-    vector3 v_normal_init = (vector3) { .x = 0, .y = 0, .z = 0 };
+    vector3 v_normal_init = (vector3){.x = 0, .y = 0, .z = 0};
 
     /*GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
     GLfloat mat_shininess[] = { 50.0 };*/
+
     GLfloat light_position[] = { 0.0, 1.0, 0.0, 0.0 };
     GLfloat mat_ambient[] = { 0.25f, 0.148f, 0.06475f, 1.0f  };
     GLfloat mat_diffuse[] = { 0.4f, 0.2368f, 0.1036f, 1.0f };
     GLfloat mat_specular[] = { 0.774597f, 0.458561f, 0.200621f, 1.0f };
     GLfloat mat_shine[] = { 76.8f };
 
+    GLfloat light1_ambient[] = {0.2, 0.2, 0.2, 1.0};
+    GLfloat light1_diffuse[] = {1.0, 1.0, 1.0, 1.0};
+    GLfloat light1_specular[] = {1.0, 1.0, 1.0, 1.0};
+    GLfloat light1_position[] = {-2.0, 2.0, 1.0, 1.0};
+    GLfloat spot_direction[] = {-1.0, -1.0, 0.0};
+
     /* Clear the screen */
-    glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
     /* Define the projection */
     glMatrixMode(GL_PROJECTION);
@@ -120,20 +126,36 @@ void display(void)
             _selected_camera->actual_camera->proj->far);
     }
 
-    /*First, we draw the axes*/
-    // draw_axes();
-
     /* Now we start drawing the object */
     glMatrixMode(GL_MODELVIEW);
 
     glLoadIdentity();
     glLoadMatrixf(_selected_camera->actual_camera->m);
+    
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
     glMaterialfv(GL_FRONT, GL_SHININESS, mat_shine);
-    if (global_lights[0].is_on == 1) glLightfv(GL_LIGHT0, GL_POSITION, global_lights[0].position);
-    if (global_lights[1].is_on == 1) glLightfv(GL_LIGHT1, GL_POSITION, global_lights[1].position);
     
+    if (global_lights[0].is_on == 1)
+    {
+        glLightfv(GL_LIGHT0, GL_POSITION, global_lights[0].position);
+        glEnable(GL_LIGHT0);
+    }
+    if (global_lights[1].is_on == 1)
+    {
+        glLightfv(GL_LIGHT1, GL_AMBIENT, light1_ambient); 
+        glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse); 
+        glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular); 
+        glLightfv(GL_LIGHT1, GL_POSITION, light1_position); 
+        glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 1.5); 
+        glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.5); 
+        glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.2);
+        glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 45.0); 
+        glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spot_direction); 
+        glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 2.0);
+        glEnable(GL_LIGHT1);
+    }
+
     /*Now each of the objects in the list*/
     while (aux_obj != 0)
     {
@@ -153,7 +175,7 @@ void display(void)
         for (f = 0; f < aux_obj->num_faces; f++)
         {
             glBegin(GL_POLYGON);
-            
+
             i1 = aux_obj->face_table[f].vertex_table[0];
             i2 = aux_obj->face_table[f].vertex_table[1];
             i3 = aux_obj->face_table[f].vertex_table[2];
@@ -170,7 +192,7 @@ void display(void)
                 aux_obj->vertex_table[v_index].normal_vector = v_normal_init;
 
                 //printf("%lf %lf %lf\n", aux_obj->face_table[f].normal_vector.x, aux_obj->face_table[f].normal_vector.y, aux_obj->face_table[f].normal_vector.z);
-                
+
                 aux_obj->vertex_table[v_index].normal_vector.x += aux_obj->face_table[f].normal_vector.x;
                 aux_obj->vertex_table[v_index].normal_vector.y += aux_obj->face_table[f].normal_vector.y;
                 aux_obj->vertex_table[v_index].normal_vector.z += aux_obj->face_table[f].normal_vector.z;
@@ -178,7 +200,7 @@ void display(void)
                 glVertex3d(aux_obj->vertex_table[v_index].coord.x,
                            aux_obj->vertex_table[v_index].coord.y,
                            aux_obj->vertex_table[v_index].coord.z);
-                
+
                 glNormal3d(aux_obj->face_table[f].normal_vector.x,
                            aux_obj->face_table[f].normal_vector.y,
                            aux_obj->face_table[f].normal_vector.z);
@@ -192,12 +214,11 @@ void display(void)
             for (v = 0; v < aux_obj->face_table[f].num_vertices; v++)
             {
                 v_index = aux_obj->face_table[f].vertex_table[v];
-                
+
                 norma = sqrt(
-                    pow(aux_obj->vertex_table[v_index].normal_vector.x, 2) + 
-                    pow(aux_obj->vertex_table[v_index].normal_vector.y, 2) + 
-                    pow(aux_obj->vertex_table[v_index].normal_vector.z, 2)
-                );
+                    pow(aux_obj->vertex_table[v_index].normal_vector.x, 2) +
+                    pow(aux_obj->vertex_table[v_index].normal_vector.y, 2) +
+                    pow(aux_obj->vertex_table[v_index].normal_vector.z, 2));
 
                 aux_obj->vertex_table[v_index].normal_vector.x /= norma;
                 aux_obj->vertex_table[v_index].normal_vector.y /= norma;
@@ -206,7 +227,7 @@ void display(void)
                 //printf("%f %f %f\n", aux_obj->vertex_table[v_index].normal_vector.x, aux_obj->vertex_table[v_index].normal_vector.y, aux_obj->vertex_table[v_index].normal_vector.z);
             }
         }
-        
+
         glPopMatrix();
         aux_obj = aux_obj->next;
     }

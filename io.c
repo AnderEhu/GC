@@ -661,7 +661,6 @@ void specialKeyboard(int key, int x, int y)
             if (global_lights[0].is_on == 0)
             {
                 global_lights[0].is_on = 1;
-                glEnable(GL_LIGHT0);
             }
             else
             {
@@ -673,7 +672,6 @@ void specialKeyboard(int key, int x, int y)
             if (global_lights[1].is_on == 0)
             {
                 global_lights[1].is_on = 1;
-                glEnable(GL_LIGHT1);
             }
             else
             {
