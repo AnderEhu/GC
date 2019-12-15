@@ -12,10 +12,25 @@ void set_default_lights()
 
     global_lights[0] = sol;
 
-    bombilla.position[0] = 5.0f;
-    bombilla.position[1] = 5.0f;
-    bombilla.position[2] = 5.0f;
+    bombilla.position[0] = 0.0f;
+    bombilla.position[1] = 1.0f;
+    bombilla.position[2] = 0.0f;
     bombilla.position[3] = 1.0f;
+   
+    bombilla.ambient[0] = 0.2f;
+    bombilla.ambient[1] = 0.2f;
+    bombilla.ambient[2] = 0.2f;
+    bombilla.ambient[3] = 1.0f;
+
+    bombilla.diffuse[0] = 1.0f;
+    bombilla.diffuse[1] = 1.0f;
+    bombilla.diffuse[2] = 1.0f;
+    bombilla.diffuse[3] = 1.0f;
+
+    bombilla.specular[0] = 1.0f;
+    bombilla.specular[1] = 1.0f;
+    bombilla.specular[2] = 1.0f;
+    bombilla.specular[3] = 1.0f;
 
     global_lights[1] = bombilla;
 
@@ -29,9 +44,5 @@ void set_default_lights()
     foco.spot_direction[2] = 1.0f;
 
     global_lights[2] = foco;
-
-
-
-    
 
 }

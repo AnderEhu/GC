@@ -196,8 +196,7 @@ void keyboard(unsigned char key, int x, int y)
                 auxiliar_object->next = _first_object;
                 _first_object = auxiliar_object;
                 _selected_object = _first_object;
-                
-
+                set_normal_vectors();
                 printf("%s\n", KG_MSSG_FILEREAD);
                 break;
             }
@@ -661,6 +660,7 @@ void specialKeyboard(int key, int x, int y)
             if (global_lights[0].is_on == 0)
             {
                 global_lights[0].is_on = 1;
+                glEnable(GL_LIGHT0);
             }
             else
             {
@@ -672,6 +672,7 @@ void specialKeyboard(int key, int x, int y)
             if (global_lights[1].is_on == 0)
             {
                 global_lights[1].is_on = 1;
+                glEnable(GL_LIGHT1);
             }
             else
             {

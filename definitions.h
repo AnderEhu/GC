@@ -137,6 +137,7 @@ typedef struct
     GLfloat diffuse[4];
     GLfloat position[4];
     GLfloat angle;
+    GLfloat m_obj[16];
 } luz;
 
 typedef struct list_matrix
