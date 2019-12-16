@@ -17,9 +17,9 @@ void set_default_lights()
     bombilla.position[2] = 0.0f;
     bombilla.position[3] = 1.0f;
    
-    bombilla.ambient[0] = 0.2f;
-    bombilla.ambient[1] = 0.2f;
-    bombilla.ambient[2] = 0.2f;
+    bombilla.ambient[0] = 1.2f;
+    bombilla.ambient[1] = 1.2f;
+    bombilla.ambient[2] = 1.2f;
     bombilla.ambient[3] = 1.0f;
 
     bombilla.diffuse[0] = 1.0f;
@@ -39,10 +39,21 @@ void set_default_lights()
     foco.position[2] = 0.0f;
     foco.position[3] = 1.0f;
 
+    foco.ambient[0] = 0.0f;
+    foco.ambient[1] = 0.0f;
+    foco.ambient[2] = 0.2f;
+    foco.ambient[3] = 1.0f;
+
+    foco.diffuse[0] = 0.0f;
+    foco.diffuse[1] = 0.0f;
+    foco.diffuse[2] = 1.0f;
+    foco.diffuse[3] = 1.0f;
+
+    foco.cut_off = 90.0f;
+
     foco.spot_direction[0] = 0.0f;
     foco.spot_direction[1] = 0.0f;
     foco.spot_direction[2] = 1.0f;
 
     global_lights[2] = foco;
-
 }

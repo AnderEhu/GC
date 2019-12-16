@@ -15,6 +15,7 @@
 #include "util.h"
 #include "camera.h"
 #include "light.h"
+#include "material.h"
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -198,7 +199,10 @@ void keyboard(unsigned char key, int x, int y)
                 auxiliar_object->next = _first_object;
                 _first_object = auxiliar_object;
                 _selected_object = _first_object;
+                
                 set_normal_vectors();
+                set_material(_selected_object); // Default material = BRONZE
+                
                 printf("%s\n", KG_MSSG_FILEREAD);
                 break;
             }
@@ -271,11 +275,18 @@ void keyboard(unsigned char key, int x, int y)
             _selected_camera->actual_camera->proj->bottom = midy + he / 2;
             _selected_camera->actual_camera->proj->top = midy - he / 2;
         }
-        else
+        else if (modo_activo == MODO_OBJ)
         {
             if (_selected_object != 0 && transformacion_activa == ESCALADO)
             {
                 transform(obj_minus_transf_values);
+            }
+        }
+        else
+        {
+            if (_selected_light == 2)
+            {
+                global_lights[2].cut_off -= 10;
             }
         }
         break;
@@ -296,13 +307,21 @@ void keyboard(unsigned char key, int x, int y)
             _selected_camera->actual_camera->proj->bottom = midy + he / 2;
             _selected_camera->actual_camera->proj->top = midy - he / 2;
         }
-        else
+        else if (modo_activo == MODO_OBJ)
         {
             if (_selected_object != 0 && transformacion_activa == ESCALADO)
             {
                 transform(obj_plus_transf_values);
             }
         }
+        else
+        {
+            if (_selected_light == 2)
+            {
+                global_lights[2].cut_off += 10;
+            }
+        }
+        
         break;
     case '?':
         print_help();
@@ -440,6 +459,10 @@ void keyboard(unsigned char key, int x, int y)
     case '3':
         _selected_light = 2;
         printf("Luz seleccionada: FOCO\n");
+        break;
+    case 'w':
+    case 'W':
+        change_material(_selected_object);
         break;
     default:
         /*In the default case we just print the code of the key. This is usefull to define new cases*/

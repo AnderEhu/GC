@@ -125,7 +125,7 @@ typedef struct
     GLfloat Ka[4];
     GLfloat Kd[4];
     GLfloat Ks[4];
-    GLfloat ns;
+    GLfloat ns[1];
 } material;
 
 typedef struct
@@ -136,8 +136,8 @@ typedef struct
     GLfloat specular[4];
     GLfloat diffuse[4];
     GLfloat position[4];
-    GLfloat angle;
     GLfloat m_obj[16];
+    GLfloat cut_off;
 } luz;
 
 typedef struct list_matrix

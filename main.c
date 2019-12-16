@@ -31,6 +31,7 @@
 #include "transformations.h"
 #include "camera.h"
 #include "light.h"
+#include "material.h"
 
 /** GLOBAL VARIABLES **/
 GLdouble _window_ratio;              /*Control of window's proportions */
@@ -86,6 +87,7 @@ int main(int argc, char **argv)
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // queremos poligonos opacos
     
+    set_global_materials();
     set_default_lights();
 
     glEnable(GL_DEPTH_TEST); // activar el test de profundidad (Z-buffer)

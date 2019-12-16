@@ -60,16 +60,6 @@ void display(void)
 {
     GLint v_index, v, f;
     object3d *aux_obj = _first_object;
-    
-
-    /*GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-    GLfloat mat_shininess[] = { 50.0 };*/
-
-    GLfloat light_position[] = { 0.0, 1.0, 0.0, 0.0 };
-    GLfloat mat_ambient[] = { 0.25f, 0.148f, 0.06475f, 1.0f  };
-    GLfloat mat_diffuse[] = { 0.4f, 0.2368f, 0.1036f, 1.0f };
-    GLfloat mat_specular[] = { 0.774597f, 0.458561f, 0.200621f, 1.0f };
-    GLfloat mat_shine[] = { 76.8f };
 
     /* Clear the screen */
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -106,10 +96,8 @@ void display(void)
     glLoadMatrixf(_selected_camera->actual_camera->m);
 
     // AQUI PUSH, mult y luego pop
-    
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shine);
+    glPushMatrix();
+    if (aux_obj != 0) glMultMatrixf(aux_obj->list_matrix->m);
     
     if (global_lights[0].is_on == 1)
     {
@@ -121,10 +109,26 @@ void display(void)
         glLightfv(GL_LIGHT1, GL_DIFFUSE, global_lights[1].diffuse); 
         glLightfv(GL_LIGHT1, GL_SPECULAR, global_lights[1].specular); 
         glLightfv(GL_LIGHT1, GL_POSITION, global_lights[1].position); 
-        glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 1.5); 
-        glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.5); 
-        glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.2);
+        glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 1.5f); 
+        glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.5f); 
+        glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.2f);
     }
+    if (global_lights[2].is_on == 1)
+    {
+        glLightfv(GL_LIGHT2, GL_AMBIENT, global_lights[2].ambient); 
+        glLightfv(GL_LIGHT2, GL_DIFFUSE, global_lights[2].diffuse); 
+        glLightfv(GL_LIGHT2, GL_POSITION, global_lights[2].position); 
+        glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, 15.0f);
+        glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, global_lights[2].spot_direction);
+        glLightf(GL_LIGHT2, GL_CONSTANT_ATTENUATION, 1.0f);
+        glLightf(GL_LIGHT2, GL_LINEAR_ATTENUATION, 0.0f);
+        glLightf(GL_LIGHT2, GL_QUADRATIC_ATTENUATION, 0.0f);
+        
+        //angle of the cone light emitted by the spot : value between 0 to 180
+        glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, global_lights[2].cut_off);
+    }
+
+    glPopMatrix();
 
     /*Now each of the objects in the list*/
     while (aux_obj != 0)
@@ -133,10 +137,18 @@ void display(void)
         if (aux_obj == _selected_object)
         {
             glColor3f(KG_COL_SELECTED_R, KG_COL_SELECTED_G, KG_COL_SELECTED_B);
+            glMaterialfv(GL_FRONT, GL_AMBIENT, aux_obj->material->Ka);
+            glMaterialfv(GL_FRONT, GL_SPECULAR, aux_obj->material->Ks);
+            glMaterialfv(GL_FRONT, GL_DIFFUSE, aux_obj->material->Kd);
+            glMaterialfv(GL_FRONT, GL_SHININESS, aux_obj->material->ns);
         }
         else
         {
             glColor3f(KG_COL_NONSELECTED_R, KG_COL_NONSELECTED_G, KG_COL_NONSELECTED_B);
+            glMaterialfv(GL_FRONT, GL_AMBIENT, aux_obj->material->Ka);
+            glMaterialfv(GL_FRONT, GL_SPECULAR, aux_obj->material->Ks);
+            glMaterialfv(GL_FRONT, GL_DIFFUSE, aux_obj->material->Kd);
+            glMaterialfv(GL_FRONT, GL_SHININESS, aux_obj->material->ns);
         }
 
         /* Draw the object; for each face create a new polygon with the corresponding vertices */
