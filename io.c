@@ -286,7 +286,7 @@ void keyboard(unsigned char key, int x, int y)
         {
             if (_selected_light == 2)
             {
-                global_lights[2].cut_off -= 10;
+                global_lights[2].cut_off -= 5;
             }
         }
         break;
@@ -318,7 +318,7 @@ void keyboard(unsigned char key, int x, int y)
         {
             if (_selected_light == 2)
             {
-                global_lights[2].cut_off += 10;
+                global_lights[2].cut_off += 5;
             }
         }
         
@@ -448,6 +448,9 @@ void keyboard(unsigned char key, int x, int y)
             }
         }
         break;
+    case '0': //introducir nueva luz
+        insert_light();
+        break;
     case '1':
         _selected_light = 0;
         printf("Luz seleccionada: SOL\n");
@@ -459,6 +462,16 @@ void keyboard(unsigned char key, int x, int y)
     case '3':
         _selected_light = 2;
         printf("Luz seleccionada: FOCO\n");
+        break;
+    case '4':
+        break;
+    case '5':
+        break;
+    case '6':
+        break;
+    case '7':
+        break;
+    case '8':
         break;
     case 'w':
     case 'W':
@@ -507,9 +520,21 @@ void specialKeyboard(int key, int x, int y)
                     break;
                 }
             }
-            else
+            else if (modo_activo == MODO_OBJ)
             {
                 transform(obj_up_transf_values);
+            }
+            else
+            {
+                switch (transformacion_activa)
+                {
+                    case TRASLACION:
+                        if (_selected_light == 1)
+                        {
+                            global_lights[_selected_light].position[1] += 1;
+                        }
+                        break;
+                }   
             }
             break;
         case GLUT_KEY_RIGHT:
@@ -539,9 +564,21 @@ void specialKeyboard(int key, int x, int y)
                     break;
                 }
             }
-            else
+            else if (modo_activo == MODO_OBJ)
             {
                 transform(obj_right_transf_values);
+            }
+            else
+            {
+                switch (transformacion_activa)
+                {
+                    case TRASLACION:
+                        if (_selected_light == 1)
+                        {
+                            global_lights[_selected_light].position[0] += 1;
+                        }
+                        break;
+                }  
             }
             break;
         case GLUT_KEY_LEFT:
@@ -571,9 +608,21 @@ void specialKeyboard(int key, int x, int y)
                     break;
                 }
             }
-            else
+            else if (modo_activo == MODO_OBJ)
             {
                 transform(obj_left_transf_values);
+            }
+            else
+            {
+                switch (transformacion_activa)
+                {
+                    case TRASLACION:
+                        if (_selected_light == 1)
+                        {
+                            global_lights[_selected_light].position[0] -= 1;
+                        }
+                        break;
+                }  
             }
             break;
         case GLUT_KEY_DOWN:
@@ -603,10 +652,23 @@ void specialKeyboard(int key, int x, int y)
                     break;
                 }
             }
-            else
+            else if (modo_activo == MODO_OBJ)
             {
                 transform(obj_down_transf_values);
             }
+            else
+            {
+                switch (transformacion_activa)
+                {
+                    case TRASLACION:
+                        if (_selected_light == 1)
+                        {
+                            global_lights[_selected_light].position[1] -= 1;
+                        }
+                        break;
+                }  
+            }
+            
             break;
         case GLUT_KEY_PAGE_UP: //Repag
             if (modo_activo == MODO_CAMARA)

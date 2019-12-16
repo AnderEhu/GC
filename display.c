@@ -117,12 +117,12 @@ void display(void)
     {
         glLightfv(GL_LIGHT2, GL_AMBIENT, global_lights[2].ambient); 
         glLightfv(GL_LIGHT2, GL_DIFFUSE, global_lights[2].diffuse); 
+        glLightfv(GL_LIGHT2, GL_SPECULAR, global_lights[2].specular);
         glLightfv(GL_LIGHT2, GL_POSITION, global_lights[2].position); 
-        glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, 15.0f);
         glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, global_lights[2].spot_direction);
-        glLightf(GL_LIGHT2, GL_CONSTANT_ATTENUATION, 1.0f);
-        glLightf(GL_LIGHT2, GL_LINEAR_ATTENUATION, 0.0f);
-        glLightf(GL_LIGHT2, GL_QUADRATIC_ATTENUATION, 0.0f);
+        glLightf(GL_LIGHT2, GL_CONSTANT_ATTENUATION, 1.5f);
+        glLightf(GL_LIGHT2, GL_LINEAR_ATTENUATION, 0.5f);
+        glLightf(GL_LIGHT2, GL_QUADRATIC_ATTENUATION, 0.2f);
         
         //angle of the cone light emitted by the spot : value between 0 to 180
         glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, global_lights[2].cut_off);
