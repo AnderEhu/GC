@@ -46,18 +46,19 @@ extern object3d *_first_object;
 extern object3d *_selected_object;
 extern list_camera *_camera_list_first;
 extern list_camera *_selected_camera;
-extern GLint flat_smooth;
 extern GLdouble _ortho_x_min, _ortho_x_max;
 extern GLdouble _ortho_y_min, _ortho_y_max;
 extern GLdouble _ortho_z_min, _ortho_z_max;
 
 extern projection *global_perspective, *global_ortho;
 
-int modo_activo = MODO_OBJ;
-int transformacion_activa = TRASLACION;
-int coordenada_activa = COORD_GLOBAL;
-int camera_modo_obj = 0; // 0 desactivada, 1 activada
-int light_activated = 1;
+GLint modo_activo = MODO_OBJ;
+GLint transformacion_activa = TRASLACION;
+GLint coordenada_activa = COORD_GLOBAL;
+GLint camera_modo_obj = 0; // 0 desactivada, 1 activada
+
+GLint light_activated = 1;
+GLint _selected_light = 0;
 
 vector3 camera_pos;
 vector3 camera_front;
@@ -73,6 +74,7 @@ extern transf_values *obj_plus_transf_values;
 extern transf_values *obj_minus_transf_values;
 
 extern luz global_lights[];
+extern GLint flat_smooth;
 
 /**
  * @brief This function just prints information about the use
@@ -361,6 +363,11 @@ void keyboard(unsigned char key, int x, int y)
     case 'a':
     case 'A':
         /* Transformaciones a la LUZ */
+        if (modo_activo != MODO_LUZ)
+        {
+            modo_activo = MODO_LUZ;
+            printf("Modo luz activado!\n");
+        }
         break;
     case 26:
         if (_selected_object->list_matrix->nextptr != 0)
@@ -398,7 +405,7 @@ void keyboard(unsigned char key, int x, int y)
     case 'K': // activar/descativar modo camara
         if (camera_modo_obj == 0 && modo_activo != MODO_CAMARA)
         {
-            if (coordenada_activa == COORD_GLOBAL)
+            if (_selected_object != 0 && coordenada_activa == COORD_GLOBAL)
                 centre_camera_to_obj(_selected_object);
             printf("Modo camara activado!\n");
             modo_activo = MODO_CAMARA;
@@ -421,6 +428,18 @@ void keyboard(unsigned char key, int x, int y)
                 _selected_camera->actual_camera->proj = global_perspective;
             }
         }
+        break;
+    case '1':
+        _selected_light = 0;
+        printf("Luz seleccionada: SOL\n");
+        break;
+    case '2':
+        _selected_light = 1;
+        printf("Luz seleccionada: BOMBILLA\n");
+        break;
+    case '3':
+        _selected_light = 2;
+        printf("Luz seleccionada: FOCO\n");
         break;
     default:
         /*In the default case we just print the code of the key. This is usefull to define new cases*/
@@ -681,6 +700,16 @@ void specialKeyboard(int key, int x, int y)
             }
             break;
         case GLUT_KEY_F3: // foco
+            if (global_lights[2].is_on == 0)
+            {
+                global_lights[2].is_on = 1;
+                glEnable(GL_LIGHT2);
+            }
+            else
+            {
+                global_lights[2].is_on = 0;
+                glDisable(GL_LIGHT2);
+            }
             break;
         case GLUT_KEY_F12: // flat / smooth
             if (flat_smooth == 0)
