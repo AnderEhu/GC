@@ -31,7 +31,7 @@ void put_light(GLint i)
         glLightf(GL_LIGHT2, GL_CONSTANT_ATTENUATION, 1.5f);
         glLightf(GL_LIGHT2, GL_LINEAR_ATTENUATION, 0.5f);
         glLightf(GL_LIGHT2, GL_QUADRATIC_ATTENUATION, 0.2f);
-        glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, global_lights[2].cut_off); //angle of the cone light: value between 0 to 180
+        glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, global_lights[i].cut_off); //angle of the cone light: value between 0 to 180
         break;
     case 3:
         glLightfv(GL_LIGHT3, GL_AMBIENT, global_lights[i].ambient); 
@@ -49,7 +49,7 @@ void put_light(GLint i)
         if (global_lights[i].type == LUZ_TIPO_FOCO)
         {
             glLightfv(GL_LIGHT3, GL_SPOT_DIRECTION, global_lights[i].spot_direction);
-            glLightf(GL_LIGHT3, GL_SPOT_CUTOFF, global_lights[2].cut_off); //angle of the cone light: value between 0 to 180
+            glLightf(GL_LIGHT3, GL_SPOT_CUTOFF, global_lights[i].cut_off); //angle of the cone light: value between 0 to 180
         }
         break;
     case 4:
@@ -68,7 +68,7 @@ void put_light(GLint i)
         if (global_lights[i].type == LUZ_TIPO_FOCO)
         {
             glLightfv(GL_LIGHT4, GL_SPOT_DIRECTION, global_lights[i].spot_direction);
-            glLightf(GL_LIGHT4, GL_SPOT_CUTOFF, global_lights[2].cut_off); //angle of the cone light: value between 0 to 180
+            glLightf(GL_LIGHT4, GL_SPOT_CUTOFF, global_lights[i].cut_off); //angle of the cone light: value between 0 to 180
         }
         break;
     case 5:
@@ -87,7 +87,7 @@ void put_light(GLint i)
         if (global_lights[i].type == LUZ_TIPO_FOCO)
         {
             glLightfv(GL_LIGHT5, GL_SPOT_DIRECTION, global_lights[i].spot_direction);
-            glLightf(GL_LIGHT5, GL_SPOT_CUTOFF, global_lights[2].cut_off); //angle of the cone light: value between 0 to 180
+            glLightf(GL_LIGHT5, GL_SPOT_CUTOFF, global_lights[i].cut_off); //angle of the cone light: value between 0 to 180
         }
         break;
     case 6:
@@ -106,7 +106,7 @@ void put_light(GLint i)
         if (global_lights[i].type == LUZ_TIPO_FOCO)
         {
             glLightfv(GL_LIGHT6, GL_SPOT_DIRECTION, global_lights[i].spot_direction);
-            glLightf(GL_LIGHT6, GL_SPOT_CUTOFF, global_lights[2].cut_off); //angle of the cone light: value between 0 to 180
+            glLightf(GL_LIGHT6, GL_SPOT_CUTOFF, global_lights[i].cut_off); //angle of the cone light: value between 0 to 180
         }
         break;
     case 7:
@@ -125,7 +125,7 @@ void put_light(GLint i)
         if (global_lights[i].type == LUZ_TIPO_FOCO)
         {
             glLightfv(GL_LIGHT7, GL_SPOT_DIRECTION, global_lights[i].spot_direction);
-            glLightf(GL_LIGHT7, GL_SPOT_CUTOFF, global_lights[2].cut_off); //angle of the cone light: value between 0 to 180
+            glLightf(GL_LIGHT7, GL_SPOT_CUTOFF, global_lights[i].cut_off); //angle of the cone light: value between 0 to 180
         }
         break;
     default:
