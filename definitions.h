@@ -63,9 +63,12 @@
 #define PROJECTION_PERSPECTIVA 1
 #define PROJECTION_ORTOGRAFICA 2
 
-#define LUZ_TIPO_FOCO 0
-#define LUZ_TIPO_SOL 1
-#define LUZ_TIPO_BOMBILLA 2
+#define LUZ_TIPO_SOL 0
+#define LUZ_TIPO_BOMBILLA 1
+#define LUZ_TIPO_FOCO 2
+
+#define FLAT 0
+#define SMOOTH 1
 
 
 /** STRUCTURES **/
@@ -138,6 +141,7 @@ typedef struct
     GLfloat position[4];
     GLfloat m_obj[16];
     GLfloat cut_off;
+    GLint type;
 } luz;
 
 typedef struct list_matrix
@@ -161,6 +165,7 @@ struct object3d
     struct object3d *next;    /* next element in the pile of objects */
     list_matrix *list_matrix; /* display list matrix */
     material *material;       /* structure to save object material */
+    GLint flat_smooth;
 };
 
 /****************************

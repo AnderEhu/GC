@@ -202,6 +202,7 @@ void keyboard(unsigned char key, int x, int y)
                 
                 set_normal_vectors();
                 set_material(_selected_object); // Default material = BRONZE
+                _selected_object->flat_smooth = FLAT; // 
                 
                 printf("%s\n", KG_MSSG_FILEREAD);
                 break;
@@ -231,29 +232,20 @@ void keyboard(unsigned char key, int x, int y)
         }
         else
         {
-            /*Erasing an object depends on whether it is the first one or not*/
             if (_selected_object == _first_object)
             {
-                /*To remove the first object we just set the first as the current's next*/
                 _first_object = _first_object->next;
-                /*Once updated the pointer to the first object it is save to free the memory*/
-
                 liberar_memoria_obj(_selected_object);
-
-                /*Finally, set the selected to the new first one*/
                 _selected_object = _first_object;
             }
             else
             {
-                /*In this case we need to get the previous element to the one we want to erase*/
                 auxiliar_object = _first_object;
                 while (auxiliar_object->next != _selected_object)
                     auxiliar_object = auxiliar_object->next;
-                /*Now we bypass the element to erase*/
+                
                 auxiliar_object->next = _selected_object->next;
-                /*free the memory*/
                 liberar_memoria_obj(_selected_object);
-                /*and update the selection*/
                 _selected_object = auxiliar_object;
             }
         }
@@ -284,9 +276,9 @@ void keyboard(unsigned char key, int x, int y)
         }
         else
         {
-            if (_selected_light == 2)
+            if (global_lights[_selected_light].type == LUZ_TIPO_FOCO)
             {
-                global_lights[2].cut_off -= 5;
+                global_lights[_selected_light].cut_off -= 5;
             }
         }
         break;
@@ -316,12 +308,11 @@ void keyboard(unsigned char key, int x, int y)
         }
         else
         {
-            if (_selected_light == 2)
+            if (global_lights[_selected_light].type == LUZ_TIPO_FOCO)
             {
-                global_lights[2].cut_off += 5;
+                global_lights[_selected_light].cut_off += 5;
             }
         }
-        
         break;
     case '?':
         print_help();
@@ -380,8 +371,7 @@ void keyboard(unsigned char key, int x, int y)
         }
         break;
     case 'a':
-    case 'A':
-        /* Transformaciones a la LUZ */
+    case 'A': /* Transformaciones a la LUZ */
         if (modo_activo != MODO_LUZ)
         {
             modo_activo = MODO_LUZ;
@@ -431,8 +421,7 @@ void keyboard(unsigned char key, int x, int y)
             break;
         }
         break;
-    /* Cambiar tipo proyeccion */
-    case 'p':
+    case 'p': /* Cambiar tipo proyeccion */
     case 'P':
         if (modo_activo == MODO_CAMARA)
         {
@@ -464,25 +453,33 @@ void keyboard(unsigned char key, int x, int y)
         printf("Luz seleccionada: FOCO\n");
         break;
     case '4':
+        _selected_light = 3;
+        printf("Luz seleccionada: 4\n");
         break;
     case '5':
+        _selected_light = 4;
+        printf("Luz seleccionada: 5\n");
         break;
     case '6':
+        _selected_light = 5;
+        printf("Luz seleccionada: 6\n");
         break;
     case '7':
+        _selected_light = 6;
+        printf("Luz seleccionada: 7\n");
         break;
     case '8':
+        _selected_light = 7;
+        printf("Luz seleccionada: 8\n");
         break;
     case 'w':
     case 'W':
         change_material(_selected_object);
         break;
     default:
-        /*In the default case we just print the code of the key. This is usefull to define new cases*/
         printf("%d %c\n", key, key);
         break;
     }
-    /*In case we have do any modification affecting the displaying of the object, we redraw them*/
     glutPostRedisplay();
 }
 
@@ -528,11 +525,11 @@ void specialKeyboard(int key, int x, int y)
             {
                 switch (transformacion_activa)
                 {
+                    case ROTACION:
+                        if (global_lights[_selected_light].type == LUZ_TIPO_SOL) transform(obj_up_transf_values);
+                        break;
                     case TRASLACION:
-                        if (_selected_light == 1)
-                        {
-                            global_lights[_selected_light].position[1] += 1;
-                        }
+                        if (global_lights[_selected_light].type == LUZ_TIPO_BOMBILLA) transform(obj_up_transf_values);
                         break;
                 }   
             }
@@ -572,11 +569,11 @@ void specialKeyboard(int key, int x, int y)
             {
                 switch (transformacion_activa)
                 {
+                    case ROTACION:
+                        if (global_lights[_selected_light].type == LUZ_TIPO_SOL) transform(obj_right_transf_values);
+                        break;
                     case TRASLACION:
-                        if (_selected_light == 1)
-                        {
-                            global_lights[_selected_light].position[0] += 1;
-                        }
+                        if (global_lights[_selected_light].type == LUZ_TIPO_BOMBILLA) transform(obj_right_transf_values);
                         break;
                 }  
             }
@@ -616,11 +613,11 @@ void specialKeyboard(int key, int x, int y)
             {
                 switch (transformacion_activa)
                 {
+                    case ROTACION:
+                        if (global_lights[_selected_light].type == LUZ_TIPO_SOL) transform(obj_left_transf_values);
+                        break;
                     case TRASLACION:
-                        if (_selected_light == 1)
-                        {
-                            global_lights[_selected_light].position[0] -= 1;
-                        }
+                        if (global_lights[_selected_light].type == LUZ_TIPO_BOMBILLA) transform(obj_left_transf_values);
                         break;
                 }  
             }
@@ -660,15 +657,14 @@ void specialKeyboard(int key, int x, int y)
             {
                 switch (transformacion_activa)
                 {
+                    case ROTACION:
+                        if (global_lights[_selected_light].type == LUZ_TIPO_SOL) transform(obj_down_transf_values);
+                        break;
                     case TRASLACION:
-                        if (_selected_light == 1)
-                        {
-                            global_lights[_selected_light].position[1] -= 1;
-                        }
+                        if (global_lights[_selected_light].type == LUZ_TIPO_BOMBILLA) transform(obj_down_transf_values);
                         break;
                 }  
             }
-            
             break;
         case GLUT_KEY_PAGE_UP: //Repag
             if (modo_activo == MODO_CAMARA)
@@ -704,9 +700,18 @@ void specialKeyboard(int key, int x, int y)
                     break;
                 }
             }
-            else
+            else if (modo_activo == MODO_OBJ)
             {
                 transform(obj_repag_transf_values);
+            }
+            else
+            {
+                switch (transformacion_activa)
+                {
+                    case TRASLACION:
+                        if (global_lights[_selected_light].type == LUZ_TIPO_BOMBILLA) transform(obj_repag_transf_values);
+                        break;
+                }     
             }
             break;
         case GLUT_KEY_PAGE_DOWN: //AVPAG
@@ -743,9 +748,18 @@ void specialKeyboard(int key, int x, int y)
                     break;
                 }
             }
-            else
+            else if (modo_activo == MODO_OBJ)
             {
                 transform(obj_avpag_transf_values);
+            }
+            else
+            {
+                switch (transformacion_activa)
+                {
+                    case TRASLACION:
+                        if (global_lights[_selected_light].type == LUZ_TIPO_BOMBILLA) transform(obj_avpag_transf_values);
+                        break;
+                }     
             }
             break;
         case GLUT_KEY_F9: // activa / desactiva luz
@@ -796,16 +810,74 @@ void specialKeyboard(int key, int x, int y)
                 glDisable(GL_LIGHT2);
             }
             break;
-        case GLUT_KEY_F12: // flat / smooth
-            if (flat_smooth == 0)
+        case GLUT_KEY_F4:
+            if (global_lights[3].position != 0 && global_lights[3].is_on == 0)
             {
-                flat_smooth = 1; // activar smooth
-                glShadeModel(GL_SMOOTH);
+                global_lights[3].is_on = 1;
+                glEnable(GL_LIGHT3);
             }
             else
             {
-                flat_smooth = 0;
-                glShadeModel(GL_FLAT);
+                global_lights[3].is_on = 0;
+                glDisable(GL_LIGHT3);
+            }
+            break;
+        case GLUT_KEY_F5:
+            if (global_lights[4].position != 0 && global_lights[4].is_on == 0)
+            {
+                global_lights[4].is_on = 1;
+                glEnable(GL_LIGHT4);
+            }
+            else
+            {
+                global_lights[4].is_on = 0;
+                glDisable(GL_LIGHT4);
+            }
+            break;
+        case GLUT_KEY_F6:
+            if (global_lights[5].position != 0 && global_lights[5].is_on == 0)
+            {
+                global_lights[5].is_on = 1;
+                glEnable(GL_LIGHT5);
+            }
+            else
+            {
+                global_lights[5].is_on = 0;
+                glDisable(GL_LIGHT5);
+            }
+            break;
+        case GLUT_KEY_F7:
+            if (global_lights[6].position != 0 && global_lights[6].is_on == 0)
+            {
+                global_lights[6].is_on = 1;
+                glEnable(GL_LIGHT6);
+            }
+            else
+            {
+                global_lights[6].is_on = 0;
+                glDisable(GL_LIGHT6);
+            }
+            break;
+        case GLUT_KEY_F8:
+            if (global_lights[7].position != 0 && global_lights[7].is_on == 0)
+            {
+                global_lights[7].is_on = 1;
+                glEnable(GL_LIGHT7);
+            }
+            else
+            {
+                global_lights[7].is_on = 0;
+                glDisable(GL_LIGHT7);
+            }
+            break;
+        case GLUT_KEY_F12: // flat / smooth
+            if (_selected_object->flat_smooth == 0)
+            {
+                _selected_object->flat_smooth = 1; // activar smooth
+            }
+            else
+            {
+                _selected_object->flat_smooth = 0;
             }
             break;
         default:

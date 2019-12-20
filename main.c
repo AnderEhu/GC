@@ -95,8 +95,7 @@ int main(int argc, char **argv)
     glEnable(GL_LIGHT0);
     glEnable(GL_NORMALIZE);
 
-    if (flat_smooth) glShadeModel(GL_SMOOTH);  // hacen falta los vectores normales de cada vertice
-    else glShadeModel(GL_FLAT);  // basta con vector normal del poligono
+    glShadeModel(GL_SMOOTH);  // hacen falta los vectores normales de cada vertice
 
     /* this initialization has to be AFTER the creation of the window */
     initialization();

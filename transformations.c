@@ -49,6 +49,9 @@ transf_values *obj_repag_transf_values;
 transf_values *obj_plus_transf_values;
 transf_values *obj_minus_transf_values;
 
+extern luz global_lights[];
+extern GLint _selected_light;
+
 /* Initializes the transformations values */
 void init_transf_values()
 {
@@ -104,7 +107,7 @@ void transf_matrix_init()
             glLoadIdentity();
         }
     }
-    else
+    else if (modo_activo == MODO_CAMARA)
     {
         // modo camara
         if (coordenada_activa == COORD_LOCAL)
@@ -117,6 +120,10 @@ void transf_matrix_init()
             glLoadIdentity();
             glTranslatef(-_selected_object->list_matrix->m[12], -_selected_object->list_matrix->m[13], -_selected_object->list_matrix->m[14]);
         }
+    }
+    else
+    {
+        glLoadMatrixf(global_lights[_selected_light].m_obj);
     }
 }
 
@@ -144,7 +151,7 @@ void transf_matrix_set()
             add_camera_mode_obj(_selected_object);
         }
     }
-    else
+    else if (modo_activo == MODO_CAMARA)
     {
         if (coordenada_activa == COORD_LOCAL)
         {
@@ -158,6 +165,10 @@ void transf_matrix_set()
             glGetFloatv(GL_MODELVIEW_MATRIX, _selected_camera->actual_camera->m_inv);
             set_inv_m(_selected_camera);
         }
+    }
+    else
+    {
+        glGetFloatv(GL_MODELVIEW_MATRIX, global_lights[_selected_light].m_obj);
     }
 }
 

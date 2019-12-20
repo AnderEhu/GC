@@ -60,6 +60,7 @@ void display(void)
 {
     GLint v_index, v, f;
     object3d *aux_obj = _first_object;
+    GLint i;
 
     /* Clear the screen */
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -96,39 +97,16 @@ void display(void)
     glLoadMatrixf(_selected_camera->actual_camera->m);
 
     // AQUI PUSH, mult y luego pop
-    glPushMatrix();
-    if (aux_obj != 0) glMultMatrixf(aux_obj->list_matrix->m);
-    
-    if (global_lights[0].is_on == 1)
+    for (i = 0; i < 8; i++) 
     {
-        glLightfv(GL_LIGHT0, GL_POSITION, global_lights[0].position);
+        if (global_lights[i].position != 0 && global_lights[i].is_on == 1) // luz seteada y activa
+        {
+            glPushMatrix();
+            glMultMatrixf(global_lights[i].m_obj);
+            put_light(i);
+            glPopMatrix();
+        }
     }
-    if (global_lights[1].is_on == 1)
-    {
-        glLightfv(GL_LIGHT1, GL_AMBIENT, global_lights[1].ambient); 
-        glLightfv(GL_LIGHT1, GL_DIFFUSE, global_lights[1].diffuse); 
-        glLightfv(GL_LIGHT1, GL_SPECULAR, global_lights[1].specular); 
-        glLightfv(GL_LIGHT1, GL_POSITION, global_lights[1].position); 
-        glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 1.5f); 
-        glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.5f); 
-        glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.2f);
-    }
-    if (global_lights[2].is_on == 1)
-    {
-        glLightfv(GL_LIGHT2, GL_AMBIENT, global_lights[2].ambient); 
-        glLightfv(GL_LIGHT2, GL_DIFFUSE, global_lights[2].diffuse); 
-        glLightfv(GL_LIGHT2, GL_SPECULAR, global_lights[2].specular);
-        glLightfv(GL_LIGHT2, GL_POSITION, global_lights[2].position); 
-        glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, global_lights[2].spot_direction);
-        glLightf(GL_LIGHT2, GL_CONSTANT_ATTENUATION, 1.5f);
-        glLightf(GL_LIGHT2, GL_LINEAR_ATTENUATION, 0.5f);
-        glLightf(GL_LIGHT2, GL_QUADRATIC_ATTENUATION, 0.2f);
-        
-        //angle of the cone light emitted by the spot : value between 0 to 180
-        glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, global_lights[2].cut_off);
-    }
-
-    glPopMatrix();
 
     /*Now each of the objects in the list*/
     while (aux_obj != 0)
@@ -158,7 +136,7 @@ void display(void)
         {
             glBegin(GL_POLYGON);
             
-            if (flat_smooth == 0)
+            if (aux_obj->flat_smooth == 0)
             {
                 glNormal3d(
                     aux_obj->face_table[f].normal_vector.x,
@@ -170,7 +148,7 @@ void display(void)
             for (v = 0; v < aux_obj->face_table[f].num_vertices; v++)
             {
                 v_index = _selected_object->face_table[f].vertex_table[v];
-                if (flat_smooth == 1)
+                if (aux_obj->flat_smooth == 1)
                 {
                     glNormal3d(
                         aux_obj->vertex_table[v_index].normal_vector.x,
