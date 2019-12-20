@@ -137,7 +137,7 @@ void set_default_lights()
 {
     luz sol, bombilla, foco;
     
-    sol.position[0] = 1.0f;
+    sol.position[0] = 0.0f;
     sol.position[1] = 1.0f;
     sol.position[2] = 0.0f;
     sol.position[3] = 0.0f;
@@ -165,7 +165,7 @@ void set_default_lights()
     sol.is_on = 1;  
     global_lights[0] = sol;
     
-    bombilla.position[0] = 0.0f;
+    bombilla.position[0] = 1.0f;
     bombilla.position[1] = 1.0f;
     bombilla.position[2] = 0.0f;
     bombilla.position[3] = 1.0f;
@@ -239,7 +239,7 @@ void insert_light()
     printf("- Where you want to put the new light? (4-8)\n");
     scanf("%d", &pos);
 
-    if (pos > 8)
+    if (pos < 4 || pos > 8)
     {
         printf("Invalid position!\n");
         return;
