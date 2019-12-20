@@ -202,7 +202,9 @@ void keyboard(unsigned char key, int x, int y)
                 
                 set_normal_vectors();
                 set_material(_selected_object); // Default material = BRONZE
-                _selected_object->flat_smooth = FLAT; // 
+                _selected_object->flat_smooth = FLAT;
+
+                init_obj_spotlight();
                 
                 printf("%s\n", KG_MSSG_FILEREAD);
                 break;
@@ -224,6 +226,8 @@ void keyboard(unsigned char key, int x, int y)
             centre_camera_to_obj(_selected_object);
         if (camera_modo_obj == 1)
             add_camera_mode_obj(_selected_object);
+        
+        init_obj_spotlight();
         break;
     case 127: /* <SUPR> */
         if (_selected_object == 0)

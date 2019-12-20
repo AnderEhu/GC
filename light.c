@@ -1,7 +1,11 @@
 #include "definitions.h"
 #include <stdio.h>
+#define C_ATT 1.0f
+#define L_ATT 0.2f
+#define Q_ATT 0.1f
 
 luz global_lights[8];
+extern object3d *_selected_object;
 
 void put_light(GLint i) 
 {
@@ -18,9 +22,9 @@ void put_light(GLint i)
         glLightfv(GL_LIGHT1, GL_DIFFUSE, global_lights[i].diffuse); 
         glLightfv(GL_LIGHT1, GL_SPECULAR, global_lights[i].specular); 
         glLightfv(GL_LIGHT1, GL_POSITION, global_lights[i].position); 
-        glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 1.5f); 
-        glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.5f); 
-        glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.2f);
+        glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, C_ATT); 
+        glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, L_ATT); 
+        glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, Q_ATT);
         break;
     case 2:
         glLightfv(GL_LIGHT2, GL_AMBIENT, global_lights[i].ambient); 
@@ -28,9 +32,9 @@ void put_light(GLint i)
         glLightfv(GL_LIGHT2, GL_SPECULAR, global_lights[i].specular);
         glLightfv(GL_LIGHT2, GL_POSITION, global_lights[i].position); 
         glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, global_lights[i].spot_direction);
-        glLightf(GL_LIGHT2, GL_CONSTANT_ATTENUATION, 1.5f);
-        glLightf(GL_LIGHT2, GL_LINEAR_ATTENUATION, 0.5f);
-        glLightf(GL_LIGHT2, GL_QUADRATIC_ATTENUATION, 0.2f);
+        glLightf(GL_LIGHT2, GL_CONSTANT_ATTENUATION, C_ATT);
+        glLightf(GL_LIGHT2, GL_LINEAR_ATTENUATION, L_ATT);
+        glLightf(GL_LIGHT2, GL_QUADRATIC_ATTENUATION, Q_ATT);
         glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, global_lights[i].cut_off); //angle of the cone light: value between 0 to 180
         break;
     case 3:
@@ -41,9 +45,9 @@ void put_light(GLint i)
         
         if (global_lights[i].type == LUZ_TIPO_BOMBILLA || global_lights[i].type == LUZ_TIPO_FOCO)
         {
-            glLightf(GL_LIGHT3, GL_CONSTANT_ATTENUATION, 1.5f);
-            glLightf(GL_LIGHT3, GL_LINEAR_ATTENUATION, 0.5f);
-            glLightf(GL_LIGHT3, GL_QUADRATIC_ATTENUATION, 0.2f);
+            glLightf(GL_LIGHT3, GL_CONSTANT_ATTENUATION, C_ATT);
+            glLightf(GL_LIGHT3, GL_LINEAR_ATTENUATION, L_ATT);
+            glLightf(GL_LIGHT3, GL_QUADRATIC_ATTENUATION, Q_ATT);
         }
         
         if (global_lights[i].type == LUZ_TIPO_FOCO)
@@ -60,9 +64,9 @@ void put_light(GLint i)
         
         if (global_lights[i].type == LUZ_TIPO_BOMBILLA || global_lights[i].type == LUZ_TIPO_FOCO)
         {
-            glLightf(GL_LIGHT4, GL_CONSTANT_ATTENUATION, 1.5f);
-            glLightf(GL_LIGHT4, GL_LINEAR_ATTENUATION, 0.5f);
-            glLightf(GL_LIGHT4, GL_QUADRATIC_ATTENUATION, 0.2f);
+            glLightf(GL_LIGHT4, GL_CONSTANT_ATTENUATION, C_ATT);
+            glLightf(GL_LIGHT4, GL_LINEAR_ATTENUATION, L_ATT);
+            glLightf(GL_LIGHT4, GL_QUADRATIC_ATTENUATION, Q_ATT);
         }
         
         if (global_lights[i].type == LUZ_TIPO_FOCO)
@@ -79,9 +83,9 @@ void put_light(GLint i)
         
         if (global_lights[i].type == LUZ_TIPO_BOMBILLA || global_lights[i].type == LUZ_TIPO_FOCO)
         {
-            glLightf(GL_LIGHT5, GL_CONSTANT_ATTENUATION, 1.5f);
-            glLightf(GL_LIGHT5, GL_LINEAR_ATTENUATION, 0.5f);
-            glLightf(GL_LIGHT5, GL_QUADRATIC_ATTENUATION, 0.2f);
+            glLightf(GL_LIGHT5, GL_CONSTANT_ATTENUATION, C_ATT);
+            glLightf(GL_LIGHT5, GL_LINEAR_ATTENUATION, L_ATT);
+            glLightf(GL_LIGHT5, GL_QUADRATIC_ATTENUATION, Q_ATT);
         }
         
         if (global_lights[i].type == LUZ_TIPO_FOCO)
@@ -98,9 +102,9 @@ void put_light(GLint i)
         
         if (global_lights[i].type == LUZ_TIPO_BOMBILLA || global_lights[i].type == LUZ_TIPO_FOCO)
         {
-            glLightf(GL_LIGHT6, GL_CONSTANT_ATTENUATION, 1.5f);
-            glLightf(GL_LIGHT6, GL_LINEAR_ATTENUATION, 0.5f);
-            glLightf(GL_LIGHT6, GL_QUADRATIC_ATTENUATION, 0.2f);
+            glLightf(GL_LIGHT6, GL_CONSTANT_ATTENUATION, C_ATT);
+            glLightf(GL_LIGHT6, GL_LINEAR_ATTENUATION, L_ATT);
+            glLightf(GL_LIGHT6, GL_QUADRATIC_ATTENUATION, Q_ATT);
         }
         
         if (global_lights[i].type == LUZ_TIPO_FOCO)
@@ -117,9 +121,9 @@ void put_light(GLint i)
         
         if (global_lights[i].type == LUZ_TIPO_BOMBILLA || global_lights[i].type == LUZ_TIPO_FOCO)
         {
-            glLightf(GL_LIGHT7, GL_CONSTANT_ATTENUATION, 1.5f);
-            glLightf(GL_LIGHT7, GL_LINEAR_ATTENUATION, 0.5f);
-            glLightf(GL_LIGHT7, GL_QUADRATIC_ATTENUATION, 0.2f);
+            glLightf(GL_LIGHT7, GL_CONSTANT_ATTENUATION, C_ATT);
+            glLightf(GL_LIGHT7, GL_LINEAR_ATTENUATION, L_ATT);
+            glLightf(GL_LIGHT7, GL_QUADRATIC_ATTENUATION, Q_ATT);
         }
         
         if (global_lights[i].type == LUZ_TIPO_FOCO)
@@ -135,98 +139,104 @@ void put_light(GLint i)
 
 void set_default_lights()
 {
-    luz sol, bombilla, foco;
-    
-    sol.position[0] = 0.0f;
-    sol.position[1] = 1.0f;
-    sol.position[2] = 0.0f;
-    sol.position[3] = 0.0f;
+    global_lights[0].position[0] = 0.0f;
+    global_lights[0].position[1] = 1.0f;
+    global_lights[0].position[2] = 0.0f;
+    global_lights[0].position[3] = 0.0f;
 
-    sol.ambient[0] = 1.2f;
-    sol.ambient[1] = 1.2f;
-    sol.ambient[2] = 1.2f;
-    sol.ambient[3] = 1.0f;
+    global_lights[0].ambient[0] = 1.2f;
+    global_lights[0].ambient[1] = 1.2f;
+    global_lights[0].ambient[2] = 1.2f;
+    global_lights[0].ambient[3] = 1.0f;
 
-    sol.diffuse[0] = 1.0f;
-    sol.diffuse[1] = 1.0f;
-    sol.diffuse[2] = 1.0f;
-    sol.diffuse[3] = 1.0f;
+    global_lights[0].diffuse[0] = 1.0f;
+    global_lights[0].diffuse[1] = 1.0f;
+    global_lights[0].diffuse[2] = 1.0f;
+    global_lights[0].diffuse[3] = 1.0f;
 
-    sol.specular[0] = 1.0f;
-    sol.specular[1] = 1.0f;
-    sol.specular[2] = 1.0f;
-    sol.specular[3] = 1.0f;
+    global_lights[0].specular[0] = 1.0f;
+    global_lights[0].specular[1] = 1.0f;
+    global_lights[0].specular[2] = 1.0f;
+    global_lights[0].specular[3] = 1.0f;
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     put_light(0);
-    glGetFloatv(GL_MODELVIEW_MATRIX, sol.m_obj);
-    sol.type = LUZ_TIPO_SOL;
-    sol.is_on = 1;  
-    global_lights[0] = sol;
+    glGetFloatv(GL_MODELVIEW_MATRIX, global_lights[0].m_obj);
+    global_lights[0].type = LUZ_TIPO_SOL;
+    global_lights[0].is_on = 1;
     
-    bombilla.position[0] = 1.0f;
-    bombilla.position[1] = 1.0f;
-    bombilla.position[2] = 0.0f;
-    bombilla.position[3] = 1.0f;
+    global_lights[1].position[0] = 1.0f;
+    global_lights[1].position[1] = 1.0f;
+    global_lights[1].position[2] = 0.0f;
+    global_lights[1].position[3] = 1.0f;
    
-    bombilla.ambient[0] = 1.2f;
-    bombilla.ambient[1] = 1.2f;
-    bombilla.ambient[2] = 1.2f;
-    bombilla.ambient[3] = 1.0f;
+    global_lights[1].ambient[0] = 1.2f;
+    global_lights[1].ambient[1] = 1.2f;
+    global_lights[1].ambient[2] = 1.2f;
+    global_lights[1].ambient[3] = 1.0f;
 
-    bombilla.diffuse[0] = 1.0f;
-    bombilla.diffuse[1] = 1.0f;
-    bombilla.diffuse[2] = 1.0f;
-    bombilla.diffuse[3] = 1.0f;
+    global_lights[1].diffuse[0] = 1.0f;
+    global_lights[1].diffuse[1] = 1.0f;
+    global_lights[1].diffuse[2] = 1.0f;
+    global_lights[1].diffuse[3] = 1.0f;
 
-    bombilla.specular[0] = 1.0f;
-    bombilla.specular[1] = 1.0f;
-    bombilla.specular[2] = 1.0f;
-    bombilla.specular[3] = 1.0f;
+    global_lights[1].specular[0] = 1.0f;
+    global_lights[1].specular[1] = 1.0f;
+    global_lights[1].specular[2] = 1.0f;
+    global_lights[1].specular[3] = 1.0f;
     
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     put_light(1);
-    glGetFloatv(GL_MODELVIEW_MATRIX, bombilla.m_obj);
+    glGetFloatv(GL_MODELVIEW_MATRIX, global_lights[1].m_obj);
 
-    bombilla.type = LUZ_TIPO_BOMBILLA;
-    bombilla.is_on = 0;
-    global_lights[1] = bombilla;
-    
-    foco.position[0] = 0.0f;
-    foco.position[1] = 0.0f;
-    foco.position[2] = 0.0f;
-    foco.position[3] = 1.0f;
+    global_lights[1].type = LUZ_TIPO_BOMBILLA;
+    global_lights[1].is_on = 0;
+}
 
-    foco.ambient[0] = 0.05f;
-    foco.ambient[1] = 0.0f;
-    foco.ambient[2] = 0.0f;
-    foco.ambient[3] = 1.0f;
+void set_m_spotlight()
+{
+    int i;
+    for (i = 0; i < 16; i++) {
+        global_lights[2].m_obj[i] = _selected_object->list_matrix->m[i];
+    }
+}
 
-    foco.diffuse[0] = 0.50f;
-    foco.diffuse[1] = 0.0f;
-    foco.diffuse[2] = 0.0f;
-    foco.diffuse[3] = 1.0f;
+void init_obj_spotlight()
+{
+    global_lights[2].position[0] = _selected_object->max.x;
+    global_lights[2].position[1] = _selected_object->max.y;
+    global_lights[2].position[2] = _selected_object->max.z;
+    global_lights[2].position[3] = 1;
 
-    foco.specular[0] = 0.99f;
-    foco.specular[1] = 0.0f;
-    foco.specular[2] = 0.0f;
-    foco.specular[3] = 1.0f;
+    global_lights[2].ambient[0] = 1.5f;
+    global_lights[2].ambient[1] = 1.5f;
+    global_lights[2].ambient[2] = 1.5f;
+    global_lights[2].ambient[3] = 1.0f;
 
-    foco.cut_off = 90.0f;
+    global_lights[2].diffuse[0] = 1.5f;
+    global_lights[2].diffuse[1] = 1.5f;
+    global_lights[2].diffuse[2] = 1.5f;
+    global_lights[2].diffuse[3] = 1.0f;
 
-    foco.spot_direction[0] = 0.0f;
-    foco.spot_direction[1] = 0.0f;
-    foco.spot_direction[2] = 1.0f;
+    global_lights[2].specular[0] = 1.0f;
+    global_lights[2].specular[1] = 1.0f;
+    global_lights[2].specular[2] = 1.0f;
+    global_lights[2].specular[3] = 1.0f;
+
+    global_lights[2].cut_off = 45.0f;
+
+    global_lights[2].spot_direction[0] = 0.0f;
+    global_lights[2].spot_direction[1] = 0.0f;
+    global_lights[2].spot_direction[2] = 1.0f;
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     put_light(2);
-    glGetFloatv(GL_MODELVIEW_MATRIX, foco.m_obj);
-    foco.type = LUZ_TIPO_FOCO;
-    foco.is_on = 0;
-    global_lights[2] = foco;
+    set_m_spotlight();
+    global_lights[2].type = LUZ_TIPO_FOCO;
+    global_lights[2].is_on = 0;
 }
 
 void insert_light()

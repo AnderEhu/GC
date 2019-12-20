@@ -11,6 +11,7 @@
 #include "load_obj.h"
 #include "camera.h"
 #include "util.h"
+#include "light.h"
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -150,6 +151,8 @@ void transf_matrix_set()
         {
             add_camera_mode_obj(_selected_object);
         }
+
+        set_m_spotlight();
     }
     else if (modo_activo == MODO_CAMARA)
     {
