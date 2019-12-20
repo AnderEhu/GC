@@ -222,7 +222,7 @@ void set_default_lights()
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    put_light(3);
+    put_light(2);
     glGetFloatv(GL_MODELVIEW_MATRIX, foco.m_obj);
     foco.type = LUZ_TIPO_FOCO;
     foco.is_on = 0;
