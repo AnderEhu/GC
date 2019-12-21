@@ -205,8 +205,8 @@ void set_m_spotlight()
 
 void init_obj_spotlight()
 {
-    global_lights[2].position[0] = _selected_object->max.x;
-    global_lights[2].position[1] = _selected_object->max.y;
+    global_lights[2].position[0] = _selected_object->max.x / 2;
+    global_lights[2].position[1] = _selected_object->max.y / 2;
     global_lights[2].position[2] = _selected_object->max.z;
     global_lights[2].position[3] = 1;
 
@@ -235,7 +235,7 @@ void init_obj_spotlight()
     glLoadIdentity();
     put_light(2);
     set_m_spotlight();
-    global_lights[2].type = LUZ_TIPO_FOCO;
+    global_lights[2].type = LUZ_TIPO_FOCO_OBJ;
     global_lights[2].is_on = 0;
 }
 
@@ -321,12 +321,12 @@ void insert_light()
             }
             else
             {
-                new.cut_off = 90.0f;
+                new.cut_off = 45.0f;
                 new.spot_direction[0] = 0.0f;
                 new.spot_direction[1] = 0.0f;
                 new.spot_direction[2] = 1.0f;
                 printf("-> Default values: \n");
-                printf("---> Cut-off: 90.0\n");
+                printf("---> Cut-off: 45.0\n");
                 printf("---> Spot direction: [0.0 0.0 1.0]\n");
             }
             break;

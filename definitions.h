@@ -66,6 +66,7 @@
 #define LUZ_TIPO_SOL 0
 #define LUZ_TIPO_BOMBILLA 1
 #define LUZ_TIPO_FOCO 2
+#define LUZ_TIPO_FOCO_OBJ 3
 
 #define FLAT 0
 #define SMOOTH 1

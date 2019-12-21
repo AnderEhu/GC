@@ -252,6 +252,7 @@ void keyboard(unsigned char key, int x, int y)
                 liberar_memoria_obj(_selected_object);
                 _selected_object = auxiliar_object;
             }
+            init_obj_spotlight();
         }
         break;
     case CTRL_MINUS:
@@ -280,7 +281,7 @@ void keyboard(unsigned char key, int x, int y)
         }
         else
         {
-            if (global_lights[_selected_light].type == LUZ_TIPO_FOCO)
+            if (global_lights[_selected_light].type == LUZ_TIPO_FOCO || global_lights[_selected_light].type == LUZ_TIPO_FOCO_OBJ)
             {
                 global_lights[_selected_light].cut_off -= 5;
             }
@@ -312,7 +313,7 @@ void keyboard(unsigned char key, int x, int y)
         }
         else
         {
-            if (global_lights[_selected_light].type == LUZ_TIPO_FOCO)
+            if (global_lights[_selected_light].type == LUZ_TIPO_FOCO || global_lights[_selected_light].type == LUZ_TIPO_FOCO_OBJ)
             {
                 global_lights[_selected_light].cut_off += 5;
             }
@@ -530,10 +531,12 @@ void specialKeyboard(int key, int x, int y)
                 switch (transformacion_activa)
                 {
                     case ROTACION:
-                        if (global_lights[_selected_light].type == LUZ_TIPO_SOL) transform(obj_up_transf_values);
+                        if (global_lights[_selected_light].type == LUZ_TIPO_SOL || global_lights[_selected_light].type == LUZ_TIPO_FOCO)
+                            transform(obj_up_transf_values);
                         break;
                     case TRASLACION:
-                        if (global_lights[_selected_light].type == LUZ_TIPO_BOMBILLA) transform(obj_up_transf_values);
+                        if (global_lights[_selected_light].type == LUZ_TIPO_BOMBILLA || global_lights[_selected_light].type == LUZ_TIPO_FOCO) 
+                            transform(obj_up_transf_values);
                         break;
                 }   
             }
@@ -574,10 +577,11 @@ void specialKeyboard(int key, int x, int y)
                 switch (transformacion_activa)
                 {
                     case ROTACION:
-                        if (global_lights[_selected_light].type == LUZ_TIPO_SOL) transform(obj_right_transf_values);
+                        if (global_lights[_selected_light].type == LUZ_TIPO_FOCO) transform(obj_right_transf_values);
                         break;
                     case TRASLACION:
-                        if (global_lights[_selected_light].type == LUZ_TIPO_BOMBILLA) transform(obj_right_transf_values);
+                        if (global_lights[_selected_light].type == LUZ_TIPO_BOMBILLA || global_lights[_selected_light].type == LUZ_TIPO_FOCO) 
+                            transform(obj_right_transf_values);
                         break;
                 }  
             }
@@ -618,10 +622,11 @@ void specialKeyboard(int key, int x, int y)
                 switch (transformacion_activa)
                 {
                     case ROTACION:
-                        if (global_lights[_selected_light].type == LUZ_TIPO_SOL) transform(obj_left_transf_values);
+                        if (global_lights[_selected_light].type == LUZ_TIPO_FOCO) transform(obj_left_transf_values);
                         break;
                     case TRASLACION:
-                        if (global_lights[_selected_light].type == LUZ_TIPO_BOMBILLA) transform(obj_left_transf_values);
+                        if (global_lights[_selected_light].type == LUZ_TIPO_BOMBILLA || global_lights[_selected_light].type == LUZ_TIPO_FOCO) 
+                            transform(obj_left_transf_values);
                         break;
                 }  
             }
@@ -662,10 +667,12 @@ void specialKeyboard(int key, int x, int y)
                 switch (transformacion_activa)
                 {
                     case ROTACION:
-                        if (global_lights[_selected_light].type == LUZ_TIPO_SOL) transform(obj_down_transf_values);
+                        if (global_lights[_selected_light].type == LUZ_TIPO_SOL || global_lights[_selected_light].type == LUZ_TIPO_FOCO) 
+                            transform(obj_down_transf_values);
                         break;
                     case TRASLACION:
-                        if (global_lights[_selected_light].type == LUZ_TIPO_BOMBILLA) transform(obj_down_transf_values);
+                        if (global_lights[_selected_light].type == LUZ_TIPO_BOMBILLA || global_lights[_selected_light].type == LUZ_TIPO_FOCO) 
+                            transform(obj_down_transf_values);
                         break;
                 }  
             }
@@ -713,7 +720,8 @@ void specialKeyboard(int key, int x, int y)
                 switch (transformacion_activa)
                 {
                     case TRASLACION:
-                        if (global_lights[_selected_light].type == LUZ_TIPO_BOMBILLA) transform(obj_repag_transf_values);
+                        if (global_lights[_selected_light].type == LUZ_TIPO_BOMBILLA || global_lights[_selected_light].type == LUZ_TIPO_FOCO) 
+                            transform(obj_repag_transf_values);
                         break;
                 }     
             }
@@ -761,7 +769,8 @@ void specialKeyboard(int key, int x, int y)
                 switch (transformacion_activa)
                 {
                     case TRASLACION:
-                        if (global_lights[_selected_light].type == LUZ_TIPO_BOMBILLA) transform(obj_avpag_transf_values);
+                        if (global_lights[_selected_light].type == LUZ_TIPO_BOMBILLA || global_lights[_selected_light].type == LUZ_TIPO_FOCO) 
+                            transform(obj_avpag_transf_values);
                         break;
                 }     
             }
