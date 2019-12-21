@@ -255,9 +255,12 @@ void insert_light()
         return;
     }
 
-    printf("- Insert position [x y z]: \n");
-    scanf("%f %f %f", &new.position[0], &new.position[1], &new.position[2]);
-
+    if (light_type != 1)
+    {
+        printf("- Insert position [x y z]: \n");
+        scanf("%f %f %f", &new.position[0], &new.position[1], &new.position[2]);
+    }
+    
     printf("- Insert properties or set default values? (1 -> set, 2 -> default): \n");
     scanf("%d", &values);
 
@@ -299,15 +302,18 @@ void insert_light()
     {
         case 1:
             new.type = LUZ_TIPO_SOL;
-            new.position[3] = 0; // positional light
+            new.position[0] = 0.0f;
+            new.position[1] = 1.0f;
+            new.position[2] = 0.0f;
+            new.position[3] = 0.0f; // positional light
             break;
         case 2:
             new.type = LUZ_TIPO_BOMBILLA;
-            new.position[3] = 1; // directional light
+            new.position[3] = 1.0f; // directional light
             break;
         case 3:
             new.type = LUZ_TIPO_FOCO;
-            new.position[3] = 1; // directional light
+            new.position[3] = 1.0f; // directional light
             printf("- Spot direction and cut-off angle needed...\n");
             printf("- Set values or use default values (1 -> set, 2 -> default): \n");
             scanf("%d", &values);

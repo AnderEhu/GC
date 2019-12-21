@@ -221,13 +221,14 @@ void keyboard(unsigned char key, int x, int y)
         /*The selection is circular, thus if we move out of the list we go back to the first element*/
         if (_selected_object == 0)
             _selected_object = _first_object;
+        
+        if (_selected_object != 0) init_obj_spotlight();
 
         if (modo_activo == MODO_CAMARA && coordenada_activa == COORD_GLOBAL)
             centre_camera_to_obj(_selected_object);
         if (camera_modo_obj == 1)
             add_camera_mode_obj(_selected_object);
-        
-        init_obj_spotlight();
+
         break;
     case 127: /* <SUPR> */
         if (_selected_object == 0)
@@ -252,7 +253,7 @@ void keyboard(unsigned char key, int x, int y)
                 liberar_memoria_obj(_selected_object);
                 _selected_object = auxiliar_object;
             }
-            init_obj_spotlight();
+            if (_selected_object != 0) init_obj_spotlight();
         }
         break;
     case CTRL_MINUS:
