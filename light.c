@@ -1,3 +1,24 @@
+#ifndef GL_SILENCE_DEPRECATION
+#define GL_SILENCE_DEPRECATION true
+#endif
+
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
+#ifdef __APPLE__
+#include <OpenGL/glu.h>
+#else
+#include <GL/glu.h>
+#endif
 #include "definitions.h"
 #include <stdio.h>
 #define C_ATT 1.0f
