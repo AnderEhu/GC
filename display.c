@@ -99,7 +99,7 @@ void display(void)
     // AQUI PUSH, mult y luego pop
     for (i = 0; i < 8; i++) 
     {
-        if (global_lights[i].position != 0 && global_lights[i].is_on == 1) // luz seteada y activa
+        if (global_lights[i].is_on == 1) // luz seteada y activa
         {
             glPushMatrix();
             glMultMatrixf(global_lights[i].m_obj);

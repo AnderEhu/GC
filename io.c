@@ -825,7 +825,7 @@ void specialKeyboard(int key, int x, int y)
             }
             break;
         case GLUT_KEY_F4:
-            if (global_lights[3].position != 0 && global_lights[3].is_on == 0)
+            if (global_lights[3].is_on == 0)
             {
                 global_lights[3].is_on = 1;
                 glEnable(GL_LIGHT3);
@@ -837,7 +837,7 @@ void specialKeyboard(int key, int x, int y)
             }
             break;
         case GLUT_KEY_F5:
-            if (global_lights[4].position != 0 && global_lights[4].is_on == 0)
+            if (global_lights[4].is_on == 0)
             {
                 global_lights[4].is_on = 1;
                 glEnable(GL_LIGHT4);
@@ -849,7 +849,7 @@ void specialKeyboard(int key, int x, int y)
             }
             break;
         case GLUT_KEY_F6:
-            if (global_lights[5].position != 0 && global_lights[5].is_on == 0)
+            if (global_lights[5].is_on == 0)
             {
                 global_lights[5].is_on = 1;
                 glEnable(GL_LIGHT5);
@@ -861,7 +861,7 @@ void specialKeyboard(int key, int x, int y)
             }
             break;
         case GLUT_KEY_F7:
-            if (global_lights[6].position != 0 && global_lights[6].is_on == 0)
+            if (global_lights[6].is_on == 0)
             {
                 global_lights[6].is_on = 1;
                 glEnable(GL_LIGHT6);
@@ -873,7 +873,7 @@ void specialKeyboard(int key, int x, int y)
             }
             break;
         case GLUT_KEY_F8:
-            if (global_lights[7].position != 0 && global_lights[7].is_on == 0)
+            if (global_lights[7].is_on == 0)
             {
                 global_lights[7].is_on = 1;
                 glEnable(GL_LIGHT7);
